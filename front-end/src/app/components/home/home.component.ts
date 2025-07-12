@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';   
 import { NavbarComponent } from '../navbar/navbar.component';
-import { RouterModule} from '@angular/router';
+import { Router, RouterModule, ActivatedRoute} from '@angular/router';
+// import { ArticleComponent } from '../article/article.component';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, RouterModule],
+  imports: [NavbarComponent, RouterModule, CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {}
+
+export class HomeComponent {
+
+  
+}

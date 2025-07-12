@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { RouterModule} from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-register',
-  imports: [FormsModule, MatDialogModule],
+  imports: [FormsModule, MatDialogModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })

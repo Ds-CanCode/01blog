@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component , Optional} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { RouterModule} from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-login',
-  imports: [FormsModule, MatDialogModule],
+  imports: [FormsModule, MatDialogModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -14,8 +15,9 @@ export class LoginComponent {
   password = '';
   rememberMe = false;
 
-  constructor(private dialogRef: MatDialogRef<LoginComponent>) {}
+  constructor(@Optional() private dialogRef: MatDialogRef<LoginComponent>) {}
 
+ 
   login() {
     console.log('Login:', {
       email: this.email,
