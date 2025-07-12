@@ -13,21 +13,21 @@ import { NavbarComponent } from '../navbar/navbar.component';
 })
 
 export class ArticleComponent {
-  // likeCount = 0;
-  // comments = [
-  //   { author: 'Ali', text: 'Super article !' },
-  //   { author: 'Sara', text: 'Très bien expliqué, merci !' }
-  // ];
-  // newComment = '';
+  likeCount = 0;
+  comments = [
+    { author: 'Ali', text: 'Super article !' },
+    { author: 'Sara', text: 'Très bien expliqué, merci !' }
+  ];
+  newComment = '';
 
-  // toggleLike() {
-  //   this.likeCount++;
-  // }
+  toggleLike() {
+    this.likeCount++;
+  }
 
-  // addComment() {
-  //   if (this.newComment.trim()) {
-  //     this.comments.push({ author: 'Moi', text: this.newComment });
-  //     this.newComment = '';
-  //   }
-  // }
+  addComment() {
+    if (this.newComment.trim()) {
+      this.comments.push({ author: 'Moi', text: this.newComment });
+      this.newComment = '';
+    }
+  }
 }

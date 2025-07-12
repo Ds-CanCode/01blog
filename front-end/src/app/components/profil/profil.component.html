@@ -1,0 +1,205 @@
+<app-navbar></app-navbar>
+<!-- profile.component.html -->
+<div class="profile-container">
+  <!-- Header avec bannière -->
+  <div class="profile-header">
+    <div class="banner-container">
+      <img [src]="user.banner" alt="Banner" class="banner-image">
+      <div class="banner-overlay"></div>
+    </div>
+    
+    <!-- Informations du profil -->
+    <div class="profile-info">
+      <div class="avatar-container">
+        <img [src]="user.avatar" alt="Avatar" class="avatar">
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="file-input">
+        <button (click)="fileInput.click()" class="edit-avatar-btn">
+          <i class="fas fa-camera"></i>
+        </button>
+      </div>
+      
+      <div class="profile-actions">
+        <button *ngIf="!isEditingProfile" (click)="startEditingProfile()" class="btn btn-outline">
+          Éditer le profil
+        </button>
+        <div *ngIf="isEditingProfile" class="edit-actions">
+          <button (click)="saveProfile()" class="btn btn-primary">Sauvegarder</button>
+          <button (click)="cancelEditProfile()" class="btn btn-secondary">Annuler</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Détails du profil -->
+    <div class="profile-details">
+      <div class="name-container">
+        <h1 class="name">
+          {{ user.name }}
+          <i *ngIf="user.isVerified" class="fas fa-check-circle verified-icon"></i>
+        </h1>
+        <p class="username"> {{ user.username }}</p>
+      </div>
+      
+      <!-- Formulaire d'édition -->
+      <div *ngIf="isEditingProfile" class="edit-form">
+        <div class="form-group">
+          <label for="name">Nom</label>
+          <input type="text" id="name" [(ngModel)]="editForm.name" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" [(ngModel)]="editForm.bio" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="location">Localisation</label>
+          <input type="text" id="location" [(ngModel)]="editForm.location" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="website">Site web</label>
+          <input type="text" id="website" [(ngModel)]="editForm.website" class="form-control">
+        </div>
+      </div>
+      
+      <!-- Affichage normal -->
+      <div *ngIf="!isEditingProfile" class="profile-bio">
+        <p class="bio">{{ user.bio }}</p>
+        <div class="profile-meta">
+          <span class="meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ user.location }}
+          </span>
+          <span class="meta-item">
+            <i class="fas fa-link"></i>
+            <a [href]="'https://' + user.website" target="_blank">{{ user.website }}</a>
+          </span>
+          <span class="meta-item">
+            <i class="fas fa-calendar-alt"></i>
+            Inscrit en {{ getJoinDate() }}
+          </span>
+        </div>
+        <div class="profile-stats">
+          <span class="stat">
+            <strong>{{ user.following }}</strong> abonnement(s)
+          </span>
+          <span class="stat">
+            <strong>{{ user.followers }}</strong> abonné(s)
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navigation des onglets -->
+  <nav class="tabs-nav">
+    <button 
+      [class.active]="activeTab === 'tweets'" 
+      (click)="setActiveTab('tweets')" 
+      class="tab-button">
+      Tweets
+      <span class="tab-count">{{ user.postsCount }}</span>
+    </button>
+    <button 
+      [class.active]="activeTab === 'replies'" 
+      (click)="setActiveTab('replies')" 
+      class="tab-button">
+      Réponses
+    </button>
+    <button 
+      [class.active]="activeTab === 'media'" 
+      (click)="setActiveTab('media')" 
+      class="tab-button">
+      Médias
+    </button>
+  </nav>
+  
+  <!-- Contenu des onglets -->
+  <div class="tab-content">
+    <!-- Onglet Tweets -->
+    <div *ngIf="activeTab === 'tweets'" class="tweets-tab">
+      <!-- Nouveau post -->
+      <div class="new-post-container">
+        <div class="new-post-form">
+          <img [src]="user.avatar" alt="Avatar" class="post-avatar">
+          <div class="post-input-container">
+            <textarea 
+              [(ngModel)]="newPostContent" 
+              placeholder="Quoi de neuf ?" 
+              class="post-input"
+              rows="3"></textarea>
+            <button (click)="addPost()" class="btn btn-primary post-btn">
+              Tweeter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Liste des posts -->
+      <div class="posts-list">
+        <div *ngFor="let post of posts" class="post-item">
+          <img [src]="user.avatar" alt="Avatar" class="post-avatar">
+          <div class="post-content">
+            <div class="post-header">
+              <div class="post-author">
+                <span class="author-name">{{ user.name }}</span>
+                <i *ngIf="user.isVerified" class="fas fa-check-circle verified-icon"></i>
+                <span class="author-username"> {{ user.username }}</span>
+                <span class="post-time">{{ getTimeAgo(post.timestamp) }}</span>
+              </div>
+              <div class="post-actions">
+                <button (click)="startEditingPost(post)" class="action-btn">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button (click)="deletePost(post.id)" class="action-btn delete-btn">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Contenu du post -->
+            <div *ngIf="!editingPost || editingPost.id !== post.id" class="post-text">
+              {{ post.content }}
+            </div>
+            
+            <!-- Formulaire d'édition -->
+            <div *ngIf="editingPost && editingPost.id === post.id" class="edit-post-form">
+              <textarea 
+                [(ngModel)]="editingPost.content" 
+                class="edit-post-input"
+                rows="3"></textarea>
+              <div class="edit-post-actions">
+                <button (click)="savePost()" class="btn btn-primary">Sauvegarder</button>
+                <button (click)="cancelEditPost()" class="btn btn-secondary">Annuler</button>
+              </div>
+            </div>
+            
+            <!-- Interactions -->
+            <div class="post-interactions">
+              <button (click)="toggleLike(post)" [class.liked]="post.isLiked" class="interaction-btn">
+                <i class="fas fa-heart"></i>
+                <span *ngIf="post.likes > 0">{{ post.likes }}</span>
+              </button>
+              <button (click)="toggleRetweet(post)" [class.retweeted]="post.isRetweeted" class="interaction-btn">
+                <i class="fas fa-retweet"></i>
+                <span *ngIf="post.retweets > 0">{{ post.retweets }}</span>
+              </button>
+              <button class="interaction-btn">
+                <i class="fas fa-comment"></i>
+              </button>
+              <button class="interaction-btn">
+                <i class="fas fa-share"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Autres onglets -->
+    <div *ngIf="activeTab === 'replies'" class="tab-placeholder">
+      <p>Aucune réponse pour le moment</p>
+    </div>
+    
+    <div *ngIf="activeTab === 'media'" class="tab-placeholder">
+      <p>Aucun média pour le moment</p>
+    </div>
+  </div>
+</div>

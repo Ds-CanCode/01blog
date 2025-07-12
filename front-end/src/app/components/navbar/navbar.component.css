@@ -13,3 +13,14 @@
   color: #000;
   text-decoration: underline;
 }
+
+.logo-img {
+  height: 60px;
+  width: auto; 
+  object-fit: contain;
+}
+
+.navbar-brand {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}

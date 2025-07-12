@@ -1,2 +1,8 @@
+:root {
+  --color-black: rgb(0, 0, 0);
+  --color-mint: rgb(207, 255, 226);
+  --color-teal: rgb(162, 213, 198);
+  --color-light: rgb(246, 246, 246);
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
