@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-
+//import { EmptyComponent } from '../app/components/empty/empty.component'
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: 'home', loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent)},
-    //{ path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)},
-    //{ path: 'register', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)},
     { path: 'article', loadComponent: () => import('./components/article/article.component').then(m => m.ArticleComponent)},
     { path: 'profil', loadComponent: () => import('./components/profil/profil.component').then(m => m.ProfilComponent)},
     { path: '**', redirectTo: 'home' }

@@ -1,11 +1,3 @@
-/* profile.component.scss */
-:root {
-  --color-black: rgb(0, 0, 0);
-  --color-mint: rgb(207, 255, 226);
-  --color-teal: rgb(162, 213, 198);
-  --color-light: rgb(246, 246, 246);
-}
-
 .profile-container {
   max-width: 1200px;
   margin: 0 auto;
