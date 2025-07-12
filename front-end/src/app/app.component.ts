@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd , RouterModule} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -11,7 +11,7 @@ import { HomeComponent } from "./components/home/home.component";
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [HomeComponent],
+  imports: [HomeComponent, RouterModule],
 })
 export class AppComponent {
   router = inject(Router);
