@@ -14,7 +14,7 @@ export class PopupService {
   constructor(private dialog: MatDialog) { }
 
   openLoginPopup(): void {
-    if (this.loginDialogRef) {
+    if (this.loginDialogRef || this.registerDialogRef || this.papierDialogRef) {
       return;
     }
     this.loginDialogRef = this.dialog.open(LoginComponent, {
@@ -26,7 +26,7 @@ export class PopupService {
   }
 
   openRegisterPopup(): void {
-    if (this.registerDialogRef) return;
+    if (this.loginDialogRef || this.registerDialogRef || this.papierDialogRef) return;
 
     this.registerDialogRef = this.dialog.open(RegisterComponent, {
       disableClose: false
@@ -38,7 +38,7 @@ export class PopupService {
   }
 
   openPapierPopup(): void {
-    if (this.papierDialogRef) return;
+    if (this.loginDialogRef || this.registerDialogRef || this.papierDialogRef) return;
 
     this.papierDialogRef = this.dialog.open(PapierComponent, {
       disableClose: false
