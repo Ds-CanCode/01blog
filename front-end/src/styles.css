@@ -4,5 +4,12 @@
   --color-teal: rgb(162, 213, 198);
   --color-light: rgb(246, 246, 246);
 }
-html, body { height: 100%; }
+html, body { height: 100vh; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body{
+  background-image: url('../public/bg.jpg');
+  background-size: cover; 
+  background-repeat: no-repeat;  
+  background-position: center; 
+  background-attachment: fixed;    
+}

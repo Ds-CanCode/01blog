@@ -1,5 +1,5 @@
 .hero-section {
-  background: linear-gradient(135deg, var(--color-teal), var(--color-mint));
+  /* background: linear-gradient(135deg, rgba(0, 128, 128, 0.7), rgba(152, 251, 152, 0.7)); */
   color: var(--color-black);
   padding: 4rem 0;
   text-align: center;
@@ -25,6 +25,7 @@
   padding: 0 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 /* Cartes personnalisées */
@@ -35,6 +36,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
+  height: 100%;
 }
 
 .custom-card:hover {
