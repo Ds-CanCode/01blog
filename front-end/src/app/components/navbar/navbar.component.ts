@@ -1,8 +1,10 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
 import { FormsModule } from '@angular/forms';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent  {
   searchText = '';
   navbarHidden = false;
   lastScrollTop = 0;
@@ -25,6 +27,8 @@ export class NavbarComponent {
   openRegister() {
     this.popupService.openRegisterPopup();
   }
+
+
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

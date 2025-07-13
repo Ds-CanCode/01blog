@@ -7,28 +7,23 @@
         <img src="logo.png" alt="Logo" class="logo-img" />
       </a>
 
-      <!-- Search visible partout, prend de la place mais max limitée -->
+      <!-- Search -->
       <div class="search-box d-flex align-items-center px-3 flex-grow-1" style="max-width: 300px;">
         <i class="bi bi-search me-2 text-muted"></i>
-        <input
-          type="text"
-          class="form-control border-0 bg-transparent shadow-none"
-          placeholder="Search"
-          [(ngModel)]="searchText"
-        />
+        <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Search"
+          [(ngModel)]="searchText" />
       </div>
     </div>
 
-    <!-- 🟠 Centered Links (desktop only, hidden mobile) -->
+    <!-- 🟠 Centered links (desktop only) -->
     <div class="navbar-center d-none d-lg-flex gap-4">
       <a class="nav-link" routerLink="/home">Home</a>
       <a class="nav-link" routerLink="/article">Article</a>
       <a class="nav-link" routerLink="/profil">Profil</a>
     </div>
 
-    <!-- 🔴 Write + Notification + Auth (desktop) + Toggle -->
+    <!-- 🔴 Actions (write, notification, login/register, toggle) -->
     <div class="d-flex align-items-center gap-3">
-
       <!-- Write -->
       <div class="d-flex align-items-center text-muted icon-button">
         <i class="bi bi-pencil-square me-1"></i>
@@ -40,36 +35,28 @@
         <i class="bi bi-bell"></i>
       </div>
 
-      <!-- Login/Register visible only desktop -->
+      <!-- Login/Register (desktop only) -->
       <div class="d-none d-lg-flex gap-2">
         <button class="btn-auth login-btn" (click)="openLogin()">Login</button>
         <button class="btn-auth register-btn" (click)="openRegister()">Register</button>
       </div>
 
-      <!-- Hamburger menu toggle (always visible on mobile) -->
-      <button
-        class="navbar-toggler ms-2"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#mainNavbar"
-        aria-controls="mainNavbar"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <!-- 🍔 Toggle button (mobile only) -->
+      <button class="navbar-toggler ms-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
     </div>
   </div>
 
-  <!-- 📱 Mobile menu (only visible on mobile) -->
-  <div class="collapse navbar-collapse px-4" id="mainNavbar">
-    <div class="d-flex flex-column align-items-start gap-3 d-lg-none">
+  <!-- 📱 Mobile menu -->
+  <div class="collapse navbar-collapse d-lg-none px-4" id="mainNavbar">
+    <div class="d-flex flex-column align-items-start gap-3">
       <a class="nav-link" routerLink="/home">Home</a>
       <a class="nav-link" routerLink="/article">Article</a>
       <a class="nav-link" routerLink="/profil">Profil</a>
 
-      <!-- Login/Register buttons for mobile -->
+      <!-- Login/Register (mobile only) -->
       <div class="auth-buttons d-flex gap-2 mt-3">
         <button class="btn-auth login-btn" (click)="openLogin()">Login</button>
         <button class="btn-auth register-btn" (click)="openRegister()">Register</button>
