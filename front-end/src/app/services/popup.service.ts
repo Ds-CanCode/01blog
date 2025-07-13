@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { PapierComponent } from '../components/papier/papier.component';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,25 +12,48 @@ export class PopupService {
   private registerDialogRef: MatDialogRef<RegisterComponent> | null = null;
   private papierDialogRef: MatDialogRef<PapierComponent> | null = null;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog
+  ) {}
+
+  private closeAllPopups() {
+    if (this.loginDialogRef) {
+      this.loginDialogRef.close();
+      this.loginDialogRef = null;
+    }
+    if (this.registerDialogRef) {
+      this.registerDialogRef.close();
+      this.registerDialogRef = null;
+    }
+    if (this.papierDialogRef) {
+      this.papierDialogRef.close();
+      this.papierDialogRef = null;
+    }
+  }
 
   openLoginPopup(): void {
-    if (this.loginDialogRef || this.registerDialogRef || this.papierDialogRef) {
+    if (this.loginDialogRef) {
       return;
     }
+    this.closeAllPopups();
+
     this.loginDialogRef = this.dialog.open(LoginComponent, {
-      disableClose: false
+      disableClose: false,
     });
+
     this.loginDialogRef.afterClosed().subscribe(() => {
       this.loginDialogRef = null;
     });
   }
 
   openRegisterPopup(): void {
-    if (this.loginDialogRef || this.registerDialogRef || this.papierDialogRef) return;
+    if (this.registerDialogRef) {
+      return;
+    }
+    this.closeAllPopups();
 
     this.registerDialogRef = this.dialog.open(RegisterComponent, {
-      disableClose: false
+      disableClose: false,
     });
 
     this.registerDialogRef.afterClosed().subscribe(() => {
@@ -38,10 +62,13 @@ export class PopupService {
   }
 
   openPapierPopup(): void {
-    if (this.loginDialogRef || this.registerDialogRef || this.papierDialogRef) return;
+    if (this.papierDialogRef) {
+      return;
+    }
+    this.closeAllPopups();
 
     this.papierDialogRef = this.dialog.open(PapierComponent, {
-      disableClose: false
+      disableClose: false,
     });
 
     this.papierDialogRef.afterClosed().subscribe(() => {

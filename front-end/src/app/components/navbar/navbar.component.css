@@ -1,11 +1,10 @@
-/* background-image: url('../../../../public/bg_nav.jpg'); */
 .custom-navbar {
   border-bottom: 1px solid #ccc;
   padding: 0.5rem 1rem;
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 9999;
+  z-index: 800;
   background-color: rgba(255, 255, 255, 0.836);
   transition: transform 0.3s ease-in-out;
 }
@@ -94,7 +93,7 @@
   text-align: center;
 }
 
-/* Centrer au milieu en PC, cacher en mobile */
+
 .navbar-center {
   position: absolute;
   left: 50%;
@@ -110,11 +109,6 @@
   flex-grow: 1;
 }
 
-
-
-
-
-/* Hide label "Write" on very small screens */
 @media (max-width: 576px) {
   .icon-button span {
     display: none;

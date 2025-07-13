@@ -2,6 +2,8 @@ import { Component , Optional} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RouterModule} from '@angular/router';
+// import { RegisterComponent } from '../register/register.component';
+import { PopupService } from '../../services/popup.service';
 
 @Component({
   standalone: true,
@@ -15,15 +17,15 @@ export class LoginComponent {
   password = '';
   rememberMe = false;
 
-  constructor(@Optional() private dialogRef: MatDialogRef<LoginComponent>) {}
+  constructor(
+    private  popupService: PopupService,
+    private dialogRef: MatDialogRef<LoginComponent>
+  ) {}
 
- 
-  login() {
-    console.log('Login:', {
-      email: this.email,
-      password: this.password,
-      rememberMe: this.rememberMe,
-    });
-    this.dialogRef.close();
+  openRegisterFromLogin() {
+    this.popupService.openRegisterPopup();
   }
+  
+  login() {}
+  signInWithGoogle(){}
 }

@@ -1,6 +1,6 @@
-import { Component, HostListener} from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
 import { FormsModule } from '@angular/forms';
 
@@ -11,24 +11,44 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent  {
+export class NavbarComponent {
   searchText = '';
   navbarHidden = false;
   lastScrollTop = 0;
+  menuOpen = false;
 
-  constructor(private popupService: PopupService) {}
+  constructor(private popupService: PopupService) { }
 
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
+  }
   openLogin() {
+    if (this.menuOpen) {
+      this.closeMenu();
+    }
     this.popupService.openLoginPopup();
   }
 
   openRegister() {
+    if (this.menuOpen) {
+      this.closeMenu();
+    }
     this.popupService.openRegisterPopup();
   }
 
   openPapier() {
+    if (this.menuOpen) {
+      this.closeMenu();
+    }
     this.popupService.openPapierPopup();
   }
+
+
 
 
 

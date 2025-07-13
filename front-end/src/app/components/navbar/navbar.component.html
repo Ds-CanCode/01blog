@@ -42,15 +42,15 @@
       </div>
 
       <!-- 🍔 Toggle button (mobile only) -->
-      <button class="navbar-toggler ms-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler ms-2 d-lg-none" type="button" aria-controls="mainNavbar"
+        [attr.aria-expanded]="menuOpen" aria-label="Toggle navigation" (click)="toggleMenu()">
         <span class="navbar-toggler-icon"></span>
       </button>
     </div>
   </div>
 
   <!-- 📱 Mobile menu -->
-  <div class="collapse navbar-collapse d-lg-none px-4" id="mainNavbar">
+  <div class="collapse navbar-collapse d-lg-none px-4" id="mainNavbar" [class.show]="menuOpen">
     <div class="d-flex flex-column align-items-start gap-3">
       <a class="nav-link" routerLink="/home">Home</a>
       <a class="nav-link" routerLink="/article">Article</a>
