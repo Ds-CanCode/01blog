@@ -5,7 +5,7 @@
   --color-light: rgb(246, 246, 246);
 }
 html, body { height: 100vh; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding-top: 100px;}
 body{
   background-image: url('../public/bg.jpg');
   background-size: cover; 

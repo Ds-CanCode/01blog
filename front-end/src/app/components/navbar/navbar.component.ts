@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
@@ -9,10 +9,13 @@ import { FormsModule } from '@angular/forms';
   imports: [RouterModule, MatDialogModule, FormsModule],
   standalone: true,
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
   searchText = '';
+  navbarHidden = false;
+  lastScrollTop = 0;
+
   constructor(private popupService: PopupService) { }
 
   openLogin() {
@@ -21,5 +24,17 @@ export class NavbarComponent {
 
   openRegister() {
     this.popupService.openRegisterPopup();
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollDiff = scrollTop - this.lastScrollTop;
+    if (scrollDiff > 5) {
+      this.navbarHidden = true;
+    } else if (scrollDiff < -10) {
+      this.navbarHidden = false;
+    }
+    this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   }
 }

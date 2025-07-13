@@ -1,7 +1,18 @@
+/* background-image: url('../../../../public/bg_nav.jpg'); */
 .custom-navbar {
-  /* background-image: url('../../../../public/bg_nav.jpg'); */
   border-bottom: 1px solid #ccc;
   padding: 0.5rem 1rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: white;
+  transition: transform 0.3s ease-in-out;
+}
+
+
+.navbar-hidden {
+  transform: translateY(-100%);
 }
 
 .logo-img {
@@ -55,8 +66,9 @@
 .search-box {
   background-color: whitesmoke;
   border-radius: 25px;
+  flex: 1;
   height: 40px;
-  width: 200px;
+  max-width: 300px;
 }
 
 .search-box input::placeholder {
@@ -91,7 +103,6 @@
 
 .nav-link:hover {
   color: var(--color-teal);
-  text-decoration: underline;
 }
 .navbar-center {
   position: absolute;
@@ -101,9 +112,21 @@
 }
 
 
+
+
 /* Hide label "Write" on very small screens */
 @media (max-width: 576px) {
   .icon-button span {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-box {
+    max-width: 150px;
+  }
+
+  .search-box input {
+    font-size: 0.9rem;
   }
 }
