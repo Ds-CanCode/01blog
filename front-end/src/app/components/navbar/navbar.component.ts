@@ -1,10 +1,8 @@
 import { Component, HostListener} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule} from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
 import { FormsModule } from '@angular/forms';
-
-declare var bootstrap: any;
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +16,7 @@ export class NavbarComponent  {
   navbarHidden = false;
   lastScrollTop = 0;
 
-  constructor(private popupService: PopupService) { }
+  constructor(private popupService: PopupService) {}
 
   openLogin() {
     this.popupService.openLoginPopup();
@@ -26,6 +24,10 @@ export class NavbarComponent  {
 
   openRegister() {
     this.popupService.openRegisterPopup();
+  }
+
+  openPapier() {
+    this.popupService.openPapierPopup();
   }
 
 

@@ -1,0 +1,93 @@
+<div class="editor-container">
+      <!-- Header -->
+      <mat-toolbar class="editor-header">
+        <div class="header-left">
+          <div class="logo-circle">
+            <mat-icon>article</mat-icon>
+          </div>
+          <span class="draft-text">Draft</span>
+        </div>
+        <div class="header-right">
+          <button mat-raised-button color="primary" (click)="publish()" class="publish-btn">
+            Publier
+          </button>
+          <button mat-icon-button (click)="close()" class="close-btn">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </mat-toolbar>
+
+      <!-- Floating Toolbar -->
+      <div 
+        class="floating-toolbar" 
+        [style.display]="showToolbar ? 'flex' : 'none'"
+        [style.left.px]="toolbarPosition.x - 120"
+        [style.top.px]="toolbarPosition.y - 60"
+      >
+        <button mat-icon-button (click)="formatText('bold')" title="Gras">
+          <mat-icon>format_bold</mat-icon>
+        </button>
+        <button mat-icon-button (click)="formatText('italic')" title="Italique">
+          <mat-icon>format_italic</mat-icon>
+        </button>
+        <button mat-icon-button (click)="createLink()" title="Lien">
+          <mat-icon>link</mat-icon>
+        </button>
+        <button mat-icon-button (click)="insertQuote()" title="Citation">
+          <mat-icon>format_quote</mat-icon>
+        </button>
+      </div>
+
+      <!-- Editor Content -->
+      <div class="editor-content">
+        <div class="editor-wrapper">
+          <!-- Title Input -->
+          <input
+            type="text"
+            placeholder="Titre de votre article..."
+            [(ngModel)]="title"
+            class="title-input"
+          />
+
+          <!-- Content Editor -->
+          <div
+            #contentEditor
+            contenteditable="true"
+            class="content-editor"
+            [innerHTML]="content"
+            (input)="onContentChange($event)"
+            (mouseup)="handleTextSelection()"
+            (keyup)="handleTextSelection()"
+            placeholder="Racontez votre histoire..."
+          ></div>
+        </div>
+      </div>
+
+      <!-- Bottom Toolbar -->
+      <div class="bottom-toolbar">
+        <div class="toolbar-buttons">
+          <button mat-icon-button (click)="insertCode()" title="Insérer du code">
+            <mat-icon>code</mat-icon>
+          </button>
+          <button mat-icon-button (click)="insertImage()" title="Insérer une image">
+            <mat-icon>image</mat-icon>
+          </button>
+          <button mat-icon-button (click)="insertList()" title="Liste à puces">
+            <mat-icon>format_list_bulleted</mat-icon>
+          </button>
+          <button mat-icon-button (click)="insertQuote()" title="Citation">
+            <mat-icon>format_quote</mat-icon>
+          </button>
+          <div class="toolbar-separator"></div>
+          <button mat-icon-button (click)="formatText('justifyLeft')" title="Aligner à gauche">
+            <mat-icon>format_align_left</mat-icon>
+          </button>
+          <button mat-icon-button (click)="formatText('justifyCenter')" title="Centrer">
+            <mat-icon>format_align_center</mat-icon>
+          </button>
+          <button mat-icon-button (click)="formatText('justifyRight')" title="Aligner à droite">
+            <mat-icon>format_align_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>

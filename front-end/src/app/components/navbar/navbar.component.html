@@ -25,9 +25,9 @@
     <!-- 🔴 Actions (write, notification, login/register, toggle) -->
     <div class="d-flex align-items-center gap-3">
       <!-- Write -->
-      <div class="d-flex align-items-center text-muted icon-button">
+      <div class="d-flex align-items-center text-muted icon-button" (click)="openPapier()">
         <i class="bi bi-pencil-square me-1"></i>
-        <span class="d-none d-sm-inline">Write</span>
+        <span class="d-none d-sm-inline" (click)="openPapier()">Write</span>
       </div>
 
       <!-- Notification -->
