@@ -1,0 +1,49 @@
+.title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--color-black);
+  font-size: 1.2rem;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 0.8rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.status {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.online {
+  color: green;
+}
+
+.offline {
+  color: #999;
+}

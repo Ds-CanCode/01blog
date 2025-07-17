@@ -1,5 +1,4 @@
 .hero-section {
-  /* background: linear-gradient(135deg, rgba(0, 128, 128, 0.7), rgba(152, 251, 152, 0.7)); */
   color: var(--color-black);
   padding: 4rem 0;
   text-align: center;
@@ -17,17 +16,58 @@
   opacity: 0.8;
 }
 
-/* Grille de cartes */
+.main-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  padding-left: 320px;
+  padding-right: 0;
+}
+
+.content-right {
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 300px;
+  background-color: var(--color-light);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+  z-index: 100;
+}
+
+.user-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.user-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+  font-weight: 500;
+}
+
 .card-grid {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  padding: 0 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
   align-items: stretch;
 }
 
+/* Conteneur de carte */
+.card-container {
+  position: relative;
+}
+
+/* Carte */
 .custom-card {
   background-color: white;
   border: none;
@@ -36,6 +76,8 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .custom-card:hover {
@@ -53,6 +95,7 @@
 .card-body {
   padding: 1.5rem;
   background-color: var(--color-light);
+  flex-grow: 1;
 }
 
 .card-title {
@@ -76,6 +119,7 @@
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .btn-custom:hover {
@@ -84,7 +128,7 @@
   box-shadow: 0 4px 12px rgba(162, 213, 198, 0.4);
 }
 
-/* Badge catégorie */
+/* Badge de catégorie */
 .category-badge {
   position: absolute;
   top: 1rem;
@@ -97,19 +141,21 @@
   color: var(--color-black);
 }
 
-/* Container */
-.card-container {
-  position: relative;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .content-right {
+    display: none;
+    /* ❌ Cache complètement la sidebar */
+  }
+
   .card-grid {
     grid-template-columns: 1fr;
     padding: 0 1rem;
-  }
-
-  .hero-section h1 {
-    font-size: 2rem;
   }
 }

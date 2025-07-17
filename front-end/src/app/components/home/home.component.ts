@@ -1,6 +1,7 @@
 import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';   
 import { NavbarComponent } from '../navbar/navbar.component';
+import { UsersComponent } from '../users/users.component';
 import { Router, RouterModule, ActivatedRoute} from '@angular/router';
 // import { ArticleComponent } from '../article/article.component';
 
@@ -8,7 +9,7 @@ import { Router, RouterModule, ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, CommonModule],
+  imports: [NavbarComponent, RouterModule, CommonModule, UsersComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
