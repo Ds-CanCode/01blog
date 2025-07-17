@@ -40,7 +40,7 @@
   width: 10px;
   height: 70px;
   background-color: --color-teal;
-  border-radius: 25%;
+
 }
 
 /* === BOUTON DE TOGGLE === */
@@ -83,6 +83,7 @@
   transition: margin-left 0.3s ease;
   max-width: calc(100% - 300px);
   box-sizing: border-box;
+
 }
 
 .main-content.expanded {
@@ -96,6 +97,9 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   justify-content: center;
+  max-width: 1200px; /* tu peux ajuster selon largeur que tu veux max */
+  margin: 0 auto; /* centre la grille */
+  transition: max-width 0.3s ease;
 }
 
 /* === CARTE === */
@@ -175,9 +179,10 @@
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
   .main-content {
-    margin-left: 20 !important;
+    margin-left: 0; /* sidebar disparue, plus besoin de marge à gauche */
     max-width: 100%;
     padding: 1rem;
+    box-sizing: border-box;
   }
 
   .sidebar {
@@ -185,8 +190,24 @@
   }
 
   .card-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important; /* 1 colonne */
     padding: 0 1rem;
+    gap: 1rem; /* réduire un peu le gap sur mobile */
   }
- 
+
+  .card-container {
+    width: 100%;
+  }
+
+  .custom-card {
+    height: auto; /* s’adapte au contenu */
+    max-width: 100%;
+  }
+
+  .custom-card img {
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+  }
 }
+
