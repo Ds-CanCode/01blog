@@ -1,8 +1,8 @@
 import { Component, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';   
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { UsersComponent } from '../users/users.component';
-import { Router, RouterModule, ActivatedRoute} from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 // import { ArticleComponent } from '../article/article.component';
 
 
@@ -15,6 +15,10 @@ import { Router, RouterModule, ActivatedRoute} from '@angular/router';
 })
 
 export class HomeComponent {
+  showUserList = false;
 
-  
+  toggleUserList() {
+    this.showUserList = !this.showUserList;
+  }
+
 }

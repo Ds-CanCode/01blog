@@ -9,6 +9,8 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 95%;
+  overflow-y: auto;
 }
 
 .user-item {
@@ -47,3 +49,25 @@
 .offline {
   color: #999;
 }
+
+.user-list::-webkit-scrollbar {
+  width: 8px;
+  background: transparent; /* Fond scrollbar transparent */
+}
+
+.user-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Fond piste très léger et transparent */
+  border-radius: 10px;
+}
+
+.user-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); /* Thumb semi-transparent */
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.user-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5); /* Thumb un peu plus opaque au hover */
+}
+
+

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -15,8 +15,21 @@ export class RegisterComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  previewUrl: string | ArrayBuffer | null = "profil.jpg";
 
-  constructor(private dialogRef: MatDialogRef<RegisterComponent>) {}
+  constructor(private dialogRef: MatDialogRef<RegisterComponent>) { }
+
+
+  onPhotoSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   register() {
     console.log('Register:', {

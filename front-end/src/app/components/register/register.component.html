@@ -1,6 +1,16 @@
 <div class="glass-card">
   <h2>Register</h2>
 
+  <div class="photo-upload">
+    <label for="profile-photo" class="photo-label">
+      <img [src]="previewUrl || 'assets/default-avatar.png'" alt="Profile" class="photo-preview" />
+      <div class="camera-icon">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/camera.png" alt="Upload" />
+      </div>
+    </label>
+    <input type="file" id="profile-photo" (change)="onPhotoSelected($event)" hidden />
+  </div>
+
   <div class="form-group">
     <input type="text" [(ngModel)]="username" placeholder="Username" />
   </div>
@@ -18,4 +28,13 @@
   </div>
 
   <button class="login-btn" (click)="register()">REGISTER</button>
+
+  <div class="divider">
+    <span>or</span>
+  </div>
+
+  <button class="google-register-btn">
+    <img src="https://img.icons8.com/color/20/000000/google-logo.png" alt="Google Logo" />
+    Register with Google
+  </button>
 </div>
