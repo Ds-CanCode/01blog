@@ -1,0 +1,28 @@
+<!-- notification.component.html -->
+<div class="notification-popup">
+  <div class="notification-header">
+    <h2>Notifications</h2>
+    <span mat-icon-button class="close-btn" (click)="closeNotification()">
+      <mat-icon>close</mat-icon>
+    </span>
+  </div>
+  
+  <div class="notification-content">
+    <div class="notification-icon">
+      <mat-icon class="notification-bell">notifications</mat-icon>
+    </div>
+    
+    <h3>Recevez vos notifications en direct</h3>
+    
+    <p>Abonnez-vous à vos chaînes préférées pour être informé de la publication de nouvelles vidéos.</p>
+    
+    <div class="notification-actions">
+      <button mat-raised-button color="primary" class="btn-primary" (click)="onAllowNotifications()">
+        Autoriser
+      </button>
+      <button mat-button class="btn-secondary" (click)="onDenyNotifications()">
+        Plus tard
+      </button>
+    </div>
+  </div>
+</div>

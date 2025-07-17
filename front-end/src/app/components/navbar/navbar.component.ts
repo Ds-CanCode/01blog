@@ -48,6 +48,12 @@ export class NavbarComponent {
     this.popupService.openPapierPopup();
   }
 
+  openNotification() {
+    if (this.menuOpen) {
+      this.closeMenu();
+    }
+    this.popupService.openNotification();
+  }
 
 
 
