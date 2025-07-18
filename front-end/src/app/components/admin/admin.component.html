@@ -1,0 +1,283 @@
+<app-navbar></app-navbar>
+<div class="admin-panel">
+  <!-- Header -->
+  <div class="header">
+    <div class="title-section">
+      <h1 class="title">
+        {{ activeTab === 'users' ? 'Utilisateurs' : 
+           activeTab === 'posts' ? 'Posts' : 'Signalements' }}
+      </h1>
+      <p class="subtitle">
+        {{ activeTab === 'users' ? 'Gérer les utilisateurs de la plateforme' : 
+           activeTab === 'posts' ? 'Gérer les publications et contenus' : 'Gérer les signalements soumis' }}
+      </p>
+    </div>
+    
+    <div class="controls">
+      <div class="search-container">
+        <input 
+          type="text" 
+          placeholder="Rechercher..." 
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          class="search-input"
+        >
+        <i class="search-icon">🔍</i>
+      </div>
+      
+      <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select">
+        <option value="newest">Plus récent</option>
+        <option value="oldest">Plus ancien</option>
+        <option *ngIf="activeTab === 'users'" value="name">Nom</option>
+        <option *ngIf="activeTab === 'users'" value="posts">Posts</option>
+        <option *ngIf="activeTab === 'posts'" value="likes">Likes</option>
+        <option *ngIf="activeTab === 'posts'" value="comments">Commentaires</option>
+        <option *ngIf="activeTab === 'reports'" value="severity">Gravité</option>
+        <option *ngIf="activeTab === 'reports'" value="status">Statut</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'users'"
+      (click)="switchTab('users')"
+    >
+      Utilisateurs ({{ users.length }})
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'posts'"
+      (click)="switchTab('posts')"
+    >
+      Posts ({{ posts.length }})
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'reports'"
+      (click)="switchTab('reports')"
+    >
+      Signalements ({{ reports.length }})
+      <span *ngIf="getPendingReportsCount() > 0" class="notification-badge">
+        {{ getPendingReportsCount() }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Users Grid -->
+  <div class="grid" *ngIf="activeTab === 'users'">
+    <div class="card" *ngFor="let user of filteredUsers" [class.banned]="user.status === 'banned'">
+      <div class="card-header">
+        <div class="avatar-container">
+          <img [src]="user.avatar" [alt]="user.name" class="avatar">
+          <div class="status-indicator" [class]="user.status"></div>
+        </div>
+        <div class="user-info">
+          <h3 class="user-name">{{ user.name }}</h3>
+          <p class="user-role">{{ user.role }}</p>
+          <p class="user-email">{{ user.email }}</p>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="user-stats">
+          <div class="stat">
+            <span class="stat-label">Posts:</span>
+            <span class="stat-value">{{ user.postsCount }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Rejoint:</span>
+            <span class="stat-value">{{ user.joinDate | date:'MMM yyyy' }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Statut:</span>
+            <span class="stat-value" [class]="user.status + '-status'">{{ user.status }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <button class="btn-secondary" (click)="viewUserProfile(user.id)">
+          Voir profil
+        </button>
+        <div class="action-buttons">
+          <button 
+            class="btn-action" 
+            [class.ban]="user.status !== 'banned'"
+            [class.unban]="user.status === 'banned'"
+            (click)="banUser(user.id)"
+            [title]="user.status === 'banned' ? 'Débannir' : 'Bannir'"
+          >
+            {{ user.status === 'banned' ? '🔓' : '🚫' }}
+          </button>
+          <button 
+            class="btn-action delete" 
+            (click)="deleteUser(user.id)"
+            title="Supprimer"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posts Grid -->
+  <div class="posts-grid" *ngIf="activeTab === 'posts'">
+    <div class="post-card" *ngFor="let post of filteredPosts" [class.hidden]="post.status === 'hidden'">
+      <div class="post-header">
+        <div class="post-author">
+          <span class="author-name">{{ post.author }}</span>
+          <span class="post-date">{{ post.createdAt | date:'dd MMM yyyy' }}</span>
+        </div>
+        <div class="post-status" [class]="post.status">
+          {{ post.status === 'published' ? 'Publié' : post.status === 'hidden' ? 'Masqué' : 'En attente' }}
+        </div>
+      </div>
+      
+      <div class="post-content">
+        <h3 class="post-title">{{ post.title }}</h3>
+        <p class="post-excerpt">{{ post.content.substring(0, 150) }}...</p>
+      </div>
+      
+      <div class="post-stats">
+        <div class="stat">
+          <span class="stat-icon">❤️</span>
+          <span class="stat-value">{{ post.likesCount }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-icon">💬</span>
+          <span class="stat-value">{{ post.commentsCount }}</span>
+        </div>
+      </div>
+      
+      <div class="post-actions">
+        <button 
+          class="btn-action" 
+          [class.hide]="post.status !== 'hidden'"
+          [class.show]="post.status === 'hidden'"
+          (click)="hidePost(post.id)"
+          [title]="post.status === 'hidden' ? 'Afficher' : 'Masquer'"
+        >
+          {{ post.status === 'hidden' ? '👁️' : '🙈' }}
+        </button>
+        <button 
+          class="btn-action delete" 
+          (click)="deletePost(post.id)"
+          title="Supprimer"
+        >
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reports Grid -->
+  <div class="reports-grid" *ngIf="activeTab === 'reports'">
+    <div class="report-card" *ngFor="let report of filteredReports" [class]="report.status">
+      <div class="report-header">
+        <div class="report-meta">
+          <div class="report-type">
+            <span class="type-icon">{{ report.type === 'user' ? '👤' : report.type === 'post' ? '📝' : '💬' }}</span>
+            <span class="type-label">{{ report.type === 'user' ? 'Utilisateur' : report.type === 'post' ? 'Post' : 'Commentaire' }}</span>
+          </div>
+          <div class="report-date">{{ report.createdAt | date:'dd MMM yyyy' }}</div>
+        </div>
+        <div class="report-severity" [class]="report.severity">
+          {{ report.severity === 'high' ? 'Élevée' : report.severity === 'medium' ? 'Moyenne' : 'Faible' }}
+        </div>
+      </div>
+      
+      <div class="report-content">
+        <div class="report-reason">
+          <strong>Motif:</strong> {{ report.reason }}
+        </div>
+        <div class="report-target">
+          <strong>Signalé:</strong> 
+          <span *ngIf="report.reportedUser">{{ report.reportedUser }}</span>
+          <span *ngIf="report.reportedPost">{{ report.reportedPost }}</span>
+        </div>
+        <div class="report-description">
+          <strong>Description:</strong> {{ report.description }}
+        </div>
+        <div class="report-reporter">
+          <strong>Signalé par:</strong> {{ report.reportedBy }}
+        </div>
+      </div>
+      
+      <div class="report-actions" *ngIf="report.status === 'pending'">
+        <button class="btn-secondary" (click)="viewReportDetails(report.id)">
+          Voir détails
+        </button>
+        <div class="action-buttons">
+          <button 
+            class="btn-action resolve" 
+            (click)="resolveReport(report.id)"
+            title="Résoudre"
+          >
+            ✅
+          </button>
+          <button 
+            class="btn-action dismiss" 
+            (click)="dismissReport(report.id)"
+            title="Rejeter"
+          >
+            ❌
+          </button>
+          <button 
+            class="btn-action delete" 
+            (click)="deleteReport(report.id)"
+            title="Supprimer"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+      
+      <div class="report-actions" *ngIf="report.status !== 'pending'">
+        <button class="btn-secondary" (click)="viewReportDetails(report.id)">
+          Voir détails
+        </button>
+        <div class="action-buttons">
+          <button 
+            class="btn-action delete" 
+            (click)="deleteReport(report.id)"
+            title="Supprimer"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="(activeTab === 'users' && filteredUsers.length === 0) || 
+                                   (activeTab === 'posts' && filteredPosts.length === 0) || 
+                                   (activeTab === 'reports' && filteredReports.length === 0)">
+    <div class="empty-icon">
+      {{ activeTab === 'users' ? '👥' : activeTab === 'posts' ? '📝' : '📋' }}
+    </div>
+    <h3>Aucun {{ activeTab === 'users' ? 'utilisateur' : activeTab === 'posts' ? 'post' : 'signalement' }} trouvé</h3>
+    <p>{{ searchTerm ? 'Essayez avec d\'autres termes de recherche' : 'Il n\'y a pas encore de contenu à afficher' }}</p>
+  </div>
+
+  <!-- Reports Summary (when reports tab is active) -->
+  <div class="reports-summary" *ngIf="activeTab === 'reports' && reports.length > 0">
+    <div class="summary-card">
+      <h4>Résumé des signalements</h4>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <span class="stat-number">{{ getPendingReportsCount() }}</span>
+          <span class="stat-label">En attente</span>
+        </div>
+        <div class="summary-stat">
+          <span class="stat-number">{{ getHighPriorityReportsCount() }}</span>
+          <span class="stat-label">Priorité élevée</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
