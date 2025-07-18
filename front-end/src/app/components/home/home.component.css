@@ -39,9 +39,13 @@
 .sidebar.collapsed {
   width: 10px;
   height: 70px;
-  background-color: --color-teal;
-
+  background-color: var(--color-teal); 
+  transition: all 0.3s ease; 
+  overflow: hidden;
+  border-radius: 0 10px 10px 0; 
+  cursor: pointer;
 }
+
 
 /* === BOUTON DE TOGGLE === */
 .toggle-btn {
