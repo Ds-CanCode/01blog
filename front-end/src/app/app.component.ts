@@ -7,6 +7,9 @@ import { Router, NavigationEnd , RouterModule} from '@angular/router';
 // import { HomeComponent } from "./components/home/home.component";
 // import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
+import { HttpClientModule } from '@angular/common/http';
+
+// import { RegisterComponent } from './components/register/register.component';
 
 
 @Component({
@@ -14,6 +17,6 @@ import { MatDialogModule } from '@angular/material/dialog';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterModule, MatDialogModule],
+  imports: [RouterModule, MatDialogModule, HttpClientModule],
 })
 export class AppComponent {}
