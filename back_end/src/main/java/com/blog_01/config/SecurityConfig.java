@@ -17,8 +17,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         System.out.println("🚀 SecurityConfig loaded with CORS enabled");
         http
-            .csrf(csrf -> csrf.disable()) // désactive CSRF
-            .cors(cors -> {})             // dit à Spring Security d'utiliser le bean ci-dessous
+            .csrf(csrf -> csrf.disable()) 
+            .cors(cors -> {})
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                 .anyRequest().authenticated()
