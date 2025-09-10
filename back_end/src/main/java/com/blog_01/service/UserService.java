@@ -9,10 +9,13 @@ import com.blog_01.model.User;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+
+    public UserService(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     public User register(User user) {
@@ -23,6 +26,11 @@ public class UserService {
             throw new RuntimeException("Email already exists");
         }
         return userRepository.save(user);
+    }
+
+    public String loginAndGenerateToken(String usernameOrEmail, String password) {
+        User user = login(usernameOrEmail, password);
+        return jwtService.generateToken(user.getUsername(), user.getRole().name());
     }
 
     public User login(String usernameOrEmail, String password) {
