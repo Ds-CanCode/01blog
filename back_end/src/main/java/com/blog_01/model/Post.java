@@ -27,7 +27,7 @@ public class Post {
     private String content;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "edited_at")
     private LocalDateTime editedAt;

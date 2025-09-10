@@ -1,37 +1,53 @@
-// package com.blog_01.service;
+package com.blog_01.service;
 
-// import com.blog_01.model.User;
-// import com.blog_01.repository.UserRepository;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.stereotype.Service;
+import java.util.List;
 
-// @Service
-// public class UserService {
+import org.springframework.stereotype.Service;
 
-//     private final UserRepository userRepository;
-//     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+import com.blog_01.repository.UserRepository;
+import com.blog_01.model.User;
 
-//     public UserService(UserRepository userRepository) {
-//         this.userRepository = userRepository;
-//     }
+@Service
+public class UserService {
+    private final UserRepository userRepository;
 
-//     public User register(User user) {
-//         if (userRepository.existsByEmail(user.getEmail())) {
-//             throw new RuntimeException("Email déjà utilisé");
-//         }
-//         if (userRepository.existsByUsername(user.getUsername())) {
-//             throw new RuntimeException("Nom d'utilisateur déjà utilisé");
-//         }
-//         // Hasher le mot de passe avant sauvegarde
-//         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//         return userRepository.save(user);
-//     }
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-//     public User login(String email, String password) {
-//         User user = userRepository.findByEmail(email);
-//         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-//             throw new RuntimeException("Email ou mot de passe incorrect");
-//         }
-//         return user;
-//     }
-// }
+    public User register(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+        return userRepository.save(user);
+    }
+
+    public User login(String usernameOrEmail, String password) {
+        User user = userRepository.findByUsername(usernameOrEmail);
+        if (user == null) {
+            user = userRepository.findByEmail(usernameOrEmail);
+        }
+     
+        if (user == null || !user.getPasswordHash().equals(password)) { 
+            throw new RuntimeException("Invalid credentials");
+        }
+        return user;
+    }
+
+
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+}

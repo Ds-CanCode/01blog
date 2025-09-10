@@ -48,8 +48,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt =  LocalDateTime.now();
 
-    @Column(name = "is_banned", nullable = false)
-    private Boolean isBanned;
+    @Column(name = "is_banned")
+    private Boolean isBanned = false;
 
     @Column(name = "profile_image")
     private String profileImage;
