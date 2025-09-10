@@ -3,10 +3,12 @@ import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, MatDialogModule, FormsModule],
+  imports: [RouterModule, MatDialogModule, FormsModule, CommonModule],
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
@@ -17,7 +19,10 @@ export class NavbarComponent {
   lastScrollTop = 0;
   menuOpen = false;
 
-  constructor(private popupService: PopupService) { }
+  constructor(
+          private popupService: PopupService,
+          public authService: AuthService
+  ){}
 
 
   toggleMenu() {

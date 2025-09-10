@@ -2,6 +2,9 @@ package com.blog_01.controller;
 
 import com.blog_01.model.User;
 import com.blog_01.service.UserService;
+
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.*;
 
 // import java.util.List;
@@ -24,8 +27,9 @@ public class UserController {
 
    
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        return userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPasswordHash());
+    public Map<String, String> login(@RequestBody LoginRequest request) {
+        String token = userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPasswordHash());
+        return Map.of("token", token);
     }
 
     

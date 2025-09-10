@@ -8,7 +8,7 @@
       </a>
 
       <!-- Search -->
-      <div class="search-box d-flex align-items-center px-3 flex-grow-1" style="max-width: 300px;">
+      <div class="search-box d-flex align-items-center px-3 flex-grow-1" style="max-width: 300px;" *ngIf="authService.isLoggedIn()">
         <i class="bi bi-search me-2 text-muted"></i>
         <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Search"
           [(ngModel)]="searchText" />
@@ -16,7 +16,7 @@
     </div>
 
     <!-- 🟠 Centered links (desktop only) -->
-    <div class="navbar-center d-none d-lg-flex gap-4">
+    <div class="navbar-center d-none d-lg-flex gap-4" *ngIf="authService.isLoggedIn()">
       <a class="nav-link" routerLink="/home">Home</a>
       <a class="nav-link" routerLink="/article">Article</a>
       <a class="nav-link" routerLink="/profil">Profil</a>
@@ -26,13 +26,13 @@
     <!-- 🔴 Actions (write, notification, login/register, toggle) -->
     <div class="d-flex align-items-center gap-3">
       <!-- Write -->
-      <div class="d-flex align-items-center text-muted icon-button" (click)="openPapier()">
+      <div class="d-flex align-items-center text-muted icon-button" (click)="openPapier()" *ngIf="authService.isLoggedIn()">
         <i class="bi bi-pencil-square me-1"></i>
         <span class="d-none d-sm-inline" (click)="openPapier()">Write</span>
       </div>
 
       <!-- Notification -->
-      <div class="text-muted icon-button">
+      <div class="text-muted icon-button" *ngIf="authService.isLoggedIn()">
         <i class="bi bi-bell" (click)="openNotification()"></i>
       </div>
 
@@ -53,9 +53,9 @@
   <!-- 📱 Mobile menu -->
   <div class="collapse navbar-collapse d-lg-none px-4" id="mainNavbar" [class.show]="menuOpen">
     <div class="d-flex flex-column align-items-start gap-3">
-      <a class="nav-link" routerLink="/home">Home</a>
-      <a class="nav-link" routerLink="/article">Article</a>
-      <a class="nav-link" routerLink="/profil">Profil</a>
+      <a class="nav-link" routerLink="/home" *ngIf="authService.isLoggedIn()">Home</a>
+      <a class="nav-link" routerLink="/article" *ngIf="authService.isLoggedIn()">Article</a>
+      <a class="nav-link" routerLink="/profil" *ngIf="authService.isLoggedIn()">Profil</a>
 
       <!-- Login/Register (mobile only) -->
       <div class="auth-buttons d-flex gap-2 mt-3">

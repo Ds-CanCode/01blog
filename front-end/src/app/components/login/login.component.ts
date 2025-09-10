@@ -4,6 +4,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RouterModule} from '@angular/router';
 // import { RegisterComponent } from '../register/register.component';
 import { PopupService } from '../../services/popup.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -13,19 +14,34 @@ import { PopupService } from '../../services/popup.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  email = '';
-  password = '';
+  usernameOrEmail: string = '';
+  passwordHash = '';
   rememberMe = false;
 
   constructor(
     private  popupService: PopupService,
-    private dialogRef: MatDialogRef<LoginComponent>
+    private dialogRef: MatDialogRef<LoginComponent>,
+    private authService: AuthService
   ) {}
 
   openRegisterFromLogin() {
     this.popupService.openRegisterPopup();
   }
   
-  login() {}
+  login() {
+    const user = {
+      usernameOrEmail: this.usernameOrEmail,
+      passwordHash: this.passwordHash
+    };
+
+    this.authService.login(user).subscribe({
+      next: (response) => {
+        console.log('✅ Token reçu :', response.token);
+      },
+      error: (err) => {
+        console.error('❌ Erreur de login:', err);
+      }
+    });
+  }
   signInWithGoogle(){}
 }
