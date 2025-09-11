@@ -1,4 +1,5 @@
-<div class="registration-container">
+<div class="registration-popup-overlay" *ngIf="isOverlayVisible" (click)="closePopup()"></div>
+<div class="registration-container" (click)="$event.stopPropagation()">
   <div class="registration-form">
     <div class="cover-photo-section">
       <div class="cover-photo-placeholder">
@@ -21,7 +22,7 @@
       </div>
     </div>
 
-    <h2 class="form-title">Create Account</h2>
+    <h2 class="form-title">Rejoignez l’aventure</h2>
 
     <div class="input-grid">
       <div class="input-group">

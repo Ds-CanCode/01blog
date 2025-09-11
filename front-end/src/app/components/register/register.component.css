@@ -1,16 +1,31 @@
-.registration-form {
-    background: rgb(246, 246, 246);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    width: 900px; 
-    max-width: 100%; 
-    height: auto;
-    position: relative;
-    text-align: center;
-    color: #333;
+.registration-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5); /* semi-transparent comme login */
+  backdrop-filter: blur(8px);   /* blur identique au login */
+  z-index: 1000;                /* doit être inférieur au container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+.registration-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;  /* supérieur à l'overlay */
+  width: 90%;
+  max-width: 700px;
+  background: #d6d6d6; /* fond légèrement transparent */
+  backdrop-filter: blur(20px);        /* blur derrière le formulaire */
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+  color: #333;
 }
 
 
@@ -218,3 +233,5 @@
 .login-link a:hover {
     text-decoration: underline;
 }
+
+
