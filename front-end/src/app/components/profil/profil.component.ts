@@ -33,7 +33,7 @@ interface UserProfile {
 @Component({
   selector: 'app-profil',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, CommonModule, FormsModule],
+  imports: [ RouterModule, CommonModule, FormsModule],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.css'
 })

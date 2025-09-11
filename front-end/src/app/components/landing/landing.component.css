@@ -1,0 +1,154 @@
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 100px); 
+  overflow: hidden;
+}
+
+.image {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  max-width: 50%;
+  max-height: 50%;
+}
+
+.image img {
+  width: 100%;
+  height: auto;
+}
+
+.text {
+  position: absolute;
+  bottom: 20%;
+  left: 5%;
+  max-width: 90%;
+  font-family: "Georgia", serif;
+  color: #333;
+  line-height: 2.4;
+  white-space: nowrap;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;       
+  width: 100%;   
+}
+
+.btn-auth {
+  padding: 0rem 2rem;     
+  font-size: 2rem;   
+  border-radius: 4px;
+  border: none;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Dancing Script', cursive;
+  white-space: nowrap; 
+  width: 120px;       
+}
+
+.login-btn {
+  background-color: var(--color-teal);
+  color: var(--color-black);
+}
+
+.login-btn:hover {
+  background-color: var(--color-mint);
+}
+
+
+.animated-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4.5vw;
+  color: #333;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow: hidden;
+}
+
+.animated-text span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: write 0.5s forwards;
+}
+
+@keyframes write {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@media (max-width: 768px) {
+  .hero-section {
+    height: calc(100vh - 60px);
+  }
+  .image {
+    top: 150px;
+    right: 10px;
+    max-width: 60%;
+    max-height: 60%;
+  }
+  .text {
+    bottom: 50%;
+    left: 2%;
+    max-width: 95%;
+  }
+  .animated-text {
+    font-size: 6vw;
+  }
+  .btn-auth {
+  padding: 0rem 2rem;      
+  font-size: 1rem;     
+  width: 120px;        
+}
+}
+
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .hero-section {
+    height: calc(100vh - 70px);
+  }
+  .image {
+    top: 100px;
+    right: 15px;
+    max-width: 50%;
+    max-height: 50%;
+  }
+  .text {
+    bottom: 40%;
+    left: 3%;
+    max-width: 92%;
+  }
+  .animated-text {
+    font-size: 5vw;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1024px) {
+  .hero-section {
+    height: calc(100vh - 80px);
+  }
+  .image {
+    top: 50px;
+    right: 20px;
+    max-width: 40%;
+    max-height: 40%;
+  }
+  .text {
+    bottom: 30%;
+    left: 5%;
+    max-width: 90%;
+  }
+  .animated-text {
+    font-size: 4vw;
+  }
+}

@@ -45,7 +45,7 @@ export interface Report {
 
 @Component({
   selector: 'app-admin',
-  imports: [RouterModule, CommonModule, FormsModule, NavbarComponent],
+  imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })

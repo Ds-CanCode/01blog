@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
@@ -14,11 +14,11 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  @Input() bgColor: string = '';
   searchText = '';
   navbarHidden = false;
   lastScrollTop = 0;
   menuOpen = false;
-
   constructor(
           private popupService: PopupService,
           public authService: AuthService
@@ -69,7 +69,7 @@ export class NavbarComponent {
     const scrollDiff = scrollTop - this.lastScrollTop;
     if (scrollDiff > 5) {
       this.navbarHidden = true;
-    } else if (scrollDiff < -10) {
+    } else if (scrollDiff < -5) {
       this.navbarHidden = false;
     }
     this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

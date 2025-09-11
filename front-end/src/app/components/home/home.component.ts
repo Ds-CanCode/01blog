@@ -9,7 +9,7 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, CommonModule, UsersComponent],
+  imports: [ RouterModule, CommonModule, UsersComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

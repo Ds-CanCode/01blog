@@ -1,0 +1,23 @@
+<!-- Navbar avec couleur personnalisée -->
+<app-navbar bgColor="white"></app-navbar>
+
+<!-- Section hero qui prend toute la fenêtre -->
+<section class="hero-section">
+    <!-- Image de la plume en haut à droite -->
+    <div class="image">
+        <img src="plume.png" alt="Plume qui écrit">
+    </div>
+
+    <!-- Texte en bas à gauche -->
+    <div class="text">
+  <h1 class="animated-text">
+     <span *ngFor="let letter of text; let i = index" 
+          [style.animationDelay]="(i * 0.1) + 's'">
+      {{ letter }}
+    </span>
+  </h1>
+  <div class="button-container">
+    <button class="btn-auth login-btn" (click)="openLogin()">Login</button>
+  </div>
+</div>
+</section>

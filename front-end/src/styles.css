@@ -6,11 +6,4 @@
 }
 html, body { height: 100vh; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding-top: 100px;}
-body{
-  background-image: url('../public/bg.png');
-  background-size: cover; 
-  background-repeat: no-repeat;  
-  background-position: center; 
-  background-attachment: fixed;    
-}
-
+  
