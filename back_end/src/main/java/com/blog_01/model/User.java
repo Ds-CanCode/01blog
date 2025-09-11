@@ -25,6 +25,10 @@ import jakarta.persistence.Table;
 @Table(name = "users")
 public class User {
 
+    public User() {}
+
+    
+
     public enum Role {
         USER,
         ADMIN
@@ -86,7 +90,16 @@ public class User {
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
 
-     public Long getId() {
+
+    public User(String username, String email, String password, byte[] profileImage, byte[] coverImage) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.profileImage = profileImage;
+        this.coverImage = coverImage;
+    }
+
+    public Long getId() {
         return id;
     }
 

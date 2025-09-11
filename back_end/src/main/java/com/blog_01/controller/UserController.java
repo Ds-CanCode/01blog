@@ -1,12 +1,14 @@
 package com.blog_01.controller;
 
-import java.util.Base64;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog_01.model.User;
 import com.blog_01.service.UserService;
@@ -22,22 +24,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public User register(@RequestBody RegisterRequest request) {
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
-            user.setProfileImage(Base64.getDecoder().decode(request.getProfileImage()));
-        }
-        if (request.getCoverImage() != null && !request.getCoverImage().isEmpty()) {
-            user.setCoverImage(Base64.getDecoder().decode(request.getCoverImage()));
-        }
-       
-        return userService.register(user);
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
+    public ResponseEntity<?> register(
+            @RequestParam("username") String username,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage
+    ) throws java.io.IOException {
+
+        byte[] profileBytes = profileImage != null ? profileImage.getBytes() : null;
+        byte[] coverBytes = coverImage != null ? coverImage.getBytes() : null;
+
+        User user = new User(username, email, password, profileBytes, coverBytes);
+        userService.register(user);
+
+        return ResponseEntity.ok("Inscription réussie !");
     }
 
+    
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody LoginRequest request) {
         String token = userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPasswordHash());

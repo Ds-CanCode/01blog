@@ -26,6 +26,8 @@ export class RegisterComponent {
   profileImageFile: string | ArrayBuffer | null = null;
   coverImageFile: string | ArrayBuffer | null = null;
 
+  profileImageData: File | null = null;
+  coverImageData: File | null = null;
 
 
 
@@ -52,6 +54,7 @@ export class RegisterComponent {
   onCoverImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      this.coverImageData = file;
       const reader = new FileReader();
       reader.onload = () => this.coverImageFile = reader.result;
       reader.readAsDataURL(file);
@@ -61,6 +64,7 @@ export class RegisterComponent {
   onProfileImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      this.profileImageData = file;
       const reader = new FileReader();
       reader.onload = () => this.profileImageFile = reader.result;
       reader.readAsDataURL(file);
@@ -72,12 +76,19 @@ export class RegisterComponent {
       this.message = "Les mots de passe ne correspondent pas !";
       return;
     }
-  
-    const user = { username: this.username, email: this.email, password: this.password, confirmPassword: this.confirmPassword, coverImageFile: this.coverImageFile, profileImageFile: this.profileImageFile };
-    this.authService.registerUser(user).subscribe({
-      next: () => this.message = 'Inscription réussie !',
-      error: (err: { error: { message: string; }; }) => this.message = 'Erreur: ' + err.error.message
-    });
+
+    const formData = new FormData();
+    formData.append('username', this.username);
+    formData.append('email', this.email);
+    formData.append('password', this.password);
+
+    if (this.profileImageData) formData.append('profileImage', this.profileImageData);
+    if (this.coverImageData) formData.append('coverImage', this.coverImageData);
+
+      this.authService.registerUser(formData).subscribe({
+        next: () => this.message = 'Inscription réussie !',
+        error: (err: { error: { message: string; }; }) => this.message = 'Erreur: ' + err.error.message
+      });
   }
   openLoginFromRegister() {
     this.popupService.openLoginPopup();
