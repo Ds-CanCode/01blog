@@ -55,6 +55,9 @@
     <div *ngIf="password && confirmPassword && password !== confirmPassword" class="error">
       Les mots de passe ne correspondent pas !
     </div>
+    <div *ngIf="message" class="alert alert-danger">
+      {{ message }}
+    </div>
     <p class="login-link">
       Already have an account? <a (click)="openLoginFromRegister()">Log in</a>
     </p>

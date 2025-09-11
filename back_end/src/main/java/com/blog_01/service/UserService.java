@@ -38,7 +38,7 @@ public class UserService {
         // }
 
         // Créer un nouvel utilisateur
-    //    user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         // Sauvegarder l'utilisateur
         return userRepository.save(user);

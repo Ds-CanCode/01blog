@@ -85,10 +85,16 @@ export class RegisterComponent {
     if (this.profileImageData) formData.append('profileImage', this.profileImageData);
     if (this.coverImageData) formData.append('coverImage', this.coverImageData);
 
-      this.authService.registerUser(formData).subscribe({
-        next: () => this.message = 'Inscription réussie !',
-        error: (err: { error: { message: string; }; }) => this.message = 'Erreur: ' + err.error.message
-      });
+    this.authService.registerUser(formData).subscribe({
+      next: () => {
+        setTimeout(() => {
+           this.openLoginFromRegister();
+        }, 1000);
+      },
+      error: (err: any) => {
+        this.message = err.error.message || 'Erreur inconnue';
+      }
+    });
   }
   openLoginFromRegister() {
     this.popupService.openLoginPopup();
