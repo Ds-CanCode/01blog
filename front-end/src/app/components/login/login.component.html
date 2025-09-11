@@ -1,4 +1,4 @@
-<div class="login-container">
+<!-- <div class="login-container">
         <h1 class="login-title">Log In</h1>
         
         <form>
@@ -30,4 +30,81 @@
         <div class="signup-link">
             Don't have an account? Please <a (click)="openRegisterFromLogin()">Create one</a>
         </div>
+</div> -->
+
+<div class="login-popup-overlay" *ngIf="isOverlayVisible" (click)="closePopup()">
+    <div class="login-popup-container" (click)="$event.stopPropagation()">
+        <!-- Section gauche avec design bleu -->
+        <div class="login-left-section">
+            <div class="welcome-content">
+                <h1 class="welcome-title">Chaque mot devient voyage...</h1>
+                <p class="welcome-subtitle">Explorez vos pensées, partagez vos histoires</p>
+                <p class="welcome-description">
+                    Ici, chaque phrase vous emmène plus loin, chaque récit ouvre une porte sur l’inconnu.
+                    Vos souvenirs, vos rêves, vos aventures se transforment en chemins que d’autres peuvent suivre.
+                    Écrivez, inspirez et laissez vos mots voyager à travers le monde.
+                </p>
+            </div>
+            <!-- Éléments décoratifs -->
+            <div class="decorative-circles">
+                <div class="circle circle-1"></div>
+                <div class="circle circle-2"></div>
+            </div>
+        </div>
+
+        <!-- Section droite avec formulaire -->
+        <div class="login-right-section">
+            <div class="login-form-container">
+                <h2 class="login-title">Rejoignez l’aventure</h2>
+                <p class="login-subtitle">Chaque mot que vous partagez devient un chemin, une histoire à découvrir</p>
+
+
+                <form class="login-form" (ngSubmit)="login()">
+                    <!-- Champ User Name -->
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input type="text" class="form-input" placeholder="Email Or Username"
+                                [(ngModel)]="usernameOrEmail" name="usernameOrEmail" required>
+                        </div>
+                    </div>
+
+                    <!-- Champ Password -->
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <circle cx="12" cy="16" r="1"></circle>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <input [type]="showPassword ? 'text' : 'password'" class="form-input" placeholder="Password"
+                                [(ngModel)]="passwordHash" name="password" required>
+                            <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+                                {{ showPassword ? 'HIDE' : 'SHOW' }}
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Bouton Sign In -->
+                    <button type="submit" class="signin-btn">
+                        Sing in
+                    </button>
+
+
+
+                    <!-- Sign Up Link -->
+                    <div class="signup-link">
+                        Don't have an account? <a (click)="openRegisterFromLogin()">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</div>

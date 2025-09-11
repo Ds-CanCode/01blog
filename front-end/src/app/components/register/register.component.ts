@@ -3,12 +3,15 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+// import { HttpClientModule } from '@angular/common/http';
+import { PopupService } from '../../services/popup.service';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   standalone: true,
   selector: 'app-register',
-  imports: [FormsModule, MatDialogModule, RouterModule, HttpClientModule],
+  imports: [FormsModule, MatDialogModule, RouterModule, CommonModule, MatIconModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -18,24 +21,31 @@ export class RegisterComponent {
   password = '';
   confirmPassword = '';
   message = '';
-  // previewUrl: string | ArrayBuffer | null = "profil.jpg";
+  isOverlayVisible = true;
+  showPassword = false;
+  profileImageFile: File | null = null;
+  coverImageFile: File | null = null;
+
+  
+
 
   constructor(
     private dialogRef: MatDialogRef<RegisterComponent>,
+     private popupService: PopupService,
     private authService: AuthService
   ) {}
 
+    togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
-  // onPhotoSelected(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.previewUrl = reader.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
+  onProfileImageSelected(event: any) {
+    this.profileImageFile = event.target.files[0];
+  }
+
+  onCoverImageSelected(event: any) {
+    this.coverImageFile = event.target.files[0];
+  }
 
   register() {
     const user = { username: this.username, email: this.email, password: this.password };
@@ -44,38 +54,15 @@ export class RegisterComponent {
       error: (err: { error: { message: string; }; }) => this.message = 'Erreur: ' + err.error.message
     });
   }
+  openLoginFromRegister(){
+    this.popupService.openLoginPopup();
+  }
 
-  // register() {
-  //   if (this.password !== this.confirmPassword) {
-  //     alert("Les mots de passe ne correspondent pas !");
-  //     return;
-  //   }
-
-  //   const user = {
-  //     username: this.username,
-  //     email: this.email,
-  //     password: this.password
-  //   };
-
-  //   this.authService.register(user).subscribe({
-  //     next: (response) => {
-  //       console.log('Inscription réussie', response);
-  //       alert('Inscription réussie !');
-  //       // this.dialogRef.close(); // ferme le dialogue
-  //     },
-  //     error: (err) => {
-  //       console.error('Erreur lors de l\'inscription', err);
-  //       alert('Erreur lors de l\'inscription');
-  //     }
-  //   });
-    // console.log('Register:', {
-    //   username: this.username,
-    //   email: this.email,
-    //   password: this.password,
-    //   confirmPassword: this.confirmPassword,
-    // });
-    close() {
+  closePopup() {
+    if (this.dialogRef) {
+      this.isOverlayVisible = false;
       this.dialogRef.close();
     }
   }
+}
 

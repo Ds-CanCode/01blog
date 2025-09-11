@@ -1,217 +1,220 @@
-/* Conteneur principal (carte en verre) */
-.glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
-  margin: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 9999;
-  position: relative;
-}
-
-/* Titre */
-.glass-card h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 30px;
-  text-align: left;
-}
-
-/* Groupes de champs */
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 16px 20px;
-  border: none;
-  border-radius: 12px;
-  background: #f5f5f5;
-  font-size: 16px;
-  color: #333;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.form-group input::placeholder {
-  color: #999;
-}
-
-.form-group input:focus {
-  background: #e8e8e8;
-  transform: translateY(-2px);
-  box-shadow: inset 0 0 0 2px #83cc9b;
-}
-
-/* Bouton */
-.login-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #83cc9b 0%, #9ef5bb 100%);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-}
-
-.login-btn:active {
-  transform: translateY(0);
-}
-
-/* Désactivation possible du bouton */
-.login-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
-
-.google-register-btn {
-  width: 100%;
-  padding: 14px 20px;
-  border: none;
-  border-radius: 12px;
-  background: #ffffff;
-  color: #555;
-  font-size: 15px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 20px;
-}
-
-.google-register-btn:hover {
-  background: #f1f1f1;
-  transform: translateY(-1px);
-}
-
-.google-register-btn img {
-  height: 20px;
-}
-
-.divider {
-  margin: 20px 0;
-  text-align: center;
-  position: relative;
-}
-
-.divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #e0e0e0;
-}
-
-.divider span {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 0 20px;
-  color: #999;
-  font-size: 14px;
-}
-
-.photo-upload {
-  text-align: center;
-  margin-bottom: 25px;
-  position: relative;
-}
-
-.photo-label {
-  display: inline-block;
-  cursor: pointer;
-  position: relative;
-}
-
-.photo-preview {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #83cc9b;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-
-/* Icône caméra */
-.camera-icon {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: #83cc9b;
-  border-radius: 50%;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s ease;
-}
-
-.camera-icon:hover {
-  background: #6fb488;
-}
-
-.camera-icon img {
-  width: 16px;
-  height: 16px;
-}
-
-.photo-text {
-  display: block;
-  font-size: 14px;
-  color: #666;
-  margin-top: 8px;
+.registration-form {
+    background: rgb(246, 246, 246);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    width: 900px; 
+    max-width: 100%; 
+    height: auto;
+    position: relative;
+    text-align: center;
+    color: #333;
 }
 
 
-
-/* Animation d'apparition */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Section des photos de couverture et de profil */
+.cover-photo-section {
+    position: relative;
+    margin-bottom: 20px;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .glass-card {
-    padding: 30px 20px;
-  }
+.cover-photo-placeholder {
+    width: 100%;
+    height: 180px;
+    background-color: #e0f2e0;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+}
 
-  .glass-card h2 {
+.cover-photo-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cover-photo-text {
+    z-index: 1;
+    font-weight: bold;
+}
+
+.upload-button-cover {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #4CAF50;
+    font-weight: bold;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Style du conteneur de la photo de profil, qui devient la référence */
+.profile-photo-upload {
+    position: relative; /* Très important pour que le positionnement absolute du bouton fonctionne */
+    display: flex;
+    flex-direction: column; /* Aligne les éléments verticalement */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espace entre la photo et le bouton */
+    margin-top: -30px;
+}
+
+/* Style du bouton d'upload */
+.upload-button-profile {
+    position: absolute; /* Positionnement absolu */
+    top: 80px; /* Ajustez cette valeur pour placer le bouton juste sous la photo */
+    left: 50%;
+    transform: translateX(-50%); /* Pour centrer le bouton horizontalement */
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #4CAF50;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 888;
+}
+
+/* Le reste du CSS pour les éléments de la section de profil */
+.profile-photo-icon {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-photo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-photo-icon .mat-icon {
+    font-size: 30px;
+    color: #4CAF50;
+    z-index: 1;
+}
+
+.upload-button-profile {
+    background-color:  rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    color:  #4CAF50;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 888;
+}
+
+/* Titre et champs de formulaire */
+.form-title {
     font-size: 24px;
-  }
+    font-weight: bold;
+    margin: 20px 0;
+    color: #333;
+}
 
-  .login-btn {
-    padding: 14px;
-    font-size: 15px;
-  }
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group .mat-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-group input::placeholder {
+    color: #aaa;
+}
+
+.input-group input:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgb(162, 213, 198);
+}
+
+/* Bouton d'inscription et lien de connexion */
+.register-button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(45deg,  rgb(162, 213, 198), rgb(207, 255, 226));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.register-button:hover {
+    background: rgb(162, 213, 198);
+}
+
+.login-link {
+    font-size: 14px;
+    color: #555;
+    margin-top: 15px;
+}
+
+.login-link a {
+    color: #4b864d;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
 }
