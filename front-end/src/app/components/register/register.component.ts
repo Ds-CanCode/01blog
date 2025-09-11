@@ -23,38 +23,63 @@ export class RegisterComponent {
   message = '';
   isOverlayVisible = true;
   showPassword = false;
-  profileImageFile: File | null = null;
-  coverImageFile: File | null = null;
+  profileImageFile: string | ArrayBuffer | null = null;
+  coverImageFile: string | ArrayBuffer | null = null;
 
-  
+
 
 
   constructor(
     private dialogRef: MatDialogRef<RegisterComponent>,
-     private popupService: PopupService,
+    private popupService: PopupService,
     private authService: AuthService
-  ) {}
+  ) { }
 
-    togglePasswordVisibility() {
+
+  isFormValid(): boolean {
+    return this.username.trim() !== '' &&
+      this.email.trim() !== '' &&
+      this.password.trim() !== '' &&
+      this.confirmPassword.trim() !== '' &&
+      this.password === this.confirmPassword;
+  }
+
+
+  togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
-  onProfileImageSelected(event: any) {
-    this.profileImageFile = event.target.files[0];
+  onCoverImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => this.coverImageFile = reader.result;
+      reader.readAsDataURL(file);
+    }
   }
 
-  onCoverImageSelected(event: any) {
-    this.coverImageFile = event.target.files[0];
+  onProfileImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => this.profileImageFile = reader.result;
+      reader.readAsDataURL(file);
+    }
   }
 
   register() {
-    const user = { username: this.username, email: this.email, password: this.password };
+    if (this.password !== this.confirmPassword) {
+      this.message = "Les mots de passe ne correspondent pas !";
+      return;
+    }
+  
+    const user = { username: this.username, email: this.email, password: this.password, coverImageFile: this.coverImageFile, profileImageFile: this.profileImageFile };
     this.authService.register(user).subscribe({
       next: () => this.message = 'Inscription réussie !',
       error: (err: { error: { message: string; }; }) => this.message = 'Erreur: ' + err.error.message
     });
   }
-  openLoginFromRegister(){
+  openLoginFromRegister() {
     this.popupService.openLoginPopup();
   }
 

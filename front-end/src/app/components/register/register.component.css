@@ -204,19 +204,34 @@
 .register-button {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(45deg,  rgb(162, 213, 198), rgb(207, 255, 226));
+    background-color:  rgb(162, 213, 198);
     border: none;
     border-radius: 10px;
     color: white;
     font-size: 18px;
     font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    
+    transition: background-color 0.3s, opacity 0.3s;
+    opacity: 0.6;
+}
+register-button.active {
+  cursor:  not-allowed;
+  background-color: rgb(162, 213, 198); /* vert foncé quand actif */
+  cursor: pointer;
+  opacity: 1;
 }
 
-.register-button:hover {
-    background: rgb(162, 213, 198);
+.register-button.active:hover {
+  cursor:pointer;
+  background-color: rgb(20, 120, 20); /* hover un peu plus foncé */
 }
+
+/* .register-button:hover:not([disabled]) {
+  background-color: rgb(162, 213, 198); 
+}
+.register-button:hover[disabled] {
+  background: #45a049; ;
+} */
 
 .login-link {
     font-size: 14px;

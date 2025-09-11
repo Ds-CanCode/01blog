@@ -3,8 +3,8 @@
   <div class="registration-form">
     <div class="cover-photo-section">
       <div class="cover-photo-placeholder">
-        <img *ngIf="!coverImageFile" src="couvertur.jpg" alt="Cover Photo">
-        <!-- <img *ngIf="coverImageFile" [src]="coverImageFile | fileUrl" alt="Cover Photo"> -->
+        <img *ngIf="!coverImageFile" src="upload.png" alt="Cover Photo">
+        <img *ngIf="coverImageFile" [src]="coverImageFile" alt="Cover Photo">
         <label class="upload-button-cover">
           <input type="file" (change)="onCoverImageSelected($event)" style="display: none;">
           <mat-icon>cloud_upload</mat-icon>
@@ -12,8 +12,8 @@
       </div>
       <div class="profile-photo-upload">
         <div class="profile-photo-icon">
-          <img *ngIf="!coverImageFile" src="avatar.jpeg" alt="Profil Photo">
-          <!-- <img *ngIf="coverImageFile" [src]="coverImageFile | fileUrl" alt="Cover Photo"> -->
+          <img *ngIf="!profileImageFile" src="avatar.jpeg" alt="Profil Photo">
+          <img *ngIf="profileImageFile" [src]="profileImageFile" alt="Cover Photo">
         </div>
         <label class="upload-button-profile">
           <input type="file" (change)="onProfileImageSelected($event)" style="display: none;">
@@ -29,10 +29,6 @@
         <mat-icon class="icon">person</mat-icon>
         <input type="text" placeholder="Username" [(ngModel)]="username" name="username">
       </div>
-      <!-- <div class="input-group">
-                <mat-icon class="icon">person</mat-icon>
-                <input type="text" placeholder="Possname" [(ngModel)]="possname" name="possname">
-            </div> -->
       <div class="input-group">
         <mat-icon class="icon">email</mat-icon>
         <input type="email" placeholder="Email" [(ngModel)]="email" name="email">
@@ -43,10 +39,6 @@
         <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password"
           name="password">
       </div>
-      <!-- <div class="input-group">
-                <mat-icon class="icon">email</mat-icon>
-                <input type="email" placeholder="Email" [(ngModel)]="email" name="email">
-            </div> -->
       <div class="input-group">
         <mat-icon class="icon" (click)="togglePasswordVisibility()">{{ showPassword ? 'visibility' : 'visibility_off'
           }}</mat-icon>
@@ -55,7 +47,14 @@
       </div>
     </div>
 
-    <button class="register-button" (click)="register()">Register</button>
+    <!-- <button class="register-button" (click)="register()">Register</button> -->
+    <button class="register-button" [ngClass]="{'active': isFormValid()}" (click)="register()"
+      [disabled]="!isFormValid()">
+      Register
+    </button>
+    <div *ngIf="password && confirmPassword && password !== confirmPassword" class="error">
+      Les mots de passe ne correspondent pas !
+    </div>
     <p class="login-link">
       Already have an account? <a (click)="openLoginFromRegister()">Log in</a>
     </p>
