@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -39,23 +40,25 @@ public class User {
     @Column(unique = true, nullable = false, length = 30)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt =  LocalDateTime.now();
 
     @Column(name = "is_banned")
     private Boolean isBanned = false;
 
+    @Lob
     @Column(name = "profile_image")
-    private String profileImage;
+    private byte[] profileImage;
 
+    @Lob
     @Column(name = "cover_image")
-    private String coverImage;  
+    private byte[] coverImage; 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
@@ -107,12 +110,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Role getRole() {
@@ -139,19 +142,19 @@ public class User {
         this.isBanned = isBanned;
     }
 
-    public String getProfileImage() {
+    public byte[] getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(String profileImage) {
+    public void setProfileImage(byte[] profileImage) {
         this.profileImage = profileImage;
     }
 
-    public String getCoverImage() {
+    public byte[] getCoverImage() {
         return coverImage;
     }
 
-    public void setCoverImage(String coverImage) {
+    public void setCoverImage(byte[] coverImage) {
         this.coverImage = coverImage;
     }
 
@@ -210,4 +213,9 @@ public class User {
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
+
+    // public void setConfirmPassword(String confirmPassword) {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'setConfirmPassword'");
+    // }
 }

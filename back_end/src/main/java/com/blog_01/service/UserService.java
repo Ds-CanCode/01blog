@@ -2,29 +2,45 @@ package com.blog_01.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.blog_01.repository.UserRepository;
 import com.blog_01.model.User;
+import com.blog_01.repository.UserRepository;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, JwtService jwtService) {
+    public UserService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User register(User user) {
+        // Vérification si le username existe déjà
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
+
+        // Vérification si l'email existe déjà
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
+
+        // // Vérification si les mots de passe correspondent
+        // if (!user.getPassword().equals(user.getConfirmPassword())) {
+        //     throw new RuntimeException("Passwords do not match");
+        // }
+
+        // Créer un nouvel utilisateur
+    //    user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Sauvegarder l'utilisateur
         return userRepository.save(user);
     }
 
@@ -38,13 +54,12 @@ public class UserService {
         if (user == null) {
             user = userRepository.findByEmail(usernameOrEmail);
         }
-     
-        if (user == null || !user.getPasswordHash().equals(password)) { 
-            throw new RuntimeException("Invalid credentials");
-        }
+
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        throw new RuntimeException("Invalid credentials");
+    }
         return user;
     }
-
 
     public User getUser(Long id) {
         return userRepository.findById(id)

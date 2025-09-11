@@ -39,7 +39,7 @@ export class LoginComponent {
       passwordHash: this.passwordHash
     };
 
-    this.authService.login(user).subscribe({
+    this.authService.loginUser(user).subscribe({
       next: (response) => {
         console.log('✅ Token reçu :', response.token);
       },

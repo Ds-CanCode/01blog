@@ -73,8 +73,8 @@ export class RegisterComponent {
       return;
     }
   
-    const user = { username: this.username, email: this.email, password: this.password, coverImageFile: this.coverImageFile, profileImageFile: this.profileImageFile };
-    this.authService.register(user).subscribe({
+    const user = { username: this.username, email: this.email, password: this.password, confirmPassword: this.confirmPassword, coverImageFile: this.coverImageFile, profileImageFile: this.profileImageFile };
+    this.authService.registerUser(user).subscribe({
       next: () => this.message = 'Inscription réussie !',
       error: (err: { error: { message: string; }; }) => this.message = 'Erreur: ' + err.error.message
     });

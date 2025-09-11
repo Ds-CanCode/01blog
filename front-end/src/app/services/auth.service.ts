@@ -8,11 +8,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  register(user: any) {
+  registerUser(user: any) {
     return this.http.post(`${this.apiUrl}/register`, user);
   }
 
-  login(user: any): Observable<{ token: string }> {
+  loginUser(user: any): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, user)
       .pipe(
         tap(response => {
