@@ -1,7 +1,7 @@
 import { Component, Optional } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 // import { RegisterComponent } from '../register/register.component';
 import { PopupService } from '../../services/popup.service';
 import { AuthService } from '../../services/auth.service';
@@ -16,7 +16,8 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   usernameOrEmail: string = '';
-  passwordHash = '';
+  password = '';
+  message = '';
   rememberMe = false;
   showPassword = false;
   isOverlayVisible = true;
@@ -24,7 +25,8 @@ export class LoginComponent {
   constructor(
     private popupService: PopupService,
     private dialogRef: MatDialogRef<LoginComponent>,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   openRegisterFromLogin() {
@@ -36,16 +38,19 @@ export class LoginComponent {
   login() {
     const user = {
       usernameOrEmail: this.usernameOrEmail,
-      passwordHash: this.passwordHash
+      password: this.password
     };
 
     this.authService.loginUser(user).subscribe({
       next: (response) => {
         console.log('✅ Token reçu :', response.token);
+        this.router.navigate(['/home']);
+        this.closePopup();
       },
-      error: (err) => {
-        console.error('❌ Erreur de login:', err);
+      error: (err: any) => {
+        this.message = err.error.message;
       }
+
     });
   }
   signInWithGoogle() { }

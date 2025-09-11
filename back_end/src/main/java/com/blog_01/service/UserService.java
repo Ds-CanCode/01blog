@@ -2,6 +2,7 @@ package com.blog_01.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,35 +33,40 @@ public class UserService {
             throw new RuntimeException("Email already exists");
         }
 
-        // // Vérification si les mots de passe correspondent
-        // if (!user.getPassword().equals(user.getConfirmPassword())) {
-        //     throw new RuntimeException("Passwords do not match");
-        // }
-
-        // Créer un nouvel utilisateur
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         // Sauvegarder l'utilisateur
         return userRepository.save(user);
     }
 
-    public String loginAndGenerateToken(String usernameOrEmail, String password) {
-        User user = login(usernameOrEmail, password);
-        return jwtService.generateToken(user.getUsername(), user.getRole().name());
-    }
-
-    public User login(String usernameOrEmail, String password) {
+    public User authenticateUser(String usernameOrEmail, String password) {
         User user = userRepository.findByUsername(usernameOrEmail);
         if (user == null) {
             user = userRepository.findByEmail(usernameOrEmail);
         }
-
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-        throw new RuntimeException("Invalid credentials");
-    }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
         return user;
     }
 
+    public String loginAndGenerateToken(String usernameOrEmail, String password) {
+        User user = authenticateUser(usernameOrEmail, password);
+        return jwtService.generateToken(user.getUsername(), user.getRole().name());
+    }
+
+    // public String loginAndGenerateToken(String usernameOrEmail, String password) {
+    //     User user = login(usernameOrEmail, password);
+    //     return jwtService.generateToken(user.getUsername(), user.getRole().name());
+    // }
+    // public User login(String usernameOrEmail, String password) {
+    //     User user = userRepository.findByUsername(usernameOrEmail);
+    //     if (user == null) {
+    //         user = userRepository.findByEmail(usernameOrEmail);
+    //     }
+    //     if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+    //         throw new RuntimeException("Invalid credentials");
+    //     }
+    //     return user;
+    // }
     public User getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));

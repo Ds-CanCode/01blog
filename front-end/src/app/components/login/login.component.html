@@ -83,13 +83,15 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
                             <input [type]="showPassword ? 'text' : 'password'" class="form-input" placeholder="Password"
-                                [(ngModel)]="passwordHash" name="password" required>
+                                [(ngModel)]="password" name="password" required>
                             <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
                                 {{ showPassword ? 'HIDE' : 'SHOW' }}
                             </button>
                         </div>
                     </div>
-
+                    <div *ngIf="message" class="alert alert-danger">
+                        {{ message }}
+                    </div>
 
 
                     <!-- Bouton Sign In -->

@@ -3,6 +3,7 @@ package com.blog_01.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,7 @@ public class UserController {
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage
     ) {
         try {
-            
+
             String hashedPassword = passwordEncoder.encode(password);
 
             byte[] profileBytes = profileImage != null ? profileImage.getBytes() : null;
@@ -57,11 +58,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginRequest request) {
-        String token = userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPasswordHash());
-        return Map.of("token", token);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            String token = userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPassword());
+            return ResponseEntity.ok(Map.of(
+                    "message", "Connexion réussie ✅",
+                    "token", token
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", e.getMessage()));
+        }
     }
-
+    
     // @GetMapping
     // public List<User> getAllUsers() {
     //     return userService.getAllUsers();
@@ -79,7 +88,7 @@ public class UserController {
 class LoginRequest {
 
     private String usernameOrEmail;
-    private String passwordHash;
+    private String password;
 
     public String getUsernameOrEmail() {
         return usernameOrEmail;
@@ -89,12 +98,12 @@ class LoginRequest {
         this.usernameOrEmail = usernameOrEmail;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
 
