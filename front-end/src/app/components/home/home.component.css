@@ -88,13 +88,21 @@
 /* === GRID DE CARTES === */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   justify-content: center;
   max-width: 1200px; /* tu peux ajuster selon largeur que tu veux max */
   margin: 0 auto; /* centre la grille */
   transition: max-width 0.3s ease;
 }
+.left-card {
+  grid-column: 1 / 2; 
+}
+.right-cards .card-container {
+  flex: 1; /* Toutes les cartes de droite ont la même hauteur */
+}
+
 
 /* === CARTE === */
 .card-container {
@@ -110,6 +118,7 @@
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
 }
 
 .custom-card:hover {
@@ -184,6 +193,7 @@
   }
 
   .card-grid {
+
     grid-template-columns: 1fr !important; /* 1 colonne */
     padding: 0 1rem;
     gap: 1rem; /* réduire un peu le gap sur mobile */

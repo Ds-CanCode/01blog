@@ -46,12 +46,12 @@ export class NavbarComponent {
     this.popupService.openRegisterPopup();
   }
 
-  openPapier() {
-    if (this.menuOpen) {
-      this.closeMenu();
-    }
-    this.popupService.openPapierPopup();
-  }
+  // openPapier() {
+  //   if (this.menuOpen) {
+  //     this.closeMenu();
+  //   }
+  //   this.popupService.openPapierPopup();
+  // }
 
   openNotification() {
     if (this.menuOpen) {

@@ -1,93 +1,136 @@
-<div class="editor-container">
-      <!-- Header -->
-      <mat-toolbar class="editor-header">
-        <div class="header-left">
-          <div class="logo-circle">
-            <mat-icon>article</mat-icon>
+<div class="papier-container" (keydown)="onKeyDown($event)">
+  <!-- Header avec titre et bouton fermer -->
+  <mat-toolbar class="papier-header" color="primary">
+    <span class="header-title">✍️ Créer un post</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="closePopup()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Contenu principal -->
+  <div class="papier-content">
+    
+    <!-- Zone d'écriture avec Quill Editor -->
+    <div class="editor-container">
+      <quill-editor
+        (onContentChanged)="onContentChanged($event)"
+    
+        class="content-editor">
+      </quill-editor>
+    </div>
+
+    <!-- Input file caché -->
+    <input 
+      #fileInput 
+      type="file" 
+      (change)="onFileSelected($event)" 
+      multiple 
+      accept="image/*,video/*" 
+      style="display: none;">
+
+    <!-- Bouton pour ajouter des fichiers -->
+    <div class="file-actions">
+      <button 
+        mat-raised-button 
+        color="accent" 
+        (click)="openFileDialog()"
+        class="add-media-btn"
+        [disabled]="selectedFiles.length >= maxFiles">
+        <mat-icon>add_photo_alternate</mat-icon>
+        Ajouter Images/Vidéos
+        <span *ngIf="selectedFiles.length > 0">({{selectedFiles.length}}/{{maxFiles}})</span>
+      </button>
+    </div>
+
+    <!-- Prévisualisation des fichiers sélectionnés -->
+    <div class="media-preview-section" *ngIf="selectedFiles.length > 0">
+      <h3 class="preview-title">
+        <mat-icon>perm_media</mat-icon>
+        Médias sélectionnés ({{selectedFiles.length}})
+      </h3>
+      
+      <div class="media-grid">
+        <div 
+          *ngFor="let file of selectedFiles; let i = index" 
+          class="media-item"
+          [attr.data-index]="i">
+          
+          <!-- Prévisualisation image -->
+          <div class="media-wrapper" *ngIf="file.type.startsWith('image/')">
+            <img [src]="file.url" [alt]="file.name" class="preview-image">
+            <div class="media-overlay">
+              <div class="file-info">
+                <span class="file-name" [title]="file.name">{{file.name}}</span>
+                <span class="file-size">{{file.size}}</span>
+              </div>
+              <button 
+                mat-mini-fab 
+                color="warn" 
+                (click)="removeFile(i)"
+                class="remove-btn"
+                [attr.aria-label]="'Supprimer ' + file.name">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
-          <span class="draft-text">Draft</span>
-        </div>
-        <div class="header-right">
-          <button mat-raised-button color="primary" (click)="publish()" class="publish-btn">
-            Publier
-          </button>
-          <button mat-icon-button (click)="close()" class="close-btn">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </mat-toolbar>
 
-      <!-- Floating Toolbar -->
-      <div 
-        class="floating-toolbar" 
-        [style.display]="showToolbar ? 'flex' : 'none'"
-        [style.left.px]="toolbarPosition.x - 120"
-        [style.top.px]="toolbarPosition.y - 60"
-      >
-        <button mat-icon-button (click)="formatText('bold')" title="Gras">
-          <mat-icon>format_bold</mat-icon>
-        </button>
-        <button mat-icon-button (click)="formatText('italic')" title="Italique">
-          <mat-icon>format_italic</mat-icon>
-        </button>
-        <button mat-icon-button (click)="createLink()" title="Lien">
-          <mat-icon>link</mat-icon>
-        </button>
-        <button mat-icon-button (click)="insertQuote()" title="Citation">
-          <mat-icon>format_quote</mat-icon>
-        </button>
-      </div>
-
-      <!-- Editor Content -->
-      <div class="editor-content">
-        <div class="editor-wrapper">
-          <!-- Title Input -->
-          <input
-            type="text"
-            placeholder="Titre de votre article..."
-            [(ngModel)]="title"
-            class="title-input"
-          />
-
-          <!-- Content Editor -->
-          <div
-            #contentEditor
-            contenteditable="true"
-            class="content-editor"
-            [innerHTML]="content"
-            (input)="onContentChange($event)"
-            (mouseup)="handleTextSelection()"
-            (keyup)="handleTextSelection()"
-            placeholder="Racontez votre histoire..."
-          ></div>
-        </div>
-      </div>
-
-      <!-- Bottom Toolbar -->
-      <div class="bottom-toolbar">
-        <div class="toolbar-buttons">
-          <button mat-icon-button (click)="insertCode()" title="Insérer du code">
-            <mat-icon>code</mat-icon>
-          </button>
-          <button mat-icon-button (click)="insertImage()" title="Insérer une image">
-            <mat-icon>image</mat-icon>
-          </button>
-          <button mat-icon-button (click)="insertList()" title="Liste à puces">
-            <mat-icon>format_list_bulleted</mat-icon>
-          </button>
-          <button mat-icon-button (click)="insertQuote()" title="Citation">
-            <mat-icon>format_quote</mat-icon>
-          </button>
-          <div class="toolbar-separator"></div>
-          <button mat-icon-button (click)="formatText('justifyLeft')" title="Aligner à gauche">
-            <mat-icon>format_align_left</mat-icon>
-          </button>
-          <button mat-icon-button (click)="formatText('justifyCenter')" title="Centrer">
-            <mat-icon>format_align_center</mat-icon>
-          </button>
-          <button mat-icon-button (click)="formatText('justifyRight')" title="Aligner à droite">
-            <mat-icon>format_align_right</mat-icon>
-          </button>
+          <!-- Prévisualisation vidéo -->
+          <div class="media-wrapper" *ngIf="file.type.startsWith('video/')">
+            <video [src]="file.url" class="preview-video" controls preload="metadata"></video>
+            <div class="media-overlay">
+              <div class="file-info">
+                <span class="file-name" [title]="file.name">{{file.name}}</span>
+                <span class="file-size">{{file.size}}</span>
+              </div>
+              <button 
+                mat-mini-fab 
+                color="warn" 
+                (click)="removeFile(i)"
+                class="remove-btn"
+                [attr.aria-label]="'Supprimer ' + file.name">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Actions en bas -->
+    <div class="papier-actions">
+      <div class="action-buttons">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="submitPost()"
+          [disabled]="!canSubmit()"
+          class="submit-btn">
+          <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+          <mat-icon *ngIf="isSubmitting" class="spinning">refresh</mat-icon>
+          {{isSubmitting ? 'Publication...' : 'Publier'}}
+        </button>
+        
+        <button 
+          mat-stroked-button 
+          (click)="closePopup()"
+          class="cancel-btn"
+          [disabled]="isSubmitting">
+          <mat-icon>cancel</mat-icon>
+          Annuler
+        </button>
+      </div>
+      
+      <!-- Informations supplémentaires -->
+      <div class="post-info">
+        <div class="char-counter" *ngIf="postContent">
+          <mat-icon>text_fields</mat-icon>
+          {{postContent.length}} caractères
+        </div>
+        <div class="shortcuts-hint">
+          <small>Ctrl+Entrée pour publier • Échap pour fermer</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
