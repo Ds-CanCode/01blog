@@ -28,14 +28,16 @@ public class PostService {
     }
 
     @Transactional
-    public Post create(String content, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
+    public Post create(String title, String content, String tags ,String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new RuntimeException("Utilisateur introuvable");
         }
 
         Post post = new Post();
+        post.setTitle(title);
         post.setContent(content);
+        post.setTags(tags);
         post.setUser(user);
 
         if (files != null) {

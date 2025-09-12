@@ -23,8 +23,14 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
+    private String title;
+
     @Column(nullable = false, length = 1000)
     private String content;
+
+    @Column(length = 50)
+    private String tags;
 
     @Column(name = "created_at", nullable = false)
     private final LocalDateTime createdAt = LocalDateTime.now();
@@ -60,12 +66,28 @@ public class Post {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public LocalDateTime getCreatedAt() {

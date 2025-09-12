@@ -1,7 +1,103 @@
-<form (ngSubmit)="createPost()" #postForm="ngForm">
-  <textarea [(ngModel)]="content" name="content" placeholder="Écris quelque chose..." required></textarea>
+<div class="container">
+    <div class="editor-container">
+        <h2>✨ Créer un nouvel article</h2>
 
-  <input type="file" (change)="onFileSelected($event)" multiple />
+        <!-- Titre de l'article -->
+        <div class="form-group">
+            <label class="form-label">Titre de l'article</label>
+            <textarea 
+                [(ngModel)]="title"
+                class="title-input" 
+                placeholder="Donnez un titre accrocheur à votre article..."
+                rows="1"
+                maxlength="100"
+                (input)="updateTitleCounter()"></textarea>
+            <div class="char-counter">{{ titleCount }}/100</div>
+        </div>
 
-  <button type="submit">Publier</button>
-</form>
+        <!-- Contenu de l'article -->
+        <div class="form-group">
+            <label class="form-label">Contenu</label>
+            <textarea 
+                [(ngModel)]="content"
+                class="editor-textarea" 
+                placeholder="Écrivez votre article ici... Partagez vos idées, expériences ou découvertes avec la communauté !"
+                maxlength="5000"
+                (input)="updateContentCounter()"></textarea>
+            <div class="char-counter">{{ contentCount }}/5000</div>
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group">
+            <label class="form-label">Tags (optionnel)</label>
+            <input 
+                type="text" 
+                [(ngModel)]="tags"
+                class="tags-input" 
+                placeholder="Ajoutez des tags séparés par des virgules (ex: technologie, innovation, startup)">
+        </div>
+
+        <!-- Upload fichiers -->
+        <div class="form-group">
+            <label class="form-label">Médias</label>
+            <div class="media-upload" (click)="fileInput.click()">
+                <label class="upload-label">
+                    <div class="upload-icon">📎</div>
+                    <div>Ajouter des images ou vidéos</div>
+                    <small>Formats supportés: JPG, PNG, GIF, MP4, MOV (Max: 10MB par fichier)</small>
+                </label>
+                <input 
+                    #fileInput
+                    type="file" 
+                    multiple 
+                    accept="image/*,video/*" 
+                    hidden
+                    (change)="onFileSelected($event)">
+            </div>
+
+            <!-- Preview des médias -->
+            <div class="preview-container" *ngIf="medias.length > 0">
+                <div *ngFor="let media of medias; trackBy: trackByMedia" class="media-preview">
+                    <div class="media-item">
+                        <img *ngIf="media.type === 'IMAGE'" 
+                             [src]="media.preview" 
+                             alt="Preview"
+                             class="preview-image">
+                        <video *ngIf="media.type === 'VIDEO'" 
+                               [src]="media.preview" 
+                               controls
+                               class="preview-video"></video>
+                        <button type="button" 
+                                class="remove-media-btn" 
+                                (click)="removeMedia(media)"
+                                title="Supprimer">
+                            ✕
+                        </button>
+                    </div>
+                    <div class="media-info">
+                        <span class="media-name">{{ media.file.name }}</span>
+                        <span class="media-size">{{ formatFileSize(media.file.size) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouton publier -->
+        <button 
+            class="publish-btn" 
+            [disabled]="loading || !isFormValid()"
+            (click)="createPost()">
+            <span *ngIf="!loading">Publier l'article</span>
+            <span *ngIf="loading">Publication...</span>
+        </button>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="spinner"></div>
+        <div class="loader-text">Publication en cours...</div>
+        <div class="loader-subtext">Traitement des médias et sauvegarde</div>
+    </div>
+</div>

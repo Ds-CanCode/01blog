@@ -31,7 +31,9 @@ public class PostController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createPost(
+            @RequestParam("title") String title,
             @RequestParam("content") String content,
+            @RequestParam("tags") String tags,
             @RequestParam(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "types", required = false) List<String> types,
             @RequestHeader("Authorization") String authHeader
@@ -44,8 +46,8 @@ public class PostController {
         String username = jwtService.extractUsername(token);
 
         try {
-            postService.create(content, username, files, types);
-        
+            postService.create(title, content, tags, username, files, types);
+
             Map<String, String> response = new HashMap<>();
             response.put("message", "Post créé par " + username);
             return ResponseEntity.ok(response);
