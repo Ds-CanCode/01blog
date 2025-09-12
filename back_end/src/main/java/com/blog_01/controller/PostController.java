@@ -3,13 +3,7 @@ package com.blog_01.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.PostDTO;
-import com.blog_01.model.Media;
-import com.blog_01.model.Post;
-import com.blog_01.model.User;
-import com.blog_01.repository.UserRepository;
 import com.blog_01.service.JwtService;
-
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +22,8 @@ public class PostController {
 
     private final PostService postService;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
 
-    public PostController(PostService postService, JwtService jwtService, UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public PostController(PostService postService, JwtService jwtService) {
         this.postService = postService;
         this.jwtService = jwtService;
     }
@@ -44,7 +36,7 @@ public class PostController {
         String token = authHeader.substring(7);
         String username = jwtService.extractUsername(token);
 
-        Post post = postService.create(postDTO, username);
+        postService.create(postDTO, username);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Post créé par " + username);

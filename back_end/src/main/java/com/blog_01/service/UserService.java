@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import com.blog_01.model.User;
 import com.blog_01.repository.UserRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 import com.blog_01.dto.UserLoginDTO;
 
 @Service
@@ -27,17 +24,12 @@ public class UserService {
     }
 
     public User register(User user) {
-        // Vérification si le username existe déjà
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-
-        // Vérification si l'email existe déjà
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
-
-        // Sauvegarder l'utilisateur
         return userRepository.save(user);
     }
 
@@ -54,24 +46,9 @@ public class UserService {
 
     public String loginAndGenerateToken(String usernameOrEmail, String password) {
         UserLoginDTO user = authenticateUser(usernameOrEmail, password);
-
         return jwtService.generateToken(user.getUsername(), user.getRole().name());
     }
 
-    // public String loginAndGenerateToken(String usernameOrEmail, String password) {
-    //     User user = login(usernameOrEmail, password);
-    //     return jwtService.generateToken(user.getUsername(), user.getRole().name());
-    // }
-    // public User login(String usernameOrEmail, String password) {
-    //     User user = userRepository.findByUsername(usernameOrEmail);
-    //     if (user == null) {
-    //         user = userRepository.findByEmail(usernameOrEmail);
-    //     }
-    //     if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-    //         throw new RuntimeException("Invalid credentials");
-    //     }
-    //     return user;
-    // }
     public User getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));

@@ -15,9 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.blog_01.model.User;
 import com.blog_01.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
-
-// import java.util.List;
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -72,18 +69,6 @@ public class UserController {
         }
     }
     
-    // @GetMapping
-    // public List<User> getAllUsers() {
-    //     return userService.getAllUsers();
-    // }
-    // @GetMapping("/{id}")
-    // public User getUser(@PathVariable Long id) {
-    //     return userService.getUser(id);
-    // }
-    // @DeleteMapping("/{id}")
-    // public void deleteUser(@PathVariable Long id) {
-    //     userService.deleteUser(id);
-    // }
 }
 
 class LoginRequest {
@@ -107,48 +92,3 @@ class LoginRequest {
         this.password = password;
     }
 }
-
-// class RegisterRequest {
-//     private String username;
-//     private String email;
-//     private String password;
-//     private String confirmPassword;
-//     private String profileImage;
-//     private String coverImage;
-//     public String getUsername() {
-//         return username;
-//     }
-//     public void setUsername(String username) {
-//         this.username = username;
-//     }
-//     public String getEmail() {
-//         return email;
-//     }
-//     public void setEmail(String email) {
-//         this.email = email;
-//     }
-//     public String getPassword() {
-//         return password;
-//     }
-//     public void setPassword(String password) {
-//         this.password = password;
-//     }
-//     public String getConfirmPassword() {
-//         return confirmPassword;
-//     }
-//     public void setConfirmPassword(String confirmPassword) {
-//         this.confirmPassword = confirmPassword;
-//     }
-//     public String getProfileImage() {
-//         return profileImage;
-//     }
-//     public void setProfileImage(String profileImage) {
-//         this.profileImage = profileImage;
-//     }
-//     public String getCoverImage() {
-//         return coverImage;
-//     }
-//     public void setCoverImage(String coverImage) {
-//         this.coverImage = coverImage;
-//     }
-// }
