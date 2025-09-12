@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -24,8 +25,9 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 1000)
-    private String url; 
+    @Lob
+    @Column(nullable = false)
+    private byte[] data; 
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -45,12 +47,12 @@ public class Media {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
+    public byte[] getData() {
+        return data;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public MediaType getType() {

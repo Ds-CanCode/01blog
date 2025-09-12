@@ -1,0 +1,7 @@
+<form (ngSubmit)="createPost()" #postForm="ngForm">
+  <textarea [(ngModel)]="content" name="content" placeholder="Écris quelque chose..." required></textarea>
+
+  <input type="file" (change)="onFileSelected($event)" multiple />
+
+  <button type="submit">Publier</button>
+</form>

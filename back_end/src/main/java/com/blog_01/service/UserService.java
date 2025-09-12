@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.blog_01.model.User;
 import com.blog_01.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import com.blog_01.dto.UserLoginDTO;
 
 @Service
@@ -50,6 +54,7 @@ public class UserService {
 
     public String loginAndGenerateToken(String usernameOrEmail, String password) {
         UserLoginDTO user = authenticateUser(usernameOrEmail, password);
+
         return jwtService.generateToken(user.getUsername(), user.getRole().name());
     }
 

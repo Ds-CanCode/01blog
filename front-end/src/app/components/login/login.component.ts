@@ -48,7 +48,8 @@ export class LoginComponent {
         this.closePopup();
       },
       error: (err: any) => {
-        this.message = err.error.message;
+         console.log('Err :', err.error.message);
+        this.message = err.error.message ;
       }
 
     });

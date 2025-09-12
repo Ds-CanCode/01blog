@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.blog_01.model.User;
 import com.blog_01.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 // import java.util.List;
 @RestController
 @RequestMapping("/api/auth")
@@ -65,7 +67,7 @@ public class UserController {
                     "token", token
             ));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(403)
+            return ResponseEntity.status(500)
                     .body(Map.of("message", e.getMessage()));
         }
     }

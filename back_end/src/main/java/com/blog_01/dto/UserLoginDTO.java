@@ -1,5 +1,4 @@
 package com.blog_01.dto;
-
 import com.blog_01.model.User.Role;
 
 public class UserLoginDTO {
