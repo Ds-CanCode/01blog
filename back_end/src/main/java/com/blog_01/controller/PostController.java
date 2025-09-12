@@ -9,9 +9,6 @@ import com.blog_01.model.User;
 import com.blog_01.repository.UserRepository;
 import com.blog_01.service.JwtService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,26 +42,10 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token manquant");
         }
         String token = authHeader.substring(7);
-        System.out.println(token);
         String username = jwtService.extractUsername(token);
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new RuntimeException("Utilisateur introuvable");
-        }
 
-        Post post = new Post();
-        post.setContent(postDTO.getContent());
-        post.setUser(user);
-        if (postDTO.getMedias() != null) {
-            postDTO.getMedias().forEach(mediaDTO -> {
-                Media media = new Media();
-                media.setType(Media.MediaType.valueOf(mediaDTO.getType()));
-                media.setPost(post);
-                media.setData(Base64.getDecoder().decode(mediaDTO.getBase64()));
-                post.getMedias().add(media);
-            });
-        }
-        postService.create(post);
+        Post post = postService.create(postDTO, username);
+
         Map<String, String> response = new HashMap<>();
         response.put("message", "Post créé par " + username);
         return ResponseEntity.ok(response);

@@ -26,7 +26,7 @@ public class Media {
     private Long id;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BYTEA")
     private byte[] data; 
 
     @Enumerated(EnumType.STRING)

@@ -66,12 +66,12 @@ public class User {
     private Boolean isBanned = false;
 
     @Lob
-    @Basic(fetch = FetchType.EAGER)
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "profile_image")
     private byte[] profileImage;
 
     @Lob
-    @Basic(fetch = FetchType.EAGER)
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "cover_image")
     private byte[] coverImage;
 

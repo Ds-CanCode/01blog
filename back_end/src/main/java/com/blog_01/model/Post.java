@@ -84,8 +84,8 @@ public class Post {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User user2) {
+        this.user = user2;
     }
 
     public List<Media> getMedias() {
