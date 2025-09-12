@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,7 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createPost(@RequestBody PostDTO postDTO, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> createPost(@RequestBody PostDTO postDTO, @RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token manquant");
         }
@@ -63,7 +65,9 @@ public class PostController {
             });
         }
         postService.create(post);
-        return ResponseEntity.ok("Post créé par " + username);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Post créé par " + username);
+        return ResponseEntity.ok(response);
     }
 
 }
