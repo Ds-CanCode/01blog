@@ -1,5 +1,5 @@
 import { Component, HostListener, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PopupService } from '../../services/popup.service';
 import { FormsModule } from '@angular/forms';
@@ -19,10 +19,12 @@ export class NavbarComponent {
   navbarHidden = false;
   lastScrollTop = 0;
   menuOpen = false;
+  
   constructor(
-          private popupService: PopupService,
-          public authService: AuthService
-  ){}
+    private popupService: PopupService,
+    public authService: AuthService,
+    private router: Router
+  ) { }
 
 
   toggleMenu() {
@@ -46,12 +48,14 @@ export class NavbarComponent {
     this.popupService.openRegisterPopup();
   }
 
-  // openPapier() {
-  //   if (this.menuOpen) {
-  //     this.closeMenu();
-  //   }
-  //   this.popupService.openPapierPopup();
-  // }
+  openPapier() {
+    this.router.navigate(['/home']);
+   
+    // if (this.menuOpen) {
+    //   this.closeMenu();
+    // }
+    // this.popupService.openPapierPopup();
+  }
 
   openNotification() {
     if (this.menuOpen) {
