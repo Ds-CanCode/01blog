@@ -3,7 +3,6 @@ package com.blog_01.controller;
 import java.io.IOException;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +65,7 @@ public class UserController {
                     "token", token
             ));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(403)
                     .body(Map.of("message", e.getMessage()));
         }
     }

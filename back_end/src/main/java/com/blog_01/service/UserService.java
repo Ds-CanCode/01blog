@@ -2,12 +2,12 @@ package com.blog_01.service;
 
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.blog_01.model.User;
 import com.blog_01.repository.UserRepository;
+import com.blog_01.dto.UserLoginDTO;
 
 @Service
 public class UserService {
@@ -37,10 +37,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User authenticateUser(String usernameOrEmail, String password) {
-        User user = userRepository.findByUsername(usernameOrEmail);
+    public UserLoginDTO authenticateUser(String usernameOrEmail, String password) {
+        UserLoginDTO user = userRepository.findLoginUser(usernameOrEmail);
         if (user == null) {
-            user = userRepository.findByEmail(usernameOrEmail);
+            throw new RuntimeException("Utilisateur introuvable");
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
@@ -49,7 +49,7 @@ public class UserService {
     }
 
     public String loginAndGenerateToken(String usernameOrEmail, String password) {
-        User user = authenticateUser(usernameOrEmail, password);
+        UserLoginDTO user = authenticateUser(usernameOrEmail, password);
         return jwtService.generateToken(user.getUsername(), user.getRole().name());
     }
 

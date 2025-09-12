@@ -6,11 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,9 +27,16 @@ import jakarta.persistence.Table;
 @Table(name = "users")
 public class User {
 
-    public User() {}
+    public User() {
+    }
 
-    
+    public User(String username, String email, String password, byte[] profileImage, byte[] coverImage) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.profileImage = profileImage;
+        this.coverImage = coverImage;
+    }
 
     public enum Role {
         USER,
@@ -51,18 +60,20 @@ public class User {
     private Role role = Role.USER;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt =  LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "is_banned")
     private Boolean isBanned = false;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Column(name = "profile_image")
     private byte[] profileImage;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Column(name = "cover_image")
-    private byte[] coverImage; 
+    private byte[] coverImage;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
@@ -89,15 +100,6 @@ public class User {
 
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
-
-
-    public User(String username, String email, String password, byte[] profileImage, byte[] coverImage) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.profileImage = profileImage;
-        this.coverImage = coverImage;
-    }
 
     public Long getId() {
         return id;
