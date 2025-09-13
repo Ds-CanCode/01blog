@@ -1,60 +1,143 @@
-<!-- <div class="hero-section">
-    <div class="container">
-        <h1>Human stories & ideas</h1>
-        <p>A place to read, write, and deepen your understanding</p>
-    </div>
-</div> -->
-
-<!-- Nouveau wrapper Flex -->
- <div class="wrapper">
-<div class="sidebar" [class.collapsed]="!showUserList">
+<div class="wrapper">
+  <div class="sidebar" [class.collapsed]="!showUserList">
     <button (click)="toggleUserList()" class="toggle-btn">
-        <img *ngIf="showUserList" src="arrow_back.png" alt="Open icon" class="icon-photo" />
-        <img *ngIf="!showUserList" src="arrow.png" alt="Closed icon" class="icon-photo" />
+      <img *ngIf="showUserList" src="arrow_back.png" alt="Open icon" class="icon-photo" />
+      <img *ngIf="!showUserList" src="arrow.png" alt="Closed icon" class="icon-photo" />
     </button>
 
     <div class="user-list" *ngIf="showUserList">
-        <app-users></app-users>
+      <app-users></app-users>
     </div>
-</div>
+  </div>
 
-
-<div class="container">
-  <h1 class="section-title">Recent Blog Posts</h1>
-  
-  <div class="blog-grid">
-    <div 
-      class="blog-card" 
-      *ngFor="let post of AllPosts"
-      (click)="onCardClick(post.id)">
-      
-      <div class="card-image">
-        <img 
-          [src]="post.image" 
-          [alt]="post.title" 
-          loading="lazy"
-          (error)="onImageError($event)">
-        <div class="video-overlay" *ngIf="post.isVideo">▶</div>
-      </div>
-      
-      <div class="card-content">
-        <h3 class="card-title">{{ post.title }}</h3>
-        <p class="card-description">{{ post.description }}</p>
-        
-        <div class="card-meta">
-          <div class="author-info">
-            <div class="author-avatar">
-              <img 
-                [src]="post.author.avatar" 
-                [alt]="post.author.name"
-                (error)="onImageError($event)">
-            </div>
-            <span class="author-name">{{ post.author.name }}</span>
-          </div>
-          <span class="publish-date">{{ post.publishDate }}</span>
-        </div>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Uncover fresh perspectives, ideas, and knowledge through the power of blogs.
+      </h1>
+      <p class="hero-description">
+        Redify is an open platform where readers find dynamic thinking, and where 
+        expert and undiscovered voices can share their writing on any topic.
+      </p>
+      <button class="start-reading-btn">
+        <span>Start Reading</span>
+        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2L14 8L8 14M14 8H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="scroll-indicator">
+        <span>Scroll down</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2V14M2 8L8 14L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="container">
+    <!-- SECTION 1: Featured Articles (Top 4) -->
+    <div class="featured-section" *ngIf="AllPosts.length > 0">
+      <h2 class="section-title">Featured Articles</h2>
+      <div class="featured-grid">
+        <!-- Main Featured Post (Left Side) -->
+        <div class="main-featured-post" *ngIf="AllPosts[0]" (click)="onCardClick(AllPosts[0].id)">
+          <div class="featured-image-container">
+            <img 
+              [src]="AllPosts[0].image" 
+              [alt]="AllPosts[0].title"
+              class="featured-image"
+              (error)="onImageError($event)"
+            >
+            <div class="featured-overlay"></div>
+            <div class="featured-content">
+              <div class="featured-meta">
+                <span class="featured-author">{{ AllPosts[0].author.name }}</span>
+                <span class="featured-date">{{ AllPosts[0].publishDate | date:'d MMM, yyyy' }}</span>
+              </div>
+              <h2 class="featured-title">{{ AllPosts[0].title }}</h2>
+              <p class="featured-description">{{ AllPosts[0].description }}</p>
+              <div class="featured-tags">
+                <span class="featured-tag">Featured</span>
+                <span class="featured-tag">Latest</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Articles (Right Side) -->
+        <div class="side-articles">
+          <div 
+            class="side-article" 
+            *ngFor="let post of AllPosts.slice(1, 4); trackBy: trackByPostId"
+            (click)="onCardClick(post.id)"
+          >
+            <div class="side-article-image">
+              <img 
+                [src]="post.image" 
+                [alt]="post.title"
+                (error)="onImageError($event)"
+              >
+            </div>
+            <div class="side-article-content">
+              <div class="side-article-meta">
+                <span class="side-author">{{ post.author.name }}</span>
+                <span class="side-date">{{ post.publishDate | date:'d MMM, yyyy' }}</span>
+              </div>
+              <h3 class="side-article-title">{{ post.title }}</h3>
+              <div class="side-article-tags">
+                <span class="side-tag">News</span>
+                <span class="side-tag">Popular</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: All Articles (Your Original Grid) -->
+    <div class="all-articles-section">
+      <h2 class="section-title">All Articles</h2>
+      <div class="blog-grid">
+        <div 
+          class="blog-card" 
+          *ngFor="let post of AllPosts; trackBy: trackByPostId"
+          (click)="onCardClick(post.id)">
+          
+          <div class="card-image">
+            <img 
+              [src]="post.image" 
+              [alt]="post.title" 
+              loading="lazy"
+              (error)="onImageError($event)">
+            <div class="video-overlay" *ngIf="post.isVideo">▶</div>
+          </div>
+          
+          <div class="card-content">
+            <h3 class="card-title">{{ post.title }}</h3>
+            <p class="card-description">{{ post.description }}</p>
+            
+            <div class="card-meta">
+              <div class="author-info">
+                <div class="author-avatar">
+                  <img 
+                    [src]="post.author.avatar" 
+                    [alt]="post.author.name"
+                    (error)="onImageError($event)">
+                </div>
+                <span class="author-name">{{ post.author.name }}</span>
+              </div>
+              <span class="publish-date">{{ post.publishDate | date:'d MMM, yyyy' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="AllPosts.length === 0">
+      <div class="loading-spinner"></div>
+      <p>Loading articles...</p>
+    </div>
+  </div>
 </div>
