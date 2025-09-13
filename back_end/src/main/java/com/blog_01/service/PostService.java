@@ -86,7 +86,6 @@ public class PostService {
             if (user.getProfileImage() != null) {
                 String base64Avatar = Base64.getEncoder().encodeToString(user.getProfileImage());
                 author.setAvatar("data:image/png;base64," + base64Avatar);
-                // adapte le type mime selon ton image: jpg/png...
             } else {
                 author.setAvatar(null);
             }
@@ -97,4 +96,52 @@ public class PostService {
 
         return ResponseEntity.ok(dtos);
     }
+
+    public ResponseEntity<BlogPostDTO> getPost(Long id) {
+        return postRepository.findById(id)
+                .map(post -> {
+                    BlogPostDTO dto = new BlogPostDTO();
+                    dto.setId(post.getId());
+                    dto.setTitle(post.getTitle());
+                    dto.setDescription(post.getContent());
+
+                    if (!post.getMedias().isEmpty()) {
+                        Media firstMedia = post.getMedias().get(0);
+                        dto.setImage(firstMedia.getUrl());
+                        dto.setVideo(firstMedia.getType() == Media.MediaType.VIDEO);
+                    }
+
+                    AuthorDTO author = new AuthorDTO();
+                    User user = post.getUser();
+                    author.setName(post.getUser().getUsername());
+                    if (user.getProfileImage() != null) {
+                        String base64Avatar = Base64.getEncoder().encodeToString(user.getProfileImage());
+                        author.setAvatar("data:image/png;base64," + base64Avatar);
+                    } else {
+                        author.setAvatar(null);
+                    }
+                    dto.setAuthor(author);
+                    dto.setPublishDate(post.getCreatedAt().toString());
+                    return ResponseEntity.ok(dto);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+    //  return
+    //     .map(post -> {
+    //         BlogPostDTO dto = new BlogPostDTO();
+    //         dto.setId(post.getId());
+    //         dto.setTitle(post.getTitle());
+    //         dto.setDescription(post.getContent());
+
+    //         if (!post.getMedias().isEmpty()) {
+    //             Media firstMedia = post.getMedias().get(0);
+    //             dto.setImage(firstMedia.getUrl());
+    //         }
+    //         AuthorDTO author = new AuthorDTO();
+    //         author.setName(post.getUser().getUsername());
+    //         dto.setAuthor(author);
+    //         dto.setPublishDate(post.getCreatedAt().toString());
+    //         return ResponseEntity.ok(dto);
+    //     })
+    //     .orElse(ResponseEntity.notFound().build());
 }

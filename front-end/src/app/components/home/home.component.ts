@@ -33,7 +33,7 @@ export interface BlogPost {
 export class HomeComponent {
   AllPosts: BlogPost[] = [];
 
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService, private router: Router) { }
 
   ngOnInit(): void {
     this.postService.getAllPosts()
@@ -47,11 +47,11 @@ export class HomeComponent {
 
   }
 
-  onCardClick(postId: number): void {
-    console.log(`Navigating to blog post ${postId}`);
-    // Navigation logic: this.router.navigate(['/blog', postId]);
+  onCardClick(id: number) {
+    this.router.navigate(['/article', id]);
   }
 
+  
   onImageError(event: any): void {
     event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNzUgNzVIMjI1VjEyNUgxNzVWNzVaIiBmaWxsPSIjRERERERkIi8+Cjwvc3ZnPgo=';
   }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import com.blog_01.service.PostService;
 import io.jsonwebtoken.io.IOException;
 
 @RestController
-@RequestMapping("/api/post")
+@RequestMapping("/api/posts")
 public class PostController {
 
     private final PostService postService;
@@ -59,8 +60,13 @@ public class PostController {
     }
 
     @GetMapping("/getAllPosts")
-    public  ResponseEntity<List<BlogPostDTO>> getAllPosts() {
+    public ResponseEntity<List<BlogPostDTO>> getAllPosts() {
         return postService.getAllPosts();
+    }
+
+    @GetMapping("/getPost/{id}")
+    public ResponseEntity<BlogPostDTO> getPostById(@PathVariable Long id) {
+        return postService.getPost(id);
     }
 
 }

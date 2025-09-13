@@ -1,34 +1,204 @@
-<app-navbar></app-navbar>
+<!-- Loading State -->
+<div class="loading-container" *ngIf="isLoading">
+  <div class="loading-spinner"></div>
+  <p>Loading article...</p>
+</div>
 
-<div class="article-container">
-  <div class="article-card">
-    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800"
-         alt="Image article" class="article-img">
-    <div class="article-body">
-      <h2 class="article-title">Titre de l'article</h2>
-      <p class="article-meta">Publié par <strong>Auteur</strong> le 12 juillet 2025</p>
-      <p class="article-text">
-        Ceci est le contenu détaillé de l'article. Il peut inclure plusieurs paragraphes, des images, des liens, etc.
-      </p>
-      <button class="btn-like" (click)="toggleLike()">
-        ❤️ {{ likeCount }} j'aime
-      </button>
-    </div>
+<!-- Article Content -->
+<div class="article-wrapper" *ngIf="!isLoading && article">
+  <!-- Back Navigation -->
+  <div class="navigation-bar">
+    <button class="back-btn" (click)="goBack()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Back to Articles</span>
+    </button>
+
   </div>
 
-  <div class="comment-card">
-    <h5 class="comment-title">Commentaires ({{ comments.length }})</h5>
-
-    @for (comment of comments; track comment.author) {
-      <div class="comment-item">
-        <strong>{{ comment.author }}</strong> : <span>{{ comment.text }}</span>
+  <!-- Article Container -->
+  <div class="article-container">
+    <!-- Main Article Card -->
+    <article class="article-card">
+      <!-- Article Header -->
+      <div class="article-header">
+        <div class="article-image-container">
+          <img 
+            [src]="article.image" 
+            [alt]="article.title"
+            class="article-image"
+            (error)="onImageError($event)"
+          >
+          <div class="video-badge" *ngIf="article.isVideo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Article Meta Info -->
+        <div class="article-meta-info">
+          <div class="author-section">
+            <div class="author-avatar">
+              <img 
+                [src]="article.author.avatar" 
+                [alt]="article.author.name"
+                (error)="onImageError($event)"
+              >
+            </div>
+            <div class="author-details">
+              <h4 class="author-name">{{ article.author.name }}</h4>
+              <p class="publish-info">
+                Published on {{ article.publishDate | date:'MMMM d, yyyy' }}
+              </p>
+            </div>
+          </div>
+          
+          <!-- Article Actions -->
+          <div class="article-actions">
+            <button 
+              class="like-btn"
+              [class.liked]="isLiked"
+              (click)="toggleLike()"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 3C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 3.00063 7.05 3.00063C5.59096 3.00063 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.55063 7.04097 1.55063 8.5C1.55063 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22248 22.45 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.3946C21.7563 5.72709 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>{{ likeCount }}</span>
+            </button>
+            
+            <div class="reading-time">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>5 min read</span>
+            </div>
+          </div>
+        </div>
       </div>
-    }
 
-    <div class="comment-form">
-      <label for="comment">Ajouter un commentaire :</label>
-      <textarea id="comment" [(ngModel)]="newComment" rows="3"></textarea>
-      <button class="btn-comment" (click)="addComment()">Commenter</button>
-    </div>
+      <!-- Article Body -->
+      <div class="article-body">
+        <h1 class="article-title">{{ article.title }}</h1>
+        
+        <div class="article-content">
+          <p class="article-lead">{{ article.description }}</p>
+          
+          <!-- Demo content - in real app, this would come from your API -->
+          <div class="article-text">
+            <p>This comprehensive article explores the latest developments and insights in this fascinating topic. Our expert analysis delves deep into the key aspects that matter most to our readers.</p>
+            
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            
+            <h3>Key Takeaways</h3>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Comments Section -->
+    <section class="comments-section">
+      <div class="comments-header">
+        <h3 class="comments-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Comments ({{ comments.length }})
+        </h3>
+      </div>
+
+      <!-- Add Comment Form -->
+      <div class="add-comment-form">
+        <div class="comment-form-header">
+          <div class="user-avatar">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face" alt="Your avatar">
+          </div>
+          <div class="form-content">
+            <label for="comment-input">Add a comment</label>
+            <textarea 
+              id="comment-input"
+              [(ngModel)]="newComment" 
+              placeholder="Share your thoughts about this article..."
+              rows="3"
+              class="comment-textarea"
+            ></textarea>
+          </div>
+        </div>
+        <div class="comment-form-actions">
+          <button 
+            class="submit-comment-btn"
+            [disabled]="!newComment.trim()"
+            (click)="addComment()"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M18 2L9 11L18 2ZM18 2L12 18L9 11L2 8L18 2Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Post Comment
+          </button>
+        </div>
+      </div>
+
+      <!-- Comments List -->
+      <div class="comments-list">
+        <div 
+          class="comment-item" 
+          *ngFor="let comment of comments; trackBy: trackByCommentId"
+        >
+          <div class="comment-avatar">
+            <img 
+              [src]="comment.author.avatar" 
+              [alt]="comment.author.name"
+              (error)="onImageError($event)"
+            >
+          </div>
+          
+          <div class="comment-content">
+            <div class="comment-header">
+              <h4 class="comment-author">{{ comment.author.name }}</h4>
+              <span class="comment-date">{{ comment.date | date:'MMM d, yyyy' }}</span>
+            </div>
+            
+            <p class="comment-text">{{ comment.text }}</p>
+            
+            <div class="comment-actions">
+              <button 
+                class="comment-like-btn"
+                (click)="likeComment(comment)"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 14.5L6.84 13.26C3.72 10.46 1.8 8.74 1.8 6.6C1.8 4.86 3.18 3.5 4.9 3.5C5.88 3.5 6.82 4.04 7.26 4.82H8.74C9.18 4.04 10.12 3.5 11.1 3.5C12.82 3.5 14.2 4.86 14.2 6.6C14.2 8.74 12.28 10.46 9.16 13.26L8 14.5Z" stroke="currentColor" fill="none" stroke-width="1.5"/>
+                </svg>
+                <span>{{ comment.likes }}</span>
+              </button>
+              
+              <button class="reply-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3.5 8.5L7.5 4.5L3.5 8.5ZM3.5 8.5L7.5 12.5L3.5 8.5ZM3.5 8.5H12.5H3.5Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Reply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Error State -->
+<div class="error-container" *ngIf="!isLoading && !article">
+  <div class="error-content">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <h2>Article not found</h2>
+    <p>The article you're looking for doesn't exist or has been removed.</p>
+    <button class="back-home-btn" (click)="goBack()">Back to Home</button>
   </div>
 </div>
