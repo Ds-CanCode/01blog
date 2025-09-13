@@ -3,9 +3,12 @@ package com.blog_01.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.blog_01.dto.AuthorDTO;
+import com.blog_01.dto.BlogPostDTO;
 import com.blog_01.model.Media;
 import com.blog_01.model.Post;
 import com.blog_01.model.User;
@@ -28,7 +31,7 @@ public class PostService {
     }
 
     @Transactional
-    public Post create(String title, String content, String tags ,String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
+    public Post create(String title, String content, String tags, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new RuntimeException("Utilisateur introuvable");
@@ -62,4 +65,27 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public  ResponseEntity<List<BlogPostDTO>> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+
+        List<BlogPostDTO> dtos = posts.stream().map(post -> {
+            BlogPostDTO dto = new BlogPostDTO();
+            dto.setId(post.getId());
+            dto.setTitle(post.getTitle());
+            dto.setDescription(post.getContent());
+            if (!post.getMedias().isEmpty()) {
+                Media firstMedia = post.getMedias().get(0);
+                dto.setImage(firstMedia.getUrl());
+                // dto.setIsVideo(firstMedia.getType() == Media.MediaType.VIDEO);
+            }
+            AuthorDTO author = new AuthorDTO();
+            author.setName(post.getUser().getUsername());
+            // author.setAvatar(post.getUser().getProfileImageUrl()); // mettre URL si Cloud
+            dto.setAuthor(author);
+            dto.setPublishDate(post.getCreatedAt().toString()); // ou formatter ISO
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(dtos);
+    }
 }

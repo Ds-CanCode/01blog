@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.blog_01.dto.BlogPostDTO;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.PostService;
 
@@ -54,6 +56,11 @@ public class PostController {
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Erreur lors de l'upload des fichiers");
         }
+    }
+
+    @GetMapping("/getAllPosts")
+    public  ResponseEntity<List<BlogPostDTO>> getAllPosts() {
+        return postService.getAllPosts();
     }
 
 }
