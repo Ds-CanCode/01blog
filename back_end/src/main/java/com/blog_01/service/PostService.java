@@ -1,5 +1,6 @@
 package com.blog_01.service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public  ResponseEntity<List<BlogPostDTO>> getAllPosts() {
+    public ResponseEntity<List<BlogPostDTO>> getAllPosts() {
         List<Post> posts = postRepository.findAll();
 
         List<BlogPostDTO> dtos = posts.stream().map(post -> {
@@ -73,14 +74,22 @@ public class PostService {
             dto.setId(post.getId());
             dto.setTitle(post.getTitle());
             dto.setDescription(post.getContent());
+
             if (!post.getMedias().isEmpty()) {
                 Media firstMedia = post.getMedias().get(0);
                 dto.setImage(firstMedia.getUrl());
                 // dto.setIsVideo(firstMedia.getType() == Media.MediaType.VIDEO);
             }
             AuthorDTO author = new AuthorDTO();
-            author.setName(post.getUser().getUsername());
-            // author.setAvatar(post.getUser().getProfileImageUrl()); // mettre URL si Cloud
+            User user = post.getUser();
+            author.setName(user.getUsername());
+            if (user.getProfileImage() != null) {
+                String base64Avatar = Base64.getEncoder().encodeToString(user.getProfileImage());
+                author.setAvatar("data:image/png;base64," + base64Avatar);
+                // adapte le type mime selon ton image: jpg/png...
+            } else {
+                author.setAvatar(null);
+            }
             dto.setAuthor(author);
             dto.setPublishDate(post.getCreatedAt().toString()); // ou formatter ISO
             return dto;
