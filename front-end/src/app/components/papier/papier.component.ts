@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 
 @Component({
   selector: 'app-papier',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
   templateUrl: './papier.component.html',
   styleUrls: ['./papier.component.css']
 })

@@ -10,10 +10,22 @@
   backdrop-filter: blur(6px);
 }
 
+.navbar-brand {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8rem; /* un peu plus grand pour l'effet logo */
+  color: var(--color-black); /* tu peux aussi mettre une couleur style sépia */
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 
 .navbar-hidden {
   transform: translateY(-100%);
 }
+
+
 
 .logo-img {
   height: 60px;

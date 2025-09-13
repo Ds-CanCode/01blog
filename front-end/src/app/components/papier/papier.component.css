@@ -1,16 +1,18 @@
 :host {
     display: block;
-    height: 100vh;
+    height: auto;
     background-image: url("../../../../public/bg.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
-
 .container {
     max-width: 800px;
     margin: 0 auto;
     position: relative;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
 }
 
 .editor-container {
