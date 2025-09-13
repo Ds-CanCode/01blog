@@ -4,6 +4,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { PostService } from '../../services/post.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -25,7 +27,7 @@ export class PapierComponent {
   titleCount: number = 0;
   contentCount: number = 0;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private router: Router, private postService: PostService) { }
 
   updateTitleCounter() {
     this.titleCount = this.title.length;
@@ -94,7 +96,7 @@ export class PapierComponent {
 
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
 
-    this.http.post('http://localhost:8080/api/post/create', formData, { headers })
+    this.postService.addPost(formData,  headers)
       .subscribe({
         next: (res) => {
           this.loading = false;
@@ -102,5 +104,14 @@ export class PapierComponent {
         },
         error: (err) => console.error('Erreur ❌', err)
       });
+
+    // this.http.post('http://localhost:8080/api/post/create', formData, { headers })
+    //   .subscribe({
+    //     next: (res) => {
+    //       this.loading = false;
+    //       this.router.navigate(['/home'])
+    //     },
+    //     error: (err) => console.error('Erreur ❌', err)
+    //   });
   }
 }
