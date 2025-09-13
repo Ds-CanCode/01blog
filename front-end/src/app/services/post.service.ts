@@ -1,21 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { BlogPost } from '../components/home/home.component';
 
-export interface Author {
-  name: string;
-  avatar: string;
-}
-
-export interface BlogPost {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  isVideo: boolean;
-  author: Author;
-  publishDate: string;
-}
 
 
 @Injectable({ providedIn: 'root' })
