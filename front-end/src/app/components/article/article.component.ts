@@ -48,7 +48,6 @@ export class ArticleComponent implements OnInit {
     this.postService.getPost(this.postId).subscribe({
       next: (data) => {
         this.article = data;
-
         this.isLoading = false;
       },
       error: (err) => {
@@ -107,6 +106,23 @@ export class ArticleComponent implements OnInit {
       },
       error: (err) => console.error('Erreur commentaire:', err)
     });
+  }
+
+
+  prevMedia(post: any) {
+    if (post.selectedMediaIndex > 0) {
+      post.selectedMediaIndex--;
+    } else {
+      post.selectedMediaIndex = post.medias.length - 1;
+    }
+  }
+
+  nextMedia(post: any) {
+    if (post.selectedMediaIndex < post.medias.length - 1) {
+      post.selectedMediaIndex++;
+    } else {
+      post.selectedMediaIndex = 0;
+    }
   }
 
 

@@ -38,17 +38,31 @@
   <div class="container">
     <!-- SECTION 1: Featured Articles (Top 4) -->
     <div class="featured-section" *ngIf="AllPosts.length > 0">
-      <!-- <h2 class="section-title">Featured Articles</h2> -->
       <div class="featured-grid">
         <!-- Main Featured Post (Left Side) -->
         <div class="main-featured-post" *ngIf="AllPosts[0]" (click)="onCardClick(AllPosts[0].id)">
           <div class="featured-image-container">
-            <img 
-              [src]="AllPosts[0].image" 
-              [alt]="AllPosts[0].title"
-              class="featured-image"
-              (error)="onImageError($event)"
-            >
+            <div class="post-media" *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 0">
+              <!-- Image -->
+              <img *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'IMAGE'"
+                   [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url"
+                   [alt]="AllPosts[0].title"
+                   class="featured-image"
+                   (error)="onImageError($event)" />
+
+              <!-- Video -->
+              <video *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'VIDEO'"
+                     [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url"
+                     class="featured-image"></video>
+
+              <!-- Media navigation - Only show if multiple media -->
+              <button *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 1" 
+                      class="media-btn prev" 
+                      (click)="prevMedia(AllPosts[0], $event)">&#10094;</button>
+              <button *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 1" 
+                      class="media-btn next" 
+                      (click)="nextMedia(AllPosts[0], $event)">&#10095;</button>
+            </div>
             <div class="featured-overlay"></div>
             <div class="featured-content">
               <div class="featured-meta">
@@ -73,11 +87,25 @@
             (click)="onCardClick(post.id)"
           >
             <div class="side-article-image">
-              <img 
-                [src]="post.image" 
-                [alt]="post.title"
-                (error)="onImageError($event)"
-              >
+              <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+                <!-- Image -->
+                <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
+                     [src]="post.medias[post.selectedMediaIndex].url"
+                     [alt]="post.title"
+                     (error)="onImageError($event)" />
+
+                <!-- Video -->
+                <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
+                       [src]="post.medias[post.selectedMediaIndex].url"></video>
+
+                <!-- Media navigation - Only show if multiple media -->
+                <button *ngIf="post.medias && post.medias.length > 1" 
+                        class="media-btn prev" 
+                        (click)="prevMedia(post, $event)">&#10094;</button>
+                <button *ngIf="post.medias && post.medias.length > 1" 
+                        class="media-btn next" 
+                        (click)="nextMedia(post, $event)">&#10095;</button>
+              </div>
             </div>
             <div class="side-article-content">
               <div class="side-article-meta">
@@ -95,9 +123,8 @@
       </div>
     </div>
 
-    <!-- SECTION 2: All Articles (Your Original Grid) -->
+    <!-- SECTION 2: All Articles -->
     <div class="all-articles-section">
-      <!-- <h2 class="section-title">All Articles</h2> -->
       <div class="blog-grid">
         <div 
           class="blog-card" 
@@ -105,12 +132,26 @@
           (click)="onCardClick(post.id)">
           
           <div class="card-image">
-            <img 
-              [src]="post.image" 
-              [alt]="post.title" 
-              loading="lazy"
-              (error)="onImageError($event)">
-            <div class="video-overlay" *ngIf="post.isVideo">▶</div>
+            <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+              <!-- Image -->
+              <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
+                   [src]="post.medias[post.selectedMediaIndex].url"
+                   [alt]="post.title"
+                   loading="lazy"
+                   (error)="onImageError($event)" />
+
+              <!-- Video -->
+              <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
+                     [src]="post.medias[post.selectedMediaIndex].url" controls></video>
+
+              <!-- Media navigation - Only show if multiple media -->
+              <button *ngIf="post.medias && post.medias.length > 1" 
+                      class="media-btn prev" 
+                      (click)="prevMedia(post, $event)">&#10094;</button>
+              <button *ngIf="post.medias && post.medias.length > 1" 
+                      class="media-btn next" 
+                      (click)="nextMedia(post, $event)">&#10095;</button>
+            </div>
           </div>
           
           <div class="card-content">

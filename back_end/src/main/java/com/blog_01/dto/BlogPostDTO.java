@@ -1,11 +1,12 @@
 package com.blog_01.dto;
 
+import java.util.List;
+
 public class BlogPostDTO {
     private Long id;
     private String title;
     private String description;
-    private String image; 
-    private boolean isVideo;
+    private List<MediaDTO> medias; 
     private AuthorDTO author;
     private String publishDate;
 
@@ -33,21 +34,13 @@ public class BlogPostDTO {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public List<MediaDTO> getMedias() {
+        return medias;
+    }
+    public void setMedias(List<MediaDTO> medias) {
+        this.medias = medias;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public boolean isVideo() {
-        return isVideo;
-    }
-
-    public void setVideo(boolean isVideo) {
-        this.isVideo = isVideo;
-    }
 
     public AuthorDTO getAuthor() {
         return author;

@@ -693,3 +693,190 @@
     padding: 20px;
   }
 }
+
+/* === MEDIA CAROUSEL STYLES === */
+/* Ajoutez ces styles à votre home.component.css existant */
+
+.post-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.media-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 10;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.media-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.media-btn.prev {
+  left: 10px;
+}
+
+.media-btn.next {
+  right: 10px;
+}
+
+/* Styles pour les cards normales */
+.blog-card .media-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.blog-card .media-btn.prev {
+  left: 8px;
+}
+
+.blog-card .media-btn.next {
+  right: 8px;
+}
+
+/* Styles pour les side articles */
+.side-article .media-btn {
+  width: 28px;
+  height: 28px;
+  font-size: 10px;
+}
+
+.side-article .media-btn.prev {
+  left: 6px;
+}
+
+.side-article .media-btn.next {
+  right: 6px;
+}
+
+/* Animation smooth pour le changement de média */
+.post-media img,
+.post-media video {
+  transition: opacity 0.3s ease;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .media-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+  
+  .media-btn.prev {
+    left: 8px;
+  }
+  
+  .media-btn.next {
+    right: 8px;
+  }
+  
+  .blog-card .media-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+  
+  .side-article .media-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .media-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+  }
+  
+  .blog-card .media-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+  
+  .side-article .media-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 8px;
+  }
+}
+
+/* Amélioration de l'accessibilité */
+.media-btn:focus {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+.media-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Animation au hover sur la card pour les boutons */
+.blog-card:hover .media-btn,
+.main-featured-post:hover .media-btn,
+.side-article:hover .media-btn {
+  opacity: 1;
+}
+
+/* Touch-friendly pour mobile */
+@media (hover: none) and (pointer: coarse) {
+  .media-btn {
+    opacity: 0.8;
+  }
+  
+  .media-btn:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+}
+
+/* Indicateur de média multiple (optionnel) */
+.media-indicator {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+.media-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+.media-dot.active {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Style pour les videos */
+.post-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

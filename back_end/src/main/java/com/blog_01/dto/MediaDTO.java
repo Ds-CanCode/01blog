@@ -1,12 +1,16 @@
 package com.blog_01.dto;
 
+import com.blog_01.model.Media.MediaType;
+
 public class MediaDTO {
-    private String base64;;
-    private String type; 
 
-    public String getBase64() { return base64; }
-    public void setBase64(String base64) { this.base64 = base64; }
+    
+    private String url;;
+    private MediaType type; 
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
+
+    public MediaType getType() { return type; }
+    public void setType(MediaType type) { this.type = type; }
 }

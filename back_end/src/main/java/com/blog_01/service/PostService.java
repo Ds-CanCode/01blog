@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.blog_01.dto.AuthorDTO;
 import com.blog_01.dto.BlogPostDTO;
+import com.blog_01.dto.MediaDTO;
 import com.blog_01.model.Media;
 import com.blog_01.model.Post;
 import com.blog_01.model.User;
@@ -34,7 +35,7 @@ public class PostService {
     @Transactional
     public Post create(String title, String content, String tags, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
         User user = userRepository.findByUsername(username)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
         if (user == null) {
             throw new RuntimeException("Utilisateur introuvable");
         }
@@ -77,9 +78,14 @@ public class PostService {
             dto.setDescription(post.getContent());
 
             if (!post.getMedias().isEmpty()) {
-                Media firstMedia = post.getMedias().get(0);
-                dto.setImage(firstMedia.getUrl());
-                // dto.setIsVideo(firstMedia.getType() == Media.MediaType.VIDEO);
+                List<MediaDTO> mediaDTOs = post.getMedias().stream().map(media -> {
+                    MediaDTO mediaDTO = new MediaDTO();
+                    mediaDTO.setUrl(media.getUrl());
+                    mediaDTO.setType(media.getType());
+                    return mediaDTO;
+                }).toList();
+
+                dto.setMedias(mediaDTOs);
             }
             AuthorDTO author = new AuthorDTO();
             User user = post.getUser();
@@ -107,9 +113,14 @@ public class PostService {
                     dto.setDescription(post.getContent());
 
                     if (!post.getMedias().isEmpty()) {
-                        Media firstMedia = post.getMedias().get(0);
-                        dto.setImage(firstMedia.getUrl());
-                        dto.setVideo(firstMedia.getType() == Media.MediaType.VIDEO);
+                        List<MediaDTO> mediaDTOs = post.getMedias().stream().map(media -> {
+                            MediaDTO mediaDTO = new MediaDTO();
+                            mediaDTO.setUrl(media.getUrl());
+                            mediaDTO.setType(media.getType());
+                            return mediaDTO;
+                        }).toList();
+
+                        dto.setMedias(mediaDTOs);
                     }
 
                     AuthorDTO author = new AuthorDTO();
@@ -124,7 +135,8 @@ public class PostService {
                     dto.setAuthor(author);
                     dto.setPublishDate(post.getCreatedAt().toString());
                     return ResponseEntity.ok(dto);
-                })
+                }
+                )
                 .orElse(ResponseEntity.notFound().build());
     }
     //  return

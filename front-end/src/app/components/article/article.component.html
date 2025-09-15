@@ -14,7 +14,6 @@
       </svg>
       <span>Back to Articles</span>
     </button>
-
   </div>
 
   <!-- Article Container -->
@@ -24,16 +23,27 @@
       <!-- Article Header -->
       <div class="article-header">
         <div class="article-image-container">
-          <img 
-            [src]="article.image" 
-            [alt]="article.title"
-            class="article-image"
-            (error)="onImageError($event)"
-          >
-          <div class="video-badge" *ngIf="article.isVideo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
-            </svg>
+          <div class="post-media" *ngIf="article.medias && article.medias.length > 0">
+            <!-- Image -->
+            <img *ngIf="article.medias[article.selectedMediaIndex || 0].type === 'IMAGE'"
+                 [src]="article.medias[article.selectedMediaIndex || 0].url"
+                 [alt]="article.title"
+                 class="article-image"
+                 (error)="onImageError($event)" />
+
+            <!-- Video -->
+            <video *ngIf="article.medias[article.selectedMediaIndex || 0].type === 'VIDEO'"
+                   [src]="article.medias[article.selectedMediaIndex || 0].url"
+                   class="article-image"
+                   controls></video>
+
+            <!-- Media navigation - Only show if multiple media -->
+            <button *ngIf="article.medias && article.medias.length > 1" 
+                    class="media-btn prev" 
+                    (click)="prevMedia(article)">&#10094;</button>
+            <button *ngIf="article.medias && article.medias.length > 1" 
+                    class="media-btn next" 
+                    (click)="nextMedia(article)">&#10095;</button>
           </div>
         </div>
         
@@ -67,7 +77,6 @@
               </svg>
               <span>{{ likeCount }}</span>
             </button>
-            
           </div>
         </div>
       </div>
@@ -157,7 +166,6 @@
             </div>
             
             <p class="comment-text">{{ comment.content }}</p>
-            
           </div>
         </div>
       </div>
