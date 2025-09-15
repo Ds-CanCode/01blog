@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule} from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { BlogPost, HomeComponent } from '../home/home.component';
 import { PostService } from '../../services/post.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LikeService } from '../../services/like.service';
 // import { CommonModule } from '@angular/common';
 
 export interface Comment {
@@ -28,12 +29,12 @@ export interface Comment {
 })
 
 export class ArticleComponent implements OnInit {
-  id!: number;
+  postId!: number;
   article: BlogPost | null = null;
-  isLiked = false;
-  likeCount = 0;
   isLoading = true;
   newComment = '';
+  likeCount: number = 0;
+  isLiked: boolean = false;
 
   comments: Comment[] = [
     {
@@ -71,21 +72,21 @@ export class ArticleComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
+    private likeService: LikeService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    this.postId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadArticle();
+    this.loadLikeInfo(this.postId);
   }
 
   loadArticle(): void {
-    this.postService.getPost(this.id).subscribe({
+    this.postService.getPost(this.postId).subscribe({
       next: (data) => {
         this.article = data;
-        console.log(this.article);
-        
-        this.likeCount = Math.floor(Math.random() * 50) + 10; // Random likes for demo
+
         this.isLoading = false;
       },
       error: (err) => {
@@ -95,47 +96,63 @@ export class ArticleComponent implements OnInit {
     });
   }
 
+  loadLikeInfo(postId: number) {
+    this.likeService.getLikeInfo(postId).subscribe(info => {
+      this.likeCount = info.likesCount;
+      this.isLiked = info.userLiked;
+    });
+  }
+
   toggleLike(): void {
-    if (this.isLiked) {
-      this.likeCount--;
-    } else {
-      this.likeCount++;
-    }
-    this.isLiked = !this.isLiked;
+    this.likeService.addLike(this.postId).subscribe({
+      next: (res) => {
+        if(this.isLiked) {
+          this.likeCount--;
+        } else {
+          this.likeCount++;
+        }
+        this.isLiked = !this.isLiked;
+
+    },
+      error: (err) => {
+        console.error('Erreur like:', err);
+      }
+    });
+
+}
+
+addComment(): void {
+  if(this.newComment.trim()) {
+  const newCommentObj: Comment = {
+    id: this.comments.length + 1,
+    author: {
+      name: 'You',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face'
+    },
+    text: this.newComment.trim(),
+    date: new Date().toISOString(),
+    likes: 0
+  };
+
+  this.comments.unshift(newCommentObj);
+  this.newComment = '';
+}
   }
 
-  addComment(): void {
-    if (this.newComment.trim()) {
-      const newCommentObj: Comment = {
-        id: this.comments.length + 1,
-        author: {
-          name: 'You',
-          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face'
-        },
-        text: this.newComment.trim(),
-        date: new Date().toISOString(),
-        likes: 0
-      };
-      
-      this.comments.unshift(newCommentObj);
-      this.newComment = '';
-    }
-  }
+likeComment(comment: Comment): void {
+  comment.likes++;
+}
 
-  likeComment(comment: Comment): void {
-    comment.likes++;
-  }
+onImageError(event: any): void {
+  event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNzUgNzVIMjI1VjEyNUgxNzVWNzVaIiBmaWxsPSIjRERERERkIi8+Cjwvc3ZnPgo=';
+}
 
-  onImageError(event: any): void {
-    event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNzUgNzVIMjI1VjEyNUgxNzVWNzVaIiBmaWxsPSIjRERERERkIi8+Cjwvc3ZnPgo=';
-  }
-
-  goBack(): void {
-    this.router.navigate(['/home']);
-  }
+goBack(): void {
+  this.router.navigate(['/home']);
+}
 
 
-  trackByCommentId(index: number, comment: Comment): number {
-    return comment.id;
-  }
+trackByCommentId(index: number, comment: Comment): number {
+  return comment.id;
+}
 }

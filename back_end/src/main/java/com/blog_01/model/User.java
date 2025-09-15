@@ -229,8 +229,4 @@ public class User {
         this.notifications = notifications;
     }
 
-    // public void setConfirmPassword(String confirmPassword) {
-    // 
-    //     throw new UnsupportedOperationException("Unimplemented method 'setConfirmPassword'");
-    // }
 }

@@ -33,7 +33,8 @@ public class PostService {
 
     @Transactional
     public Post create(String title, String content, String tags, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
         if (user == null) {
             throw new RuntimeException("Utilisateur introuvable");
         }

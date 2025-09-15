@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             + "FROM User u WHERE u.username = :usernameOrEmail OR u.email = :usernameOrEmail")
     UserLoginDTO findLoginUser(@Param("usernameOrEmail") String usernameOrEmail);
 
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
     User findByEmail(String email);
 

@@ -38,7 +38,7 @@
   <div class="container">
     <!-- SECTION 1: Featured Articles (Top 4) -->
     <div class="featured-section" *ngIf="AllPosts.length > 0">
-      <h2 class="section-title">Featured Articles</h2>
+      <!-- <h2 class="section-title">Featured Articles</h2> -->
       <div class="featured-grid">
         <!-- Main Featured Post (Left Side) -->
         <div class="main-featured-post" *ngIf="AllPosts[0]" (click)="onCardClick(AllPosts[0].id)">
@@ -69,7 +69,7 @@
         <div class="side-articles">
           <div 
             class="side-article" 
-            *ngFor="let post of AllPosts.slice(1, 4); trackBy: trackByPostId"
+            *ngFor="let post of AllPosts.slice(1, 4)"
             (click)="onCardClick(post.id)"
           >
             <div class="side-article-image">
@@ -97,11 +97,11 @@
 
     <!-- SECTION 2: All Articles (Your Original Grid) -->
     <div class="all-articles-section">
-      <h2 class="section-title">All Articles</h2>
+      <!-- <h2 class="section-title">All Articles</h2> -->
       <div class="blog-grid">
         <div 
           class="blog-card" 
-          *ngFor="let post of AllPosts; trackBy: trackByPostId"
+          *ngFor="let post of AllPosts.slice(4)"
           (click)="onCardClick(post.id)">
           
           <div class="card-image">
