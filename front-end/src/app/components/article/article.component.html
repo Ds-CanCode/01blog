@@ -68,13 +68,6 @@
               <span>{{ likeCount }}</span>
             </button>
             
-            <div class="reading-time">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
-                <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <span>5 min read</span>
-            </div>
           </div>
         </div>
       </div>
@@ -116,7 +109,7 @@
       <div class="add-comment-form">
         <div class="comment-form-header">
           <div class="user-avatar">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face" alt="Your avatar">
+            <img src="profil.jpg" alt="Your avatar">
           </div>
           <div class="form-content">
             <label for="comment-input">Add a comment</label>
@@ -165,24 +158,6 @@
             
             <p class="comment-text">{{ comment.text }}</p>
             
-            <div class="comment-actions">
-              <button 
-                class="comment-like-btn"
-                (click)="likeComment(comment)"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 14.5L6.84 13.26C3.72 10.46 1.8 8.74 1.8 6.6C1.8 4.86 3.18 3.5 4.9 3.5C5.88 3.5 6.82 4.04 7.26 4.82H8.74C9.18 4.04 10.12 3.5 11.1 3.5C12.82 3.5 14.2 4.86 14.2 6.6C14.2 8.74 12.28 10.46 9.16 13.26L8 14.5Z" stroke="currentColor" fill="none" stroke-width="1.5"/>
-                </svg>
-                <span>{{ comment.likes }}</span>
-              </button>
-              
-              <button class="reply-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3.5 8.5L7.5 4.5L3.5 8.5ZM3.5 8.5L7.5 12.5L3.5 8.5ZM3.5 8.5H12.5H3.5Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Reply
-              </button>
-            </div>
           </div>
         </div>
       </div>

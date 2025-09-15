@@ -1,5 +1,6 @@
 package com.blog_01.dto;
 
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 import com.blog_01.model.Comment;
@@ -12,6 +13,7 @@ public class CommentDTO {
     private Long userId;
     private String username;
     private String avatar;
+    private final LocalDateTime createDate;
 
     public CommentDTO(Comment comment) {
         this.id = comment.getId();
@@ -21,10 +23,11 @@ public class CommentDTO {
         this.username = comment.getUser().getUsername();
         byte[] avatarBytes = comment.getUser().getProfileImage();
         if (avatarBytes != null) {
-            this.avatar = Base64.getEncoder().encodeToString(avatarBytes);
+            this.avatar = "data:image/png;base64," + Base64.getEncoder().encodeToString(avatarBytes);
         } else {
             this.avatar = null;
         }
+        this.createDate = comment.getCreatedAt();
     }
 
 
@@ -75,4 +78,9 @@ public class CommentDTO {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
 }

@@ -96,16 +96,16 @@ export class ArticleComponent implements OnInit {
 
     this.commentService.addComment(this.postId, content).subscribe({
       next: (comment) => {
-        // this.comments.unshift({
-        //   id: comment.id,
-        //   author: {
-        //     name: 'You',
-        //     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face'
-        //   },
-        //   text: comment.content,
-        //   date: comment.createdAt,
-        //   likes: 0
-        // });
+        this.comments.unshift({
+          id: comment.id,
+          author: {
+            name: comment.username,
+            avatar: comment.avatar
+          },
+          text: comment.content,
+          date: comment.createDate,
+          likes: 0
+        });
         console.log("Comment is added", comment);
         this.newComment = '';
       },
@@ -113,12 +113,10 @@ export class ArticleComponent implements OnInit {
     });
   }
 
-  likeComment(comment: Comment): void {
-    comment.likes++;
-  }
+  
 
   onImageError(event: any): void {
-    event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNzUgNzVIMjI1VjEyNUgxNzVWNzVaIiBmaWxsPSIjRERERERkIi8+Cjwvc3ZnPgo=';
+    event.target.src = 'profil.jpg';
   }
 
   goBack(): void {

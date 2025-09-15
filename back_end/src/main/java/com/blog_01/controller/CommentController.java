@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.CommentDTO;
-import com.blog_01.model.Comment;
 import com.blog_01.service.CommentService;
 import com.blog_01.service.JwtService;
 
