@@ -97,7 +97,7 @@ public class PostService {
                 author.setAvatar(null);
             }
             dto.setAuthor(author);
-            dto.setPublishDate(post.getCreatedAt().toString()); // ou formatter ISO
+            dto.setPublishDate(post.getCreatedAt().toString());
             return dto;
         }).toList();
 
