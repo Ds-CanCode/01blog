@@ -2,6 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
+export interface CommentDTO {
+  id: number;
+  content: string;
+  postId: number;
+  userId: number;
+  username: string;
+  avatar?: string;
+  createDate: string; 
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,7 +21,7 @@ export class CommentService {
 
   constructor(private http: HttpClient) { }
 
-  addComment(postId: number, content: string): Observable<any> {
+  addComment(postId: number, content: string): Observable<CommentDTO> {
     const token = localStorage.getItem('jwt') || '';
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
@@ -18,6 +29,10 @@ export class CommentService {
     });
 
     const body = { content };
-    return this.http.post(`${this.apiUrl}/${postId}`, body, { headers });
+    return this.http.post<CommentDTO>(`${this.apiUrl}/${postId}`, body, { headers });
+  }
+
+  getComments(postId: number): Observable<CommentDTO[]> {
+    return this.http.get<CommentDTO[]>(`${this.apiUrl}/post/${postId}`);
   }
 }

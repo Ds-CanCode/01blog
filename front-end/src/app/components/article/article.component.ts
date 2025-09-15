@@ -6,19 +6,11 @@ import { PostService } from '../../services/post.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LikeService } from '../../services/like.service';
-import { CommentService } from '../../services/comment.service';
+import { CommentDTO, CommentService } from '../../services/comment.service';
 // import { CommonModule } from '@angular/common';
 
-export interface Comment {
-  id: number;
-  author: {
-    name: string;
-    avatar: string;
-  };
-  text: string;
-  date: string;
-  likes: number;
-}
+
+
 
 @Component({
   selector: 'app-article',
@@ -35,7 +27,7 @@ export class ArticleComponent implements OnInit {
   newComment = '';
   likeCount: number = 0;
   isLiked: boolean = false;
-  comments: Comment[] = [];
+  comments: CommentDTO[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +41,7 @@ export class ArticleComponent implements OnInit {
     this.postId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadArticle();
     this.loadLikeInfo(this.postId);
+    this.loadComments(this.postId);
   }
 
   loadArticle(): void {
@@ -70,6 +63,18 @@ export class ArticleComponent implements OnInit {
       this.likeCount = info.likesCount;
       this.isLiked = info.userLiked;
     });
+  }
+
+  loadComments(postId: number) {
+    this.commentService.getComments(postId).subscribe({
+      next: (comment) => {
+        console.log(comment);
+        this.comments = comment;
+      },
+      error: (err) => {
+        console.error('Error loading comment:', err);
+      }
+    })
   }
 
   toggleLike(): void {
@@ -96,16 +101,7 @@ export class ArticleComponent implements OnInit {
 
     this.commentService.addComment(this.postId, content).subscribe({
       next: (comment) => {
-        this.comments.unshift({
-          id: comment.id,
-          author: {
-            name: comment.username,
-            avatar: comment.avatar
-          },
-          text: comment.content,
-          date: comment.createDate,
-          likes: 0
-        });
+        this.comments.unshift(comment);
         console.log("Comment is added", comment);
         this.newComment = '';
       },
@@ -113,7 +109,7 @@ export class ArticleComponent implements OnInit {
     });
   }
 
-  
+
 
   onImageError(event: any): void {
     event.target.src = 'profil.jpg';
@@ -124,7 +120,7 @@ export class ArticleComponent implements OnInit {
   }
 
 
-  trackByCommentId(index: number, comment: Comment): number {
+  trackByCommentId(index: number, comment: CommentDTO): number {
     return comment.id;
   }
 }

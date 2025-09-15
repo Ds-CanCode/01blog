@@ -1,5 +1,8 @@
 package com.blog_01.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,4 +42,18 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
         return new CommentDTO(savedComment);
     }
+
+    @Transactional(readOnly = true)
+    public List<CommentDTO> getCommentsByPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+       
+        List<Comment> comments = commentRepository.findByPost(post);
+
+        return comments.stream()
+                .map(CommentDTO::new)
+                .collect(Collectors.toList());
+    }
+
 }

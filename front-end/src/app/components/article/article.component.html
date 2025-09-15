@@ -144,19 +144,19 @@
         >
           <div class="comment-avatar">
             <img 
-              [src]="comment.author.avatar" 
-              [alt]="comment.author.name"
+              [src]="comment.avatar" 
+              [alt]="comment.username"
               (error)="onImageError($event)"
             >
           </div>
           
           <div class="comment-content">
             <div class="comment-header">
-              <h4 class="comment-author">{{ comment.author.name }}</h4>
-              <span class="comment-date">{{ comment.date | date:'MMM d, yyyy' }}</span>
+              <h4 class="comment-author">{{ comment.username }}</h4>
+              <span class="comment-date">{{ comment.createDate | date:'MMM d, yyyy' }}</span>
             </div>
             
-            <p class="comment-text">{{ comment.text }}</p>
+            <p class="comment-text">{{ comment.content }}</p>
             
           </div>
         </div>

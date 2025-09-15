@@ -1,8 +1,10 @@
 package com.blog_01.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,4 +41,11 @@ public class CommentController {
         //CommentDTO dto = new CommentDTO(comment);
         return ResponseEntity.ok(comment);
     }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable Long postId) {
+        List<CommentDTO> comments = commentService.getCommentsByPost(postId);
+        return ResponseEntity.ok(comments);
+    }
+
 }
