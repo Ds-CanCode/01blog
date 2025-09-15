@@ -64,6 +64,9 @@ export class NavbarComponent {
     this.popupService.openNotification();
   }
 
+  logout() {
+    this.authService.logout();
+  }
 
 
 

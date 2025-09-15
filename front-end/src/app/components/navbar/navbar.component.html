@@ -3,12 +3,12 @@
 
     <!-- 🔵 Logo + Search -->
     <div class="d-flex align-items-center gap-3">
-      <a class="navbar-brand" >
+      <a class="navbar-brand">
         <img src="logo.png" alt="Logo" class="logo-img" />
         plume
       </a>
 
-      
+
     </div>
 
     <!-- 🟠 Centered links (desktop only) -->
@@ -22,10 +22,11 @@
     <!-- 🔴 Actions (write, notification, login/register, toggle) -->
     <div class="d-flex align-items-center gap-3">
       <!-- Write -->
-      <div class="d-flex align-items-center text-muted icon-button" (click)="openPapier()" *ngIf="authService.isLoggedIn()">
+      <div class="d-flex align-items-center text-muted icon-button" (click)="openPapier()"
+        *ngIf="authService.isLoggedIn()">
         <i class="bi bi-pencil-square me-1"></i>
         <span class="d-none d-sm-inline" (click)="openPapier()">Write</span>
-          <!-- <a class="d-none d-sm-inline" routerLink="/papier">Write</a> -->
+        <!-- <a class="d-none d-sm-inline" routerLink="/papier">Write</a> -->
       </div>
 
       <!-- Notification -->
@@ -35,9 +36,18 @@
 
       <!-- Login/Register (desktop only) -->
       <div class="d-none d-lg-flex gap-2">
-        <button class="btn-auth login-btn" (click)="openLogin()">Login</button>
-        <button class="btn-auth register-btn" (click)="openRegister()">Register</button>
+        <!-- ✅ Si user est connecté -->
+        <button *ngIf="authService.isLoggedIn(); else notLogged" class="btn-auth login-btn" (click)="logout()">
+          Logout
+        </button>
+
+        <!-- ❌ Sinon afficher login & register -->
+        <ng-template #notLogged>
+          <button class="btn-auth login-btn" (click)="openLogin()">Login</button>
+          <button class="btn-auth register-btn" (click)="openRegister()">Register</button>
+        </ng-template>
       </div>
+
 
       <!-- 🍔 Toggle button (mobile only) -->
       <button class="navbar-toggler ms-2 d-lg-none" type="button" aria-controls="mainNavbar"
