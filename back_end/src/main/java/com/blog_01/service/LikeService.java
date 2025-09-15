@@ -9,7 +9,6 @@ import com.blog_01.model.Post;
 import com.blog_01.model.User;
 import com.blog_01.repository.LikeRepository;
 import com.blog_01.repository.PostRepository;
-import com.blog_01.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -22,39 +21,33 @@ public class LikeService {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    
 
     @Transactional
-    public void addLike(Long postId, String username) {
+    public void addLike(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        boolean existingLike = likeRepository.existsByUserAndPost(user, post);
-
-        if (existingLike) {
-            likeRepository.deleteByUserAndPost(user, post);
+        if (likeRepository.existsByUserIdAndPostId(userId, postId)) {
+            likeRepository.deleteByUserIdAndPostId(userId, postId);
         } else {
             Like like = new Like();
+            User userProxy = new User();
+            userProxy.setId(userId);
+            like.setUser(userProxy);
             like.setPost(post);
-            like.setUser(user);
             likeRepository.save(like);
         }
+
     }
 
-    public LikeDTO getLikeInfo(Long postId, String username) {
+    public LikeDTO getLikeInfo(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
         LikeDTO dto = new LikeDTO();
         dto.setLikesCount(likeRepository.countByPost(post));
-        dto.setUserLiked(likeRepository.existsByUserAndPost(user, post));
+        dto.setUserLiked(likeRepository.existsByUserIdAndPostId(userId, postId));
         return dto;
     }
 }

@@ -38,11 +38,10 @@ public class LikeController {
             return ResponseEntity.status(401).body("Token manquant");
         }
         String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+        Long userId = jwtService.extractId(token);
 
         try {
-            likeService.addLike(postId, username);
-
+            likeService.addLike(postId, userId);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Like" + postId);
             return ResponseEntity.ok(response);
@@ -61,9 +60,9 @@ public class LikeController {
         }
 
         String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+        Long userId = jwtService.extractId(token);
 
-        LikeDTO info = likeService.getLikeInfo(postId, username);
+        LikeDTO info = likeService.getLikeInfo(postId, userId);
         return ResponseEntity.ok(info);
     }
 }

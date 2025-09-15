@@ -46,7 +46,7 @@ public class UserService {
 
     public String loginAndGenerateToken(String usernameOrEmail, String password) {
         UserLoginDTO user = authenticateUser(usernameOrEmail, password);
-        return jwtService.generateToken(user.getUsername(), user.getRole().name());
+        return jwtService.generateToken(user.getId(), user.getUsername(), user.getRole().name());
     }
 
     public User getUser(Long id) {
