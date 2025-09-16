@@ -82,14 +82,19 @@ export class ProfileComponent implements OnInit {
    * Utilise exactement votre logique backend
    */
   private loadUserProfile(): void {
-    const userId = this.route.snapshot.paramMap.get('id');
+    const userId = this.route.snapshot.paramMap.get('id') || null;
+    console.log(userId);
     if (userId) {
       this.loadUser(parseInt(userId));
       this.loadUserPosts(parseInt(userId));
+    } else {
+      this.loadUser(null);
+      this.loadUserPosts(null);
     }
+  
   }
 
-  private loadUser(userId: number): void {
+  private loadUser(userId: number | null): void {
     this.profileService.getUserInfo(userId).subscribe({
       next: (info: UserProfile) => {
         this.user = {
@@ -99,7 +104,7 @@ export class ProfileComponent implements OnInit {
           bio: 'Passionate learner and content creator', // Valeur par défaut
           postsCount: 0, // Sera mis à jour avec les posts
           isFollowed: false, // À récupérer depuis votre service
-          isOwnProfile: this.isCurrentUser(userId), // Logique à implémenter
+          // isOwnProfile: this.isCurrentUser(userId), // Logique à implémenter
         };
         console.log(this.user);
         this.isLoading = false;
@@ -112,7 +117,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private loadUserPosts(userId: number): void {
+  private loadUserPosts(userId: number | null): void {
     this.profileService.getUserPostInfo(userId).subscribe({
       next: (posts: UserPost[]) => {
         this.userPosts = posts.map(post => ({

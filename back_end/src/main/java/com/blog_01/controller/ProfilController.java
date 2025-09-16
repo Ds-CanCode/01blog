@@ -55,6 +55,34 @@ public class ProfilController {
         return ResponseEntity.ok(userPostInfo);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserInfoMe(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String token = authHeader.substring(7);
+        Long userId = jwtService.extractId(token);
+        UserInfoDTO userInfo = profilservice.getUserInfo(userId);
+        return ResponseEntity.ok(userInfo);
+    }
+
+    
+    @GetMapping("/post/me")
+    public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfoMe(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
+        String token = authHeader.substring(7);
+        Long userId = jwtService.extractId(token);
+        List<UserPostInfoDTO> userPostInfo = profilservice.getUserPostInfo(userId);
+        return ResponseEntity.ok(userPostInfo);
+    }
+
     // @GetMapping("/post/{userInfoId}")
     // public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfo(
     //         @PathVariable Long userInfoId,

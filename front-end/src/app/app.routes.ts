@@ -8,6 +8,7 @@ export const routes: Routes = [
      { path: 'papier', loadComponent: () => import('./components/papier/papier.component').then(m => m.PapierComponent), canActivate: [AuthGuard]},
     { path: 'article/:id', loadComponent: () => import('./components/article/article.component').then(m => m.ArticleComponent), canActivate: [AuthGuard] },
     { path: 'profil/:id', loadComponent: () => import('./components/profil/profil.component').then(m => m.ProfileComponent), canActivate: [AuthGuard] },
+    { path: 'profil', loadComponent: () => import('./components/profil/profil.component').then(m => m.ProfileComponent), canActivate: [AuthGuard] },
     { path: 'admin', loadComponent: () => import('./components/admin/admin.component').then(m => m.AdminComponent), canActivate: [AuthGuard] },
     { path: '**', redirectTo: 'home' }
 ];
