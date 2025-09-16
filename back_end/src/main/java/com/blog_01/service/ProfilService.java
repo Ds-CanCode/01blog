@@ -1,19 +1,29 @@
 package com.blog_01.service;
 
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blog_01.dto.MediaDTO;
 import com.blog_01.dto.UserInfoDTO;
+import com.blog_01.dto.UserPostInfoDTO;
+import com.blog_01.model.Post;
 import com.blog_01.model.User;
+import com.blog_01.repository.PostRepository;
 import com.blog_01.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProfilService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     public UserInfoDTO getUserInfo(Long userInfoId) {
         User user = userRepository.findById(userInfoId)
@@ -30,7 +40,7 @@ public class ProfilService {
         } else {
             dto.setProfileImage(null);
         }
-         if (user.getCoverImage() != null) {
+        if (user.getCoverImage() != null) {
             String base64Avatar = Base64.getEncoder().encodeToString(user.getCoverImage());
             dto.setCoverImage("data:image/png;base64," + base64Avatar);
         } else {
@@ -41,4 +51,34 @@ public class ProfilService {
 
         return dto;
     }
+
+    @Transactional()
+    public List<UserPostInfoDTO> getUserPostInfo(Long userInfoId) {
+        List<Post> posts = postRepository.findPostsWithMediaByUserId(userInfoId);
+
+        List<UserPostInfoDTO> dtos = posts.stream().map(post -> {
+            UserPostInfoDTO dto = new UserPostInfoDTO();
+            dto.setId(post.getId());
+            dto.setTitle(post.getTitle());
+            dto.setDescription(post.getContent());
+            dto.setPublishDate(post.getCreatedAt().toString()); // tu peux formatter si besoin
+
+            // Mapper les medias correctement
+            List<MediaDTO> mediaDTOs = post.getMedias().stream()
+                    .map(media -> {
+                        MediaDTO m = new MediaDTO();
+                        m.setUrl(media.getUrl());
+                        m.setType(media.getType()); // convertir Enum en String
+                        return m;
+                    })
+                    .toList();
+
+            dto.setMedias(mediaDTOs);
+
+            return dto;
+        }).toList();
+
+        return dtos;
+    }
+
 }
