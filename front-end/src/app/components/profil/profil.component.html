@@ -1,193 +1,214 @@
+<div class="profile-wrapper">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p>Loading profile...</p>
+  </div>
 
-<!-- profile.component.html -->
-<div class="profil-hero">
-    <div class="profile-container">
-        <!-- Header avec bannière -->
-        <div class="profile-header">
-            <div class="banner-container">
-                <img [src]="user.banner" alt="Banner" class="banner-image">
-                <div class="banner-overlay"></div>
-            </div>
+  <!-- Profile Content -->
+  <div class="profile-container" *ngIf="!isLoading && user">
 
-            <!-- Informations du profil -->
-            <div class="profile-info">
-                <div class="avatar-container">
-                    <img [src]="user.avatar" alt="Avatar" class="avatar">
-                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="file-input">
-                    <button (click)="fileInput.click()" class="edit-avatar-btn">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                </div>
-
-                <div class="profile-actions">
-                    <button *ngIf="!isEditingProfile" (click)="startEditingProfile()" class="btn btn-outline">
-                        Éditer le profil
-                    </button>
-                    <div *ngIf="isEditingProfile" class="edit-actions">
-                        <button (click)="saveProfile()" class="btn btn-primary">Sauvegarder</button>
-                        <button (click)="cancelEditProfile()" class="btn btn-secondary">Annuler</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Détails du profil -->
-            <div class="profile-details">
-                <div class="name-container">
-                    <h1 class="name">
-                        {{ user.name }}
-                        <i *ngIf="user.isVerified" class="fas fa-check-circle verified-icon"></i>
-                    </h1>
-                    <p class="username"> {{ user.username }}</p>
-                </div>
-
-                <!-- Formulaire d'édition -->
-                <div *ngIf="isEditingProfile" class="edit-form">
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" [(ngModel)]="editForm.name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="bio">Bio</label>
-                        <textarea id="bio" [(ngModel)]="editForm.bio" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Localisation</label>
-                        <input type="text" id="location" [(ngModel)]="editForm.location" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="website">Site web</label>
-                        <input type="text" id="website" [(ngModel)]="editForm.website" class="form-control">
-                    </div>
-                </div>
-
-                <!-- Affichage normal -->
-                <div *ngIf="!isEditingProfile" class="profile-bio">
-                    <p class="bio">{{ user.bio }}</p>
-                    <div class="profile-meta">
-                        <span class="meta-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            {{ user.location }}
-                        </span>
-                        <span class="meta-item">
-                            <i class="fas fa-link"></i>
-                            <a [href]="'https://' + user.website" target="_blank">{{ user.website }}</a>
-                        </span>
-                        <span class="meta-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            Inscrit en {{ getJoinDate() }}
-                        </span>
-                    </div>
-                    <div class="profile-stats">
-                        <span class="stat">
-                            <strong>{{ user.following }}</strong> abonnement(s)
-                        </span>
-                        <span class="stat">
-                            <strong>{{ user.followers }}</strong> abonné(s)
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation des onglets -->
-        <nav class="tabs-nav">
-            <!-- <button [class.active]="activeTab === 'tweets'" (click)="setActiveTab('tweets')" class="tab-button">
-                Tweets
-                <span class="tab-count">{{ user.postsCount }}</span>
-            </button> -->
-             <!--<button [class.active]="activeTab === 'replies'" (click)="setActiveTab('replies')" class="tab-button">
-                Réponses
-            </button>
-            <button [class.active]="activeTab === 'media'" (click)="setActiveTab('media')" class="tab-button">
-                Médias
-            </button> -->
-        </nav>
-
-        <!-- Contenu des onglets -->
-        <div class="tab-content">
-            <!-- Onglet Tweets -->
-            <div *ngIf="activeTab === 'tweets'" class="tweets-tab">
-                <!-- Nouveau post -->
-                <div class="new-post-container">
-                    <div class="new-post-form">
-                        <img [src]="user.avatar" alt="Avatar" class="post-avatar">
-                        <div class="post-input-container">
-                            <textarea [(ngModel)]="newPostContent" placeholder="Quoi de neuf ?" class="post-input"
-                                rows="3"></textarea>
-                            <button (click)="addPost()" class="btn btn-primary post-btn">
-                                Tweeter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Liste des posts -->
-                <div class="posts-list">
-                    <div *ngFor="let post of posts" class="post-item">
-                        <img [src]="user.avatar" alt="Avatar" class="post-avatar">
-                        <div class="post-content">
-                            <div class="post-header">
-                                <div class="post-author">
-                                    <span class="author-name">{{ user.name }}</span>
-                                    <i *ngIf="user.isVerified" class="fas fa-check-circle verified-icon"></i>
-                                    <span class="author-username"> {{ user.username }}</span>
-                                    <span class="post-time">{{ getTimeAgo(post.timestamp) }}</span>
-                                </div>
-                                <div class="post-actions">
-                                    <button (click)="startEditingPost(post)" class="action-btn">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button (click)="deletePost(post.id)" class="action-btn delete-btn">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Contenu du post -->
-                            <div *ngIf="!editingPost || editingPost.id !== post.id" class="post-text">
-                                {{ post.content }}
-                            </div>
-
-                            <!-- Formulaire d'édition -->
-                            <div *ngIf="editingPost && editingPost.id === post.id" class="edit-post-form">
-                                <textarea [(ngModel)]="editingPost.content" class="edit-post-input" rows="3"></textarea>
-                                <div class="edit-post-actions">
-                                    <button (click)="savePost()" class="btn btn-primary">Sauvegarder</button>
-                                    <button (click)="cancelEditPost()" class="btn btn-secondary">Annuler</button>
-                                </div>
-                            </div>
-
-                            <!-- Interactions -->
-                            <div class="post-interactions">
-                                <button (click)="toggleLike(post)" [class.liked]="post.isLiked" class="interaction-btn">
-                                    <i class="fas fa-heart"></i>
-                                    <span *ngIf="post.likes > 0">{{ post.likes }}</span>
-                                </button>
-                                <button (click)="toggleRetweet(post)" [class.retweeted]="post.isRetweeted"
-                                    class="interaction-btn">
-                                    <i class="fas fa-retweet"></i>
-                                    <span *ngIf="post.retweets > 0">{{ post.retweets }}</span>
-                                </button>
-                                <button class="interaction-btn">
-                                    <i class="fas fa-comment"></i>
-                                </button>
-                                <button class="interaction-btn">
-                                    <i class="fas fa-share"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Autres onglets -->
-            <div *ngIf="activeTab === 'replies'" class="tab-placeholder">
-                <p>Aucune réponse pour le moment</p>
-            </div>
-
-            <div *ngIf="activeTab === 'media'" class="tab-placeholder">
-                <p>Aucun média pour le moment</p>
-            </div>
-        </div>
+    <!-- Cover Section -->
+    <div class="profile-cover">
+      <img [src]="getCoverImageUrl()" alt="Cover image" class="cover-image">
+      <div class="cover-overlay"></div>
     </div>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-info">
+        <div class="profile-avatar-container">
+          <img [src]="getProfileImageUrl()" [alt]="user.fullName || user.username" class="profile-avatar">
+        </div>
+
+
+        <div class="profile-details">
+          <div class="profile-names">
+            <h1 class="profile-fullname">{{ user.fullName || user.username }}</h1>
+            <p class="profile-username">@{{ user.username }}</p>
+          </div>
+
+          <p class="profile-bio" *ngIf="user.bio">{{ user.bio }}</p>
+
+          <div class="profile-meta">
+            <span class="profile-member-since">
+              Member since {{ formatMemberSince(user.createdAt) }}
+            </span>
+          </div>
+
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ userPosts.length }}</span>
+              <span class="stat-label">Posts</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">{{ user.followersCount }}</span>
+              <span class="stat-label">Followers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">{{ user.followingCount }}</span>
+              <span class="stat-label">Following</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="profile-actions">
+        <button *ngIf="isOwnProfile" class="action-btn edit-profile-btn" (click)="editProfile()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M11.333 2a1.333 1.333 0 011.334 1.333V12.667a1.333 1.333 0 01-1.334 1.333H4.667a1.333 1.333 0 01-1.334-1.333V3.333A1.333 1.333 0 014.667 2h6.666z"
+              stroke="currentColor" stroke-width="1.5" />
+            <path d="M10.667 7.333L7.333 4l-2 2v2.667h2.667l3.334-3.334z" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          Edit Profile
+        </button>
+
+        <button *ngIf="!isOwnProfile" class="action-btn follow-btn" [class.following]="user.isFollowing"
+          [disabled]="isFollowLoading" (click)="toggleFollow()">
+          <span *ngIf="!isFollowLoading">
+            {{ user.isFollowing ? 'Unfollow' : 'Follow' }}
+          </span>
+          <span *ngIf="isFollowLoading" class="loading-text">
+            <div class="mini-spinner"></div>
+            {{ user.isFollowing ? 'Unfollowing...' : 'Following...' }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Posts Section -->
+    <div class="profile-posts-section">
+      <!-- Subject Filter -->
+      <div class="posts-header" *ngIf="availableSubjects.length > 0">
+        <h2 class="section-title">Posts</h2>
+
+      </div>
+
+      <!-- Posts Grid -->
+      <div class="blog-grid" *ngIf="filteredPosts.length > 0">
+        <div class="blog-card profile-post-card" *ngFor="let post of filteredPosts" (click)="onCardClick(post.id)">
+
+          <!-- Edit/Delete Actions for Own Posts -->
+          <div class="post-actions" *ngIf="isOwnProfile">
+            <button class="post-action-btn edit-btn" (click)="editPost(post, $event)" title="Edit post">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M11.333 2a1.333 1.333 0 011.334 1.333V12.667a1.333 1.333 0 01-1.334 1.333H4.667a1.333 1.333 0 01-1.334-1.333V3.333A1.333 1.333 0 014.667 2h6.666z"
+                  stroke="currentColor" stroke-width="1.5" />
+                <path d="M10.667 7.333L7.333 4l-2 2v2.667h2.667l3.334-3.334z" stroke="currentColor"
+                  stroke-width="1.5" />
+              </svg>
+            </button>
+            <button class="post-action-btn delete-btn" (click)="deletePost(post, $event)" title="Delete post">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M2 4h12M5.333 4V2.667a1.333 1.333 0 011.334-1.334h2.666a1.333 1.333 0 011.334 1.334V4m2 0v9.333a1.333 1.333 0 01-1.333 1.334H4.667a1.333 1.333 0 01-1.334-1.334V4h8.667z"
+                  stroke="currentColor" stroke-width="1.5" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Post Media -->
+          <div class="card-image">
+            <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+              <!-- Image -->
+              <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
+                [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title" loading="lazy"
+                (error)="onImageError($event)" />
+
+              <!-- Video -->
+              <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
+                [src]="post.medias[post.selectedMediaIndex].url" controls></video>
+
+              <!-- Media navigation -->
+              <button *ngIf="post.medias && post.medias.length > 1" class="media-btn prev"
+                (click)="prevMedia(post, $event)">&#10094;</button>
+              <button *ngIf="post.medias && post.medias.length > 1" class="media-btn next"
+                (click)="nextMedia(post, $event)">&#10095;</button>
+            </div>
+          </div>
+
+          <!-- Post Content -->
+          <div class="card-content">
+            <!-- Subject Tag -->
+            <div class="post-subject" *ngIf="post.subject">
+              <span class="subject-tag">{{ post.subject }}</span>
+            </div>
+
+            <h3 class="card-title">{{ post.title }}</h3>
+            <p class="card-description">{{ post.description }}</p>
+
+            <!-- Post Stats -->
+            <div class="post-stats" *ngIf="post.likesCount || post.commentsCount">
+              <div class="stat" *ngIf="post.likesCount">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 14S2 9 2 5.5C2 3.015 4.015 1 6.5 1S11 3.015 11 5.5C11 9 8 14 8 14z" stroke="currentColor"
+                    fill="none" stroke-width="1.5" />
+                </svg>
+                <span>{{ post.likesCount }}</span>
+              </div>
+              <div class="stat" *ngIf="post.commentsCount">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M14 10c0 1.1-.9 2-2 2H4l-2 2V4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v6z" stroke="currentColor"
+                    fill="none" stroke-width="1.5" />
+                </svg>
+                <span>{{ post.commentsCount }}</span>
+              </div>
+            </div>
+
+            <!-- Post Meta -->
+            <div class="card-meta">
+              <div class="author-info">
+                <div class="author-avatar">
+                  <img [src]="post.author.avatar" [alt]="post.author.name" (error)="onImageError($event)">
+                </div>
+                <span class="author-name">{{ post.author.name }}</span>
+              </div>
+              <span class="publish-date">{{ formatDate(post.publishDate) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Posts Message -->
+      <div class="no-posts-message" *ngIf="filteredPosts.length === 0 && !isLoading">
+        <div class="no-posts-content">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="no-posts-icon">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor"
+              stroke-width="2" />
+            <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" />
+            <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2" />
+            <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2" />
+            <polyline points="10,9 9,9 8,9" stroke="currentColor" stroke-width="2" />
+          </svg>
+          <h3>No posts found</h3>
+          <p *ngIf="selectedSubjectFilter !== 'all'">
+            No posts found for "{{ selectedSubjectFilter }}". Try selecting a different subject.
+          </p>
+          <p *ngIf="selectedSubjectFilter === 'all' && isOwnProfile">
+            You haven't published any posts yet. Start sharing your thoughts!
+          </p>
+          <p *ngIf="selectedSubjectFilter === 'all' && !isOwnProfile">
+            This user hasn't published any posts yet.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="!isLoading && !user">
+    <div class="error-content">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="error-icon">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+        <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2" />
+        <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" />
+      </svg>
+      <h3>Profile not found</h3>
+      <p>The user profile you're looking for doesn't exist or has been removed.</p>
+      <button class="action-btn" onclick="history.back()">Go Back</button>
+    </div>
+  </div>
 </div>

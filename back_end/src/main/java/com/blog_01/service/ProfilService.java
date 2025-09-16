@@ -1,7 +1,8 @@
 package com.blog_01.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Base64;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog_01.dto.UserInfoDTO;
@@ -23,8 +24,18 @@ public class ProfilService {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setCreatedAt(user.getCreatedAt());
-        dto.setProfileImage(user.getProfileImage());
-        dto.setCoverImage(user.getCoverImage());
+        if (user.getProfileImage() != null) {
+            String base64Avatar = Base64.getEncoder().encodeToString(user.getProfileImage());
+            dto.setProfileImage("data:image/png;base64," + base64Avatar);
+        } else {
+            dto.setProfileImage(null);
+        }
+         if (user.getCoverImage() != null) {
+            String base64Avatar = Base64.getEncoder().encodeToString(user.getCoverImage());
+            dto.setCoverImage("data:image/png;base64," + base64Avatar);
+        } else {
+            dto.setCoverImage(null);
+        }
         dto.setFollowersCount(user.getFollowers().size());
         dto.setFollowingCount(user.getFollowing().size());
 

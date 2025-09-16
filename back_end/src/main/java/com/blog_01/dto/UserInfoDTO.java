@@ -8,8 +8,8 @@ public class UserInfoDTO {
     private String username;
     private String email;
     private LocalDateTime createdAt;
-    private byte[] profileImage;
-    private byte[] coverImage;
+    private String profileImage;
+    private String coverImage;
     private int followersCount;
     private int followingCount;
 
@@ -25,11 +25,11 @@ public class UserInfoDTO {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public byte[] getProfileImage() { return profileImage; }
-    public void setProfileImage(byte[] profileImage) { this.profileImage = profileImage; }
+    public String getProfileImage() { return profileImage; }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
-    public byte[] getCoverImage() { return coverImage; }
-    public void setCoverImage(byte[] coverImage) { this.coverImage = coverImage; }
+    public String getCoverImage() { return coverImage; }
+    public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
 
     public int getFollowersCount() { return followersCount; }
     public void setFollowersCount(int followersCount) { this.followersCount = followersCount; }

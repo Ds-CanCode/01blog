@@ -9,31 +9,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.UserInfoDTO;
-// import com.blog_01.service.JwtService;
+import com.blog_01.service.JwtService;
 import com.blog_01.service.ProfilService;
-
 
 @RestController
 @RequestMapping("/api/profile")
 public class ProfilController {
-    
+
     @Autowired
     private ProfilService profilservice;
 
-    // @Autowired
-    // private JwtService jwtService;
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/{userInfoId}")
     public ResponseEntity<?> getUserInfo(
-            @PathVariable Long userInfoId
-            // @RequestHeader("Authorization") String authHeader
+            @PathVariable Long userInfoId,
+            @RequestHeader("Authorization") String authHeader
     ) {
-                                    // if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                                    //     return ResponseEntity.status(401).build();
-                                    // }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
 
-        // String token = authHeader.substring(7);
-        // Long userId = jwtService.extractId(token);
+        String token = authHeader.substring(7);
+        Long userId = jwtService.extractId(token);
         UserInfoDTO userInfo = profilservice.getUserInfo(userInfoId);
         return ResponseEntity.ok(userInfo);
     }
