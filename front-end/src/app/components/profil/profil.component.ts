@@ -95,7 +95,7 @@ export class ProfileComponent implements OnInit {
           bio: 'Passionate learner and content creator', // Valeur par défaut
           postsCount: 0, // Sera mis à jour avec les posts
           isFollowed: false, // À récupérer depuis votre service
-          // isOwnProfile: this.isCurrentUser(userId), // Logique à implémenter
+          isOwnProfile: userId != null ? false : true, // Logique à implémenter
         };
         console.log(this.user);
         this.isLoading = false;
@@ -222,12 +222,4 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-
-
-  // Navigation vers le profil
-  viewProfile(): void {
-    if (this.user) {
-      this.router.navigate(['/profile', this.user.id]);
-    }
-  }
 }
