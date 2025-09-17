@@ -124,7 +124,7 @@ export class PapierComponent {
       this.postService.editPost(formData, this.postId).subscribe({
         next: (res) => {
           this.loading = false;
-          this.router.navigate(['/home'])
+          this.router.navigate(['/profil'])
         },
         error: (err) => console.error('Erreur ❌', err)
       })
