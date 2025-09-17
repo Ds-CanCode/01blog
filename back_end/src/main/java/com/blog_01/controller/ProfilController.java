@@ -2,8 +2,8 @@ package com.blog_01.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,7 @@ public class ProfilController {
     private JwtService jwtService;
 
     @GetMapping("/{userInfoId}")
-    public ResponseEntity<?> getUserInfo(
+    public ResponseEntity<UserInfoDTO> getUserInfo(
             @PathVariable Long userInfoId,
             @RequestHeader("Authorization") String authHeader
     ) {
@@ -57,7 +57,7 @@ public class ProfilController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getUserInfoMe(
+    public ResponseEntity<UserInfoDTO> getUserInfoMe(
             @RequestHeader("Authorization") String authHeader
     ) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

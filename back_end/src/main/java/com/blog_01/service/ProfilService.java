@@ -25,6 +25,7 @@ public class ProfilService {
     @Autowired
     private PostRepository postRepository;
 
+    @Transactional
     public UserInfoDTO getUserInfo(Long userInfoId) {
         User user = userRepository.findById(userInfoId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -52,7 +53,7 @@ public class ProfilService {
         return dto;
     }
 
-    @Transactional()
+    @Transactional
     public List<UserPostInfoDTO> getUserPostInfo(Long userInfoId) {
         List<Post> posts = postRepository.findPostsWithMediaByUserId(userInfoId);
 
