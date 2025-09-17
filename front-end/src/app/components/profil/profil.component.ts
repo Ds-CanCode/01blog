@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../services/profil.service';
+import { AuthService } from '../../services/auth.service';
 
 // Interfaces basées exactement sur votre backend
 export interface UserProfile {
@@ -65,7 +66,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -74,8 +76,9 @@ export class ProfileComponent implements OnInit {
 
   private loadUserProfile(): void {
     const userId = this.route.snapshot.paramMap.get('id') || null;
-    console.log(userId);
-    if (userId) {
+    const meUserId = localStorage.getItem('userId');
+   
+    if (userId && (userId != meUserId)) {
       this.loadUser(parseInt(userId));
       this.loadUserPosts(parseInt(userId));
     } else {

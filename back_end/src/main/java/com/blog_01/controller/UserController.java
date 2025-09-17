@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.blog_01.model.User;
+import com.blog_01.service.JwtService;
 import com.blog_01.service.UserService;
 
 @RestController
@@ -21,10 +22,12 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping(value = "/register", consumes = "multipart/form-data")
@@ -59,9 +62,11 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             String token = userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPassword());
+            Long userId = jwtService.extractId(token);
             return ResponseEntity.ok(Map.of(
                     "message", "Connexion réussie ✅",
-                    "token", token
+                    "token", token,
+                    "id", userId
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500)
