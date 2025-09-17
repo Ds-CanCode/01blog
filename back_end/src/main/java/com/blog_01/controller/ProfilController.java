@@ -2,8 +2,10 @@ package com.blog_01.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -40,7 +42,6 @@ public class ProfilController {
         return ResponseEntity.ok(userInfo);
     }
 
-    
     @GetMapping("/post/{userInfoId}")
     public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfo(
             @PathVariable Long userInfoId,
@@ -69,7 +70,6 @@ public class ProfilController {
         return ResponseEntity.ok(userInfo);
     }
 
-    
     @GetMapping("/post/me")
     public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfoMe(
             @RequestHeader("Authorization") String authHeader
@@ -83,19 +83,23 @@ public class ProfilController {
         return ResponseEntity.ok(userPostInfo);
     }
 
-    // @GetMapping("/post/{userInfoId}")
-    // public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfo(
-    //         @PathVariable Long userInfoId,
-    //         @RequestHeader("Authorization") String authHeader
-    // ) {
-    //     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-    //         return ResponseEntity.status(401).build();
-    //     }
-    //     String token = authHeader.substring(7);
-    //     Long userId = jwtService.extractId(token);
-    //     // List<Post> userPostInfo = profilservice.getUserPostInfo(userInfoId);
-    //     // return ResponseEntity.ok(userPostInfo);
-    //     List<UserPostInfoDTO> userPostInfo = profilservice.getUserPostInfo(userId);
-    //     return ResponseEntity.ok(userPostInfo);
-    // }
+
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deletePost(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
+        String token = authHeader.substring(7);
+        Long userId = jwtService.extractId(token);
+        boolean isDeleted = profilservice.deletePost(id, userId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } 
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        
+    }
 }

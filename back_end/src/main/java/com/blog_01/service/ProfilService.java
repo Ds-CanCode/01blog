@@ -81,4 +81,18 @@ public class ProfilService {
         return dtos;
     }
 
+    public boolean deletePost(Long idPost, Long idUser) {
+        Post post = postRepository.findById(idPost)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!post.getUser().getId().equals(user.getId())) {
+            return false;
+        }
+
+        postRepository.delete(post);
+        return true;
+    }
 }
