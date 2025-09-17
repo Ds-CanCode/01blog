@@ -23,4 +23,14 @@ export class FollowService {
         return this.http.post(`${this.apiUrl}/${userId}`, {}, { headers });
     }
 
+    isfollow(userId: number): Observable<any> {
+        const token = localStorage.getItem('jwt');
+        console.log(token);
+
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+
+        return this.http.get(`${this.apiUrl}/check/${userId}`, { headers });
+    }
 }

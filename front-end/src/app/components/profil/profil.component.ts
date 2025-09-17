@@ -15,15 +15,8 @@ export interface UserProfile {
   coverImage: string;
   followersCount: number;
   followingCount: number;
-  // Champs UI additionnels
-  name?: string;
-  bio?: string;
-  location?: string;
-  website?: string;
   postsCount?: number;
-  isFollowed?: boolean;
   isOwnProfile?: boolean;
-  isVerified?: boolean;
 }
 
 export interface MediaDTO {
@@ -62,6 +55,7 @@ export class ProfileComponent implements OnInit {
   isLoading = true;
   editingPost: UserPost | null = null;
   showDeleteConfirm: number | null = null;
+  isFollowed?: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -72,6 +66,25 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserProfile();
+    this.isFollow();
+  }
+
+  private isFollow(): void {
+    const userId = this.route.snapshot.paramMap.get('id');
+    const meUserId = localStorage.getItem('userId');
+
+    if (userId && (userId != meUserId)) {
+      this.followService.isfollow(parseInt(userId)).subscribe({
+        next: (res: any) => {
+          console.log(res);
+          
+          this.isFollowed = res.isFollowed;
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      })
+    }
   }
 
   private loadUserProfile(): void {
@@ -93,14 +106,10 @@ export class ProfileComponent implements OnInit {
       next: (info: UserProfile) => {
         this.user = {
           ...info,
-          // Ajout des champs UI manquants si nécessaire
-          name: info.username, // Utiliser username comme nom par défaut
-          bio: 'Passionate learner and content creator', // Valeur par défaut
-          postsCount: 0, // Sera mis à jour avec les posts
-          // isFollowed: false, // À récupérer depuis votre service
-          isOwnProfile: userId != null ? false : true, // Logique à implémenter
+          postsCount: 0,
+          isOwnProfile: userId != null ? false : true,
         };
-        console.log(this.user);
+
         this.isLoading = false;
       },
       error: (error) => {
@@ -141,8 +150,7 @@ export class ProfileComponent implements OnInit {
     if (this.user && !this.user.isOwnProfile) {
       this.followService.follow(this.user.id).subscribe({
         next: (res) => {
-          console.log("Follow");
-          
+          this.isFollowed = !this.isFollowed;
         },
         error: (err) => {
           console.error(err);

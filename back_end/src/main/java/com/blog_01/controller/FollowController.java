@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -39,11 +40,29 @@ public class FollowController {
         }
 
         boolean isNowFollowed = followService.follow(myId, userId);
-        // int followersCount = followService.getFollowersCount(userId);
 
         return ResponseEntity.ok(Map.of(
                 "isFollowed", isNowFollowed
-                // "followersCount", followersCount
+        ));
+    }
+
+    @GetMapping("/check/{userId}")
+    public ResponseEntity<?> isFollow(
+            @PathVariable Long userId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token manquant");
+        }
+        String token = authHeader.substring(7);
+        Long myId = jwtService.extractId(token);
+        if (Objects.equals(myId, userId)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Vous ne pouvez pas vous suivre vous-même"));
+        }
+        boolean isFollowed = followService.isFollow(myId, userId);
+
+        return ResponseEntity.ok(Map.of(
+                "isFollowed", isFollowed
         ));
     }
 }

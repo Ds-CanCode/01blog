@@ -23,18 +23,12 @@
           </div>
           
           <div class="profile-details">
-            <h1 class="profile-name">{{ user.name || user.username }}</h1>
+            <h1 class="profile-name">{{ user.username }}</h1>
             <p class="profile-username">{{ user.username }}</p>
-            <p class="profile-bio" *ngIf="user.bio">{{ user.bio }}</p>
             
             <!-- Profile Meta -->
             <div class="profile-meta">
-              <div class="meta-item" *ngIf="user.location">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 0C5.24 0 3 2.24 3 5C3 8.5 8 16 8 16S13 8.5 13 5C13 2.24 10.76 0 8 0ZM8 7C6.9 7 6 6.1 6 5C6 3.9 6.9 3 8 3S10 3.9 10 5C10 6.1 9.1 7 8 7Z" fill="currentColor"/>
-                </svg>
-                <span>{{ user.location }}</span>
-              </div>
+            
               <div class="meta-item">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M14 2H12V1C12 0.45 11.55 0 11 0S10 0.45 10 1V2H6V1C6 0.45 5.55 0 5 0S4 0.45 4 1V2H2C0.9 2 0 2.9 0 4V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V4C16 2.9 15.1 2 14 2ZM14 14H2V6H14V14Z" fill="currentColor"/>
@@ -65,9 +59,9 @@
             <button 
               *ngIf="!user.isOwnProfile" 
               (click)="toggleFollow()" 
-              [class]="user.isFollowed ? 'follow-btn following' : 'follow-btn'"
+              [class]="isFollowed ? 'follow-btn following' : 'follow-btn'"
             >
-              {{ user.isFollowed ? 'Unfollow' : 'Follow' }}
+              {{ isFollowed ? 'Unfollow' : 'Follow' }}
             </button>
             <button 
               *ngIf="user.isOwnProfile" 
@@ -86,7 +80,7 @@
 
     <!-- Posts Section -->
     <div class="posts-section">
-      <h2 class="section-title">All Posts by {{ user.name || user.username }}</h2>
+      <h2 class="section-title">All Posts by {{ user.username }}</h2>
       
       <!-- Posts Grid -->
       <div class="blog-grid" *ngIf="userPosts.length > 0">
@@ -178,10 +172,10 @@
                   <div class="author-avatar">
                     <img 
                       [src]="user.profileImage" 
-                      [alt]="user.name || user.username"
+                      [alt]="user.username"
                       (error)="onImageError($event)">
                   </div>
-                  <span class="author-name">{{ user.name || user.username }}</span>
+                  <span class="author-name">{{ user.username }}</span>
                 </div>
                 <span class="publish-date">{{ post.publishDate | date:'d MMM, yyyy' }}</span>
               </div>

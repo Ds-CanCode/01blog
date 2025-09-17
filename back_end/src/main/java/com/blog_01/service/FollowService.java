@@ -41,10 +41,12 @@ public class FollowService {
         return isNowFollowed;
     }
 
-    // @Transactional
-    // public int getFollowersCount(Long userId) {
-    //     User target = userRepository.findById(userId)
-    //             .orElseThrow(() -> new RuntimeException("Utilisateur cible introuvable"));
-    //     return target.getFollowers().size();
-    // }
+    public boolean isFollow(Long myId, Long userId) {
+        User me = userRepository.findById(myId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+        User target = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur cible introuvable"));
+
+        return me.getFollowing().contains(target);
+    }
 }
