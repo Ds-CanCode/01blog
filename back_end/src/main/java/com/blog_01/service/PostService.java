@@ -33,7 +33,7 @@ public class PostService {
     }
 
     @Transactional
-    public Post create(String title, String content, String tags, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
+    public Post create(String title, String content, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         if (user == null) {
@@ -43,7 +43,6 @@ public class PostService {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
-        post.setTags(tags);
         post.setUser(user);
 
         if (files != null) {
@@ -141,22 +140,43 @@ public class PostService {
                 )
                 .orElse(ResponseEntity.notFound().build());
     }
-    //  return
-    //     .map(post -> {
-    //         BlogPostDTO dto = new BlogPostDTO();
-    //         dto.setId(post.getId());
-    //         dto.setTitle(post.getTitle());
-    //         dto.setDescription(post.getContent());
 
-    //         if (!post.getMedias().isEmpty()) {
-    //             Media firstMedia = post.getMedias().get(0);
-    //             dto.setImage(firstMedia.getUrl());
-    //         }
-    //         AuthorDTO author = new AuthorDTO();
-    //         author.setName(post.getUser().getUsername());
-    //         dto.setAuthor(author);
-    //         dto.setPublishDate(post.getCreatedAt().toString());
-    //         return ResponseEntity.ok(dto);
-    //     })
-    //     .orElse(ResponseEntity.notFound().build());
+    @Transactional
+    public Post edit(Long idUser, Long idPost, String title, String content, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
+        Post post = postRepository.findById(idPost)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Permistion");
+        }
+        
+        post.setTitle(title);
+        post.setContent(content);
+        post.setUser(user);
+
+        if (files != null) {
+            for (int i = 0; i < files.size(); i++) {
+                MultipartFile file = files.get(i);
+                String typeStr = types.get(i);
+                String resourceType = typeStr.equals("VIDEO") ? "video" : "image";
+
+                byte[] fileBytes = file.getBytes();
+                Map uploadResult = cloudinaryService.upload(fileBytes, "posts", resourceType);
+
+                Media media = new Media();
+                media.setType(Media.MediaType.valueOf(typeStr));
+                media.setUrl(uploadResult.get("secure_url").toString());
+                media.setPublicId(uploadResult.get("public_id").toString());
+                media.setPost(post);
+
+                post.getMedias().add(media);
+            }
+        }
+
+        return postRepository.save(post);
+    }
+    
 }

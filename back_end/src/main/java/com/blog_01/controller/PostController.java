@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,6 @@ public class PostController {
     public ResponseEntity<?> createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("tags") String tags,
             @RequestParam(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "types", required = false) List<String> types,
             @RequestHeader("Authorization") String authHeader
@@ -49,7 +49,7 @@ public class PostController {
         String username = jwtService.extractUsername(token);
 
         try {
-            postService.create(title, content, tags, username, files, types);
+            postService.create(title, content, username, files, types);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Post créé par " + username);
@@ -69,4 +69,29 @@ public class PostController {
         return postService.getPost(id);
     }
 
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editPost(
+            @PathVariable Long id,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files,
+            @RequestParam(value = "types", required = false) List<String> types,
+            @RequestHeader("Authorization") String authHeader
+    ) throws java.io.IOException {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token manquant");
+        }
+
+        String token = authHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        Long idUser = jwtService.extractId(token);
+        try {
+            postService.edit(idUser, id, title, content, username, files, types);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Post créé par " + username);
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Erreur lors de l'upload des fichiers");
+        }
+    }
 }

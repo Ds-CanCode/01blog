@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { PostService } from '../../services/post.service';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 })
 
 
+
 export class PapierComponent {
   title: string = '';
   content: string = '';
@@ -26,8 +27,28 @@ export class PapierComponent {
   loading: boolean = false;
   titleCount: number = 0;
   contentCount: number = 0;
+  isEditMode: boolean = false;
+  postId: number | null = null;
 
-  constructor(private router: Router, private postService: PostService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private postService: PostService) { }
+
+
+  ngOnInit() {
+    const postIdParam = this.route.snapshot.paramMap.get('id');
+    if (postIdParam) {
+      this.postId = +postIdParam;
+      this.isEditMode = true;
+      this.loadPost(this.postId);
+    }
+  }
+
+  private loadPost(id: number) {
+    this.postService.getPost(id).subscribe(post => {
+      this.title = post.title;
+      this.content = post.description;
+    });
+  }
+
 
   updateTitleCounter() {
     this.titleCount = this.title.length;
@@ -85,18 +106,16 @@ export class PapierComponent {
       formData.append(`types`, media.type);
     });
 
-
-    const token = localStorage.getItem('jwt');
-    if (!token) {
-      console.error('Token JWT manquant côté front');
-      return;
-    }
-
-
-
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-
-    this.postService.addPost(formData,  headers)
+    if (this.isEditMode && this.postId) {
+      this.postService.editPost(formData, this.postId).subscribe({
+        next: (res) => {
+          this.loading = false;
+          this.router.navigate(['/home'])
+        },
+        error: (err) => console.error('Erreur ❌', err)
+      })
+    } else {
+      this.postService.addPost(formData)
       .subscribe({
         next: (res) => {
           this.loading = false;
@@ -104,14 +123,6 @@ export class PapierComponent {
         },
         error: (err) => console.error('Erreur ❌', err)
       });
-
-    // this.http.post('http://localhost:8080/api/post/create', formData, { headers })
-    //   .subscribe({
-    //     next: (res) => {
-    //       this.loading = false;
-    //       this.router.navigate(['/home'])
-    //     },
-    //     error: (err) => console.error('Erreur ❌', err)
-    //   });
+    }
   }
 }

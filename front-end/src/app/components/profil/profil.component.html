@@ -158,7 +158,7 @@
           
           <div class="card-content">
             <!-- Edit mode -->
-            <div *ngIf="editingPost && editingPost.id === post.id" class="edit-mode">
+            <!-- <div *ngIf="editingPost && editingPost.id === post.id" class="edit-mode">
               <div class="edit-form">
                 <input [(ngModel)]="editingPost.title" class="edit-title-input" placeholder="Post title">
                 <textarea [(ngModel)]="editingPost.description" class="edit-description-input" rows="3" placeholder="Post description"></textarea>
@@ -166,7 +166,7 @@
                   <button (click)="cancelEditPost()" class="btn-cancel">Cancel</button>
                 </div>
               </div>
-            </div>
+            </div> -->
             
             <!-- Normal view -->
             <div *ngIf="!editingPost || editingPost.id !== post.id">

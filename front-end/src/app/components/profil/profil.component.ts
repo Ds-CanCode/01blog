@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../services/profil.service';
-import { AuthService } from '../../services/auth.service';
 
 // Interfaces basées exactement sur votre backend
 export interface UserProfile {
@@ -67,7 +66,6 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService,
-    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -171,16 +169,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // Gestion des posts (pour le profil personnel)
+
   startEditingPost(post: UserPost): void {
-    this.editingPost = { ...post };
+    this.router.navigate(['/papier', post.id]);
   }
 
-
-
-  cancelEditPost(): void {
-    this.editingPost = null;
-  }
 
   confirmDeletePost(postId: number): void {
     if (confirm('Are you sure you want to delete this post?')) {
