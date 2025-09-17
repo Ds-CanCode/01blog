@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../services/profil.service';
+import { FollowService } from '../../services/follow.service';
 
 // Interfaces basées exactement sur votre backend
 export interface UserProfile {
@@ -10,8 +11,8 @@ export interface UserProfile {
   username: string;
   email: string;
   createdAt: string;
-  profileImage: string; // Base64 depuis votre backend
-  coverImage: string;   // Base64 depuis votre backend
+  profileImage: string;
+  coverImage: string;
   followersCount: number;
   followingCount: number;
   // Champs UI additionnels
@@ -66,6 +67,7 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService,
+    private followService: FollowService,
   ) { }
 
   ngOnInit(): void {
@@ -75,7 +77,7 @@ export class ProfileComponent implements OnInit {
   private loadUserProfile(): void {
     const userId = this.route.snapshot.paramMap.get('id') || null;
     const meUserId = localStorage.getItem('userId');
-   
+
     if (userId && (userId != meUserId)) {
       this.loadUser(parseInt(userId));
       this.loadUserPosts(parseInt(userId));
@@ -95,7 +97,7 @@ export class ProfileComponent implements OnInit {
           name: info.username, // Utiliser username comme nom par défaut
           bio: 'Passionate learner and content creator', // Valeur par défaut
           postsCount: 0, // Sera mis à jour avec les posts
-          isFollowed: false, // À récupérer depuis votre service
+          // isFollowed: false, // À récupérer depuis votre service
           isOwnProfile: userId != null ? false : true, // Logique à implémenter
         };
         console.log(this.user);
@@ -137,14 +139,15 @@ export class ProfileComponent implements OnInit {
 
   toggleFollow(): void {
     if (this.user && !this.user.isOwnProfile) {
-      this.user.isFollowed = !this.user.isFollowed;
-      if (this.user.isFollowed) {
-        this.user.followersCount++;
-      } else {
-        this.user.followersCount--;
-      }
-
-      console.log('Follow status changed:', this.user.isFollowed);
+      this.followService.follow(this.user.id).subscribe({
+        next: (res) => {
+          console.log("Follow");
+          
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
     }
   }
 

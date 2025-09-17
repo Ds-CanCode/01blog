@@ -13,24 +13,38 @@ public class FollowService {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Transactional
-    public void follow(Long myId, Long userId) {
+    public boolean follow(Long myId, Long userId) {
         User me = userRepository.findById(myId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
         User target = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur cible introuvable"));
 
+        boolean isNowFollowed;
+
         if (me.getFollowing().contains(target)) {
+            // Si déjà suivi → unfollow
             me.getFollowing().remove(target);
             target.getFollowers().remove(me);
-            userRepository.save(me);
-            userRepository.save(target);
+            isNowFollowed = false;
         } else {
+            // Sinon → follow
             me.getFollowing().add(target);
             target.getFollowers().add(me);
-            userRepository.save(me);
-            userRepository.save(target);
+            isNowFollowed = true;
         }
+
+        userRepository.save(me);
+        userRepository.save(target);
+
+        return isNowFollowed;
     }
+
+    // @Transactional
+    // public int getFollowersCount(Long userId) {
+    //     User target = userRepository.findById(userId)
+    //             .orElseThrow(() -> new RuntimeException("Utilisateur cible introuvable"));
+    //     return target.getFollowers().size();
+    // }
 }

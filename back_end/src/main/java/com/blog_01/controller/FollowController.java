@@ -1,5 +1,6 @@
 package com.blog_01.controller;
 
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,16 @@ public class FollowController {
         }
         String token = authHeader.substring(7);
         Long myId = jwtService.extractId(token);
-        if (!Objects.equals(myId, userId)) {
-            followService.follow(myId, userId);
-            return ResponseEntity.ok(200);
+        if (Objects.equals(myId, userId)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Vous ne pouvez pas vous suivre vous-même"));
         }
-        return ResponseEntity.ok(403);
+
+        boolean isNowFollowed = followService.follow(myId, userId);
+        // int followersCount = followService.getFollowersCount(userId);
+
+        return ResponseEntity.ok(Map.of(
+                "isFollowed", isNowFollowed
+                // "followersCount", followersCount
+        ));
     }
 }
