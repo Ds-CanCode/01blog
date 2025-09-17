@@ -55,7 +55,7 @@ export interface UserPost {
   styleUrl: './profil.component.css'
 })
 export class ProfileComponent implements OnInit {
-  
+
   user: UserProfile | null = null;
   userPosts: UserPost[] = [];
   isLoading = true;
@@ -65,8 +65,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private profileService: ProfileService 
-  ) {}
+    private profileService: ProfileService
+  ) { }
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit {
       this.loadUser(null);
       this.loadUserPosts(null);
     }
-  
+
   }
 
   private loadUser(userId: number | null): void {
@@ -118,12 +118,12 @@ export class ProfileComponent implements OnInit {
           comments: post.comments || 0,
           isLiked: false
         }));
-        
-        
+
+
         if (this.user) {
           this.user.postsCount = this.userPosts.length;
         }
-        
+
         console.log(this.userPosts);
       },
       error: (error) => {
@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
- 
+
   toggleFollow(): void {
     if (this.user && !this.user.isOwnProfile) {
       this.user.isFollowed = !this.user.isFollowed;
@@ -142,7 +142,7 @@ export class ProfileComponent implements OnInit {
       } else {
         this.user.followersCount--;
       }
-      
+
       console.log('Follow status changed:', this.user.isFollowed);
     }
   }
@@ -150,20 +150,20 @@ export class ProfileComponent implements OnInit {
   // Navigation médias (même logique que home)
   prevMedia(post: UserPost, event?: Event): void {
     if (event) event.stopPropagation();
-    
+
     if (post.medias && post.medias.length > 1) {
-      post.selectedMediaIndex = post.selectedMediaIndex > 0 
-        ? post.selectedMediaIndex - 1 
+      post.selectedMediaIndex = post.selectedMediaIndex > 0
+        ? post.selectedMediaIndex - 1
         : post.medias.length - 1;
     }
   }
 
   nextMedia(post: UserPost, event?: Event): void {
     if (event) event.stopPropagation();
-    
+
     if (post.medias && post.medias.length > 1) {
-      post.selectedMediaIndex = post.selectedMediaIndex < post.medias.length - 1 
-        ? post.selectedMediaIndex + 1 
+      post.selectedMediaIndex = post.selectedMediaIndex < post.medias.length - 1
+        ? post.selectedMediaIndex + 1
         : 0;
     }
   }
@@ -173,7 +173,7 @@ export class ProfileComponent implements OnInit {
     this.editingPost = { ...post };
   }
 
- 
+
 
   cancelEditPost(): void {
     this.editingPost = null;
@@ -186,16 +186,22 @@ export class ProfileComponent implements OnInit {
   }
 
   deletePost(postId: number): void {
-    
-    
-    this.userPosts = this.userPosts.filter(p => p.id !== postId);
-    if (this.user?.postsCount) {
-      this.user.postsCount--;
-    }
-    console.log('Post deleted:', postId);
+    this.profileService.deletePost(postId).subscribe({
+      next: () => {
+        this.userPosts = this.userPosts.filter(p => p.id !== postId);
+        if (this.user?.postsCount !== undefined && this.user.postsCount > 0) {
+          this.user.postsCount--;
+        }
+        console.log('Post deleted:', postId);
+      },
+      error: (err) => {
+        console.error('Error deleting post:', err);
+      }
+    });
   }
 
- 
+
+
 
   onCardClick(postId: number): void {
     this.router.navigate(['/article', postId]);
