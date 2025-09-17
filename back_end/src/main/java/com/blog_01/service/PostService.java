@@ -89,6 +89,7 @@ public class PostService {
             }
             AuthorDTO author = new AuthorDTO();
             User user = post.getUser();
+            author.setId(user.getId());
             author.setName(user.getUsername());
             if (user.getProfileImage() != null) {
                 String base64Avatar = Base64.getEncoder().encodeToString(user.getProfileImage());
@@ -125,6 +126,7 @@ public class PostService {
 
                     AuthorDTO author = new AuthorDTO();
                     User user = post.getUser();
+                    author.setId(user.getId());
                     author.setName(post.getUser().getUsername());
                     if (user.getProfileImage() != null) {
                         String base64Avatar = Base64.getEncoder().encodeToString(user.getProfileImage());

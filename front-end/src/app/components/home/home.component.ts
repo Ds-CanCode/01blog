@@ -20,6 +20,7 @@ export interface BlogPost {
   description: string;
   medias: MediaDTO[];
   author: {
+    id: number;
     name: string;
     avatar: string;
   };
@@ -58,6 +59,12 @@ export class HomeComponent {
   onCardClick(id: number) {
     this.router.navigate(['/article', id]);
   }
+
+  onUserClick(userId: number, event: Event) {
+    event.stopPropagation(); 
+    this.router.navigate(['/profil', userId]);
+  }
+
 
 
   onImageError(event: any): void {

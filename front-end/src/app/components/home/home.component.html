@@ -66,7 +66,7 @@
             <div class="featured-overlay"></div>
             <div class="featured-content">
               <div class="featured-meta">
-                <span class="featured-author">{{ AllPosts[0].author.name }}</span>
+                <span class="featured-author" (click)="onUserClick(AllPosts[0].author.id, $event)">{{ AllPosts[0].author.name }}</span>
                 <span class="featured-date">{{ AllPosts[0].publishDate | date:'d MMM, yyyy' }}</span>
               </div>
               <h2 class="featured-title">{{ AllPosts[0].title }}</h2>
@@ -109,7 +109,7 @@
             </div>
             <div class="side-article-content">
               <div class="side-article-meta">
-                <span class="side-author">{{ post.author.name }}</span>
+                <span class="side-author" (click)="onUserClick(post.author.id, $event)">{{ post.author.name }} </span>
                 <span class="side-date">{{ post.publishDate | date:'d MMM, yyyy' }}</span>
               </div>
               <h3 class="side-article-title">{{ post.title }}</h3>
@@ -159,7 +159,7 @@
             <p class="card-description">{{ post.description }}</p>
             
             <div class="card-meta">
-              <div class="author-info">
+              <div class="author-info" (click)="onUserClick(post.author.id, $event)">
                 <div class="author-avatar">
                   <img 
                     [src]="post.author.avatar" 
