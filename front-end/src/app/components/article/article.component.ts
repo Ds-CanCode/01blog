@@ -126,6 +126,9 @@ export class ArticleComponent implements OnInit {
   }
 
 
+  onUserClick(userId: number) {
+    this.router.navigate(['/profil', userId]);
+  }
 
   onImageError(event: any): void {
     event.target.src = 'profil.jpg';

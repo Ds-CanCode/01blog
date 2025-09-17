@@ -49,7 +49,7 @@
         
         <!-- Article Meta Info -->
         <div class="article-meta-info">
-          <div class="author-section">
+          <div class="author-section" (click)="onUserClick(article.author.id)">
             <div class="author-avatar">
               <img 
                 [src]="article.author.avatar" 
@@ -139,7 +139,7 @@
           class="comment-item" 
           *ngFor="let comment of comments; trackBy: trackByCommentId"
         >
-          <div class="comment-avatar">
+          <div class="comment-avatar" (click)="onUserClick(comment.userId)">
             <img 
               [src]="comment.avatar" 
               [alt]="comment.username"
