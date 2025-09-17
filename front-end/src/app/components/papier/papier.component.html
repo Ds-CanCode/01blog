@@ -60,14 +60,15 @@
                                [src]="media.preview" 
                                controls
                                class="preview-video"></video>
+                        
                         <button type="button" 
-                                class="remove-media-btn" 
+                                class="remove-btn" 
                                 (click)="removeMedia(media)"
                                 title="Supprimer">
                             ✕
                         </button>
                     </div>
-                    <div class="media-info">
+                    <div class="media-info" *ngIf="media.file">
                         <span class="media-name">{{ media.file.name }}</span>
                         <span class="media-size">{{ formatFileSize(media.file.size) }}</span>
                     </div>

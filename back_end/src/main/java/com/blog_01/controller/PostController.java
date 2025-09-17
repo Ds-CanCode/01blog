@@ -76,6 +76,7 @@ public class PostController {
             @RequestParam("content") String content,
             @RequestParam(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "types", required = false) List<String> types,
+            @RequestParam(required = false, name = "mediasToRemove") String mediasToRemoveJson,
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -86,7 +87,7 @@ public class PostController {
         String username = jwtService.extractUsername(token);
         Long idUser = jwtService.extractId(token);
         try {
-            postService.edit(idUser, id, title, content, username, files, types);
+            postService.edit(idUser, id, title, content, username, files, types, mediasToRemoveJson);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Post créé par " + username);
             return ResponseEntity.ok(response);

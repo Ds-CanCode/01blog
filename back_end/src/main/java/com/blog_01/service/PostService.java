@@ -1,8 +1,10 @@
 package com.blog_01.service;
 
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,22 +16,27 @@ import com.blog_01.dto.MediaDTO;
 import com.blog_01.model.Media;
 import com.blog_01.model.Post;
 import com.blog_01.model.User;
+import com.blog_01.repository.MediaRepository;
 import com.blog_01.repository.PostRepository;
 import com.blog_01.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 
 @Service
 public class PostService {
 
-    private final PostRepository postRepository;
+     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CloudinaryService cloudinaryService;
+    private final MediaRepository mediaRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, CloudinaryService cloudinaryService) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CloudinaryService cloudinaryService, MediaRepository mediaRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.cloudinaryService = cloudinaryService;
+        this.mediaRepository = mediaRepository;
     }
 
     @Transactional
@@ -142,7 +149,7 @@ public class PostService {
     }
 
     @Transactional
-    public Post edit(Long idUser, Long idPost, String title, String content, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
+    public Post edit(Long idUser, Long idPost, String title, String content, String username, List<MultipartFile> files, List<String> types, String mediasToRemoveJson) throws java.io.IOException {
         Post post = postRepository.findById(idPost)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
@@ -156,6 +163,29 @@ public class PostService {
         post.setTitle(title);
         post.setContent(content);
         post.setUser(user);
+        post.setEditedAt(LocalDateTime.now());
+
+
+        if (mediasToRemoveJson != null && !mediasToRemoveJson.isEmpty()) {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> mediasToRemove = mapper.readValue(mediasToRemoveJson, List.class);
+
+            Iterator<Media> iterator = post.getMedias().iterator();
+            while (iterator.hasNext()) {
+                Media media = iterator.next();
+                if (mediasToRemove.contains(media.getUrl())) {
+                    if (media.getPublicId() != null) {
+                        try {
+                            cloudinaryService.delete(media.getPublicId());
+                        } catch (IOException e) {
+                            e.printStackTrace(); 
+                        }
+                    }
+                    mediaRepository.delete(media);
+                    iterator.remove();
+                }
+            }
+        }
 
         if (files != null) {
             for (int i = 0; i < files.size(); i++) {

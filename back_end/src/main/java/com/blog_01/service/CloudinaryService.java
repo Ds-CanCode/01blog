@@ -30,4 +30,7 @@ public class CloudinaryService {
         return cloudinary.uploader().upload(fileBytes, params);
     }
 
+    public Map delete(String publicId) throws IOException {
+        return cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+    }
 }

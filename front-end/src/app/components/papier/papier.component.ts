@@ -23,12 +23,13 @@ export class PapierComponent {
   title: string = '';
   content: string = '';
   tags: string = '';
-  medias: { file: File, type: 'IMAGE' | 'VIDEO', preview: string }[] = [];
+  medias: { file: File | null, type: 'IMAGE' | 'VIDEO', preview: string }[] = [];
   loading: boolean = false;
   titleCount: number = 0;
   contentCount: number = 0;
   isEditMode: boolean = false;
   postId: number | null = null;
+  mediasToRemove: string[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router, private postService: PostService) { }
 
@@ -46,6 +47,11 @@ export class PapierComponent {
     this.postService.getPost(id).subscribe(post => {
       this.title = post.title;
       this.content = post.description;
+      this.medias = post.medias.map((m: any) => ({
+        file: null,
+        type: m.type as 'IMAGE' | 'VIDEO',
+        preview: m.url
+      }));
     });
   }
 
@@ -79,7 +85,7 @@ export class PapierComponent {
 
 
   trackByMedia(index: number, media: any): any {
-    return media.file.name + media.file.size;
+    return media.file ? media.file.name + media.file.size : media.preview;
   }
 
   formatFileSize(bytes: number): string {
@@ -91,6 +97,9 @@ export class PapierComponent {
   }
 
   removeMedia(media: any) {
+    if (!media.file) {
+      this.mediasToRemove.push(media.preview);
+    }
     this.medias = this.medias.filter(m => m !== media);
   }
 
@@ -99,14 +108,19 @@ export class PapierComponent {
     const formData = new FormData();
     formData.append('title', this.title);
     formData.append('content', this.content);
-    formData.append('tags', this.tags);
 
     this.medias.forEach((media, index) => {
-      formData.append('files', media.file, media.file.name);
-      formData.append(`types`, media.type);
+      if (media.file) {
+        formData.append('files', media.file, media.file.name);
+        formData.append('types', media.type);
+      }
     });
 
     if (this.isEditMode && this.postId) {
+
+      if (this.mediasToRemove.length > 0) {
+        formData.append('mediasToRemove', JSON.stringify(this.mediasToRemove));
+      }
       this.postService.editPost(formData, this.postId).subscribe({
         next: (res) => {
           this.loading = false;
@@ -114,15 +128,18 @@ export class PapierComponent {
         },
         error: (err) => console.error('Erreur ❌', err)
       })
+
     } else {
+
       this.postService.addPost(formData)
-      .subscribe({
-        next: (res) => {
-          this.loading = false;
-          this.router.navigate(['/home'])
-        },
-        error: (err) => console.error('Erreur ❌', err)
-      });
+        .subscribe({
+          next: (res) => {
+            this.loading = false;
+            this.router.navigate(['/home'])
+          },
+          error: (err) => console.error('Erreur ❌', err)
+        });
+        
     }
   }
 }
