@@ -32,23 +32,23 @@ export class ReportComponent {
 
 
   onSubmit(): void {
-    if (!this.additionalDetails.trim()) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append("reason", this.additionalDetails);
-    this.reportService.addReport(this.data.userId, formData).subscribe({
-      next: () => {
-        console.log("Reported");
-        this.closePopup();
-      },
-      error: (err) => {
-        console.error('Error:', err);
+    if (confirm('Are you sure you want to report user?')) {
+      if (!this.additionalDetails.trim()) {
+        return;
       }
-    })
-
+      const formData = new FormData();
+      formData.append("reason", this.additionalDetails);
+      this.reportService.addReport(this.data.userId, formData).subscribe({
+        next: () => {
+          console.log("Reported");
+          this.closePopup();
+        },
+        error: (err) => {
+          console.error('Error:', err);
+        }
+      })
+    }
   }
-
 
   private resetForm(): void {
     this.additionalDetails = '';
