@@ -15,7 +15,7 @@
     <div class="navbar-center d-none d-lg-flex gap-4" *ngIf="authService.isLoggedIn()">
       <a class="nav-link" routerLink="/home">Home</a>
       <a class="nav-link" routerLink="/profil">Profil</a>
-      <a class="nav-link" routerLink="/admin">Admin</a>
+      <a class="nav-link" routerLink="/admin" *ngIf="authService.isLoggedIn() && authService.isAdmin()">Admin</a>
     </div>
 
     <!-- 🔴 Actions (write, notification, login/register, toggle) -->
@@ -61,7 +61,7 @@
     <div class="d-flex flex-column align-items-start gap-3">
       <a class="nav-link" routerLink="/home" *ngIf="authService.isLoggedIn()">Home</a>
       <a class="nav-link" routerLink="/profil" *ngIf="authService.isLoggedIn()">Profil</a>
-      <a class="nav-link" routerLink="/admin" *ngIf="authService.isLoggedIn()">Admin</a>
+      <a class="nav-link" routerLink="/admin" *ngIf="authService.isLoggedIn() && authService.isAdmin()">Admin</a>
 
       <!-- Login/Register (mobile only) -->
       <div class="auth-buttons d-flex gap-2 mt-3">

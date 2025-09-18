@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { JwtUtils } from '../utils/jwt.utils';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,5 +33,14 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('jwt');
+  }
+
+  getRole(): string | null {
+    const token = localStorage.getItem('jwt');
+    return token ? JwtUtils.getRoleFromToken(token) : null;
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
   }
 }
