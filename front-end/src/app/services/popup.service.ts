@@ -5,6 +5,7 @@ import { RegisterComponent } from '../components/register/register.component';
 import { PapierComponent } from '../components/papier/papier.component';
 import { NotificationComponent } from "../components/notification/notification.component"
 import { ReportComponent } from '../components/report/report';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class PopupService {
   private papierDialogRef: MatDialogRef<PapierComponent> | null = null;
   private notifDialogRef: MatDialogRef<NotificationComponent> | null = null;
   private reportDialogRef: MatDialogRef<ReportComponent> | null = null;
+
 
   constructor(
     private dialog: MatDialog
@@ -103,7 +105,7 @@ export class PopupService {
     });
   }
 
-  openReport(): void {
+  openReport(userId: number): void  {
     if (this.reportDialogRef) {
       return;
     }
@@ -112,6 +114,7 @@ export class PopupService {
 
     this.reportDialogRef = this.dialog.open(ReportComponent, {
       disableClose: false,
+      data: { userId: userId }
     });
     
     this.reportDialogRef.afterClosed().subscribe(() => {

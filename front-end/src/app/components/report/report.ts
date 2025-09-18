@@ -1,21 +1,11 @@
 // report.component.ts
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PopupService } from '../../services/popup.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ReportService } from '../../services/report.service';
 
-interface ReportedUser {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-}
-
-interface ReportReason {
-  value: string;
-  label: string;
-}
 
 @Component({
   selector: 'app-report',
@@ -26,53 +16,51 @@ interface ReportReason {
 })
 
 export class ReportComponent {
+
   isOverlayVisible = true;
-  reportedUser: ReportedUser | null = null;
-  
-
-  selectedReason: string = '';
   additionalDetails: string = '';
-  isSubmitting = false;
-  showConfirmation = false;
 
-  reportReasons: ReportReason[] = [
-    { value: 'spam', label: 'Spam or unwanted commercial content' },
-    { value: 'misinformation', label: 'False information or misinformation' },
-    { value: 'copyright', label: 'Copyright or intellectual property violation' },
-    { value: 'impersonation', label: 'Impersonation or fake account' },
-    { value: 'other', label: 'Other violation (please specify in details)' }
-  ];
 
-  
- 
+
+
   constructor(
     private dialogRef: MatDialogRef<ReportComponent>,
-  ) {}
+    private reportService: ReportService,
+    private popupService: PopupService,
+    @Inject(MAT_DIALOG_DATA) public data: { userId: number }
+  ) { }
 
 
   onSubmit(): void {
+    if (!this.additionalDetails.trim()) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("reason", this.additionalDetails);
+    this.reportService.addReport(this.data.userId, formData).subscribe({
+      next: () => {
+        console.log("Reported");
+        this.closePopup();
+      },
+      error: (err) => {
+        console.error('Error:', err);
+      }
+    })
+
   }
 
- 
+
   private resetForm(): void {
-    this.selectedReason = '';
     this.additionalDetails = '';
-    this.isSubmitting = false;
-    this.showConfirmation = false;
   }
 
 
-
-  getReasonLabel(value: string): string {
-    const reason = this.reportReasons.find(r => r.value === value);
-    return reason ? reason.label : value;
-  }
 
   closePopup() {
     if (this.dialogRef) {
       this.resetForm()
       this.isOverlayVisible = false;
-      this.dialogRef.close();
+      this.popupService.closeAllPopups();
     }
   }
 }

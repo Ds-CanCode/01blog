@@ -63,7 +63,7 @@
               {{ isFollowed ? 'Unfollow' : 'Follow' }}
             </button>
 
-            <button *ngIf="!user.isOwnProfile" class="report-btn" (click)="openReportPopup()">
+            <button *ngIf="!user.isOwnProfile" class="report-btn" (click)="openReportPopup(user.id)">
               Report
             </button>
           </div>

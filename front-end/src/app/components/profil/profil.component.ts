@@ -78,8 +78,6 @@ export class ProfileComponent implements OnInit {
     if (userId && (userId != meUserId)) {
       this.followService.isfollow(parseInt(userId)).subscribe({
         next: (res: any) => {
-          console.log(res);
-          
           this.isFollowed = res.isFollowed;
         },
         error: (error) => {
@@ -151,7 +149,12 @@ export class ProfileComponent implements OnInit {
   toggleFollow(): void {
     if (this.user && !this.user.isOwnProfile) {
       this.followService.follow(this.user.id).subscribe({
-        next: (res) => {
+        next: () => {
+          if (this.isFollowed && this.user) {
+            this.user.followersCount-- ;
+          } else if (!this.isFollowed && this.user){
+            this.user.followersCount++
+          }
           this.isFollowed = !this.isFollowed;
         },
         error: (err) => {
@@ -217,8 +220,8 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  openReportPopup() {
-    this.popupService.openReport();
+  openReportPopup(userId: number) {
+    this.popupService.openReport(userId);
   }
 
   // Utilitaires
