@@ -4,6 +4,7 @@ import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { PapierComponent } from '../components/papier/papier.component';
 import { NotificationComponent } from "../components/notification/notification.component"
+import { ReportComponent } from '../components/report/report';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,11 @@ export class PopupService {
   private registerDialogRef: MatDialogRef<RegisterComponent> | null = null;
   private papierDialogRef: MatDialogRef<PapierComponent> | null = null;
   private notifDialogRef: MatDialogRef<NotificationComponent> | null = null;
+  private reportDialogRef: MatDialogRef<ReportComponent> | null = null;
 
   constructor(
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   closeAllPopups() {
     if (this.loginDialogRef) {
@@ -34,6 +36,10 @@ export class PopupService {
     if (this.notifDialogRef) {
       this.notifDialogRef.close();
       this.notifDialogRef = null;
+    }
+    if (this.reportDialogRef) {
+      this.reportDialogRef.close();
+      this.reportDialogRef = null;
     }
   }
 
@@ -82,21 +88,35 @@ export class PopupService {
     });
   }
 
- openNotification(): void {
+  openNotification(): void {
     if (this.notifDialogRef) {
       return;
     }
     this.closeAllPopups();
+
     this.notifDialogRef = this.dialog.open(NotificationComponent, {
       disableClose: false,
-      panelClass: 'notification-dialog',
-      backdropClass: 'notification-backdrop'
     });
+
     this.notifDialogRef.afterClosed().subscribe(() => {
       this.notifDialogRef = null;
     });
   }
 
- 
+  openReport(): void {
+    if (this.reportDialogRef) {
+      return;
+    }
+
+    this.closeAllPopups();
+
+    this.reportDialogRef = this.dialog.open(ReportComponent, {
+      disableClose: false,
+    });
+    
+    this.reportDialogRef.afterClosed().subscribe(() => {
+      this.reportDialogRef = null;
+    });
+  }
 
 }

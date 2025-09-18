@@ -1,0 +1,61 @@
+<!-- report.html -->
+<div class="report-overlay" *ngIf="isOverlayVisible" (click)="closePopup()">
+  <div class="report-modal" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="report-header">
+      <h2 class="report-title">Report User</h2>
+    
+    </div>
+
+
+    <!-- Report Form -->
+    <form class="report-form" (ngSubmit)="onSubmit()" #reportForm="ngForm">
+      <!-- Reason Selection -->
+      <div class="form-group">
+        <label class="form-label">Reason for report <span class="required">*</span></label>
+        <div class="reason-options">
+          <label class="reason-option" *ngFor="let reason of reportReasons">
+            <input 
+              type="radio" 
+              name="reason" 
+              [value]="reason.value"
+              [(ngModel)]="selectedReason"
+              required>
+            <span class="reason-text">{{ reason.label }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Additional Details -->
+      <div class="form-group">
+        <label for="details" class="form-label">Additional details (optional)</label>
+        <textarea 
+          id="details"
+          class="form-textarea"
+          [(ngModel)]="additionalDetails"
+          name="details"
+          placeholder="Please provide any additional context or details about this report..."
+          rows="4"
+          maxlength="500"></textarea>
+        <div class="char-count">{{ additionalDetails.length || 0 }}/500</div>
+      </div>
+
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="closePopup()">Cancel</button>
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="!selectedReason || isSubmitting">
+          <span *ngIf="!isSubmitting">Submit Report</span>
+          <span *ngIf="isSubmitting" class="loading-text">
+            <div class="mini-spinner"></div>
+            Submitting...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

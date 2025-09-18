@@ -14,29 +14,31 @@
         <img [src]="user.coverImage" alt="Cover" class="cover-image" (error)="onImageError($event)">
         <div class="cover-overlay"></div>
       </div>
-      
+
       <!-- Profile Info -->
       <div class="profile-info-card">
         <div class="profile-avatar-section">
           <div class="avatar-container">
             <img [src]="user.profileImage" alt="Avatar" class="profile-avatar" (error)="onImageError($event)">
           </div>
-          
+
           <div class="profile-details">
             <h1 class="profile-name">{{ user.username }}</h1>
             <p class="profile-username">{{ user.username }}</p>
-            
+
             <!-- Profile Meta -->
             <div class="profile-meta">
-            
+
               <div class="meta-item">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M14 2H12V1C12 0.45 11.55 0 11 0S10 0.45 10 1V2H6V1C6 0.45 5.55 0 5 0S4 0.45 4 1V2H2C0.9 2 0 2.9 0 4V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V4C16 2.9 15.1 2 14 2ZM14 14H2V6H14V14Z" fill="currentColor"/>
+                  <path
+                    d="M14 2H12V1C12 0.45 11.55 0 11 0S10 0.45 10 1V2H6V1C6 0.45 5.55 0 5 0S4 0.45 4 1V2H2C0.9 2 0 2.9 0 4V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V4C16 2.9 15.1 2 14 2ZM14 14H2V6H14V14Z"
+                    fill="currentColor" />
                 </svg>
                 <span>Joined {{ getJoinDate() }}</span>
               </div>
             </div>
-            
+
             <!-- Profile Stats -->
             <div class="profile-stats">
               <div class="stat-item">
@@ -53,21 +55,16 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Profile Actions -->
           <div class="profile-actions">
-            <button 
-              *ngIf="!user.isOwnProfile" 
-              (click)="toggleFollow()" 
-              [class]="isFollowed ? 'follow-btn following' : 'follow-btn'"
-            >
+            <button *ngIf="!user.isOwnProfile" (click)="toggleFollow()"
+              [class]="isFollowed ? 'follow-btn following' : 'follow-btn'">
               {{ isFollowed ? 'Unfollow' : 'Follow' }}
             </button>
-            <button 
-              *ngIf="user.isOwnProfile" 
-              class="edit-profile-btn"
-            >
-              Edit Profile
+
+            <button *ngIf="!user.isOwnProfile" class="report-btn" (click)="openReportPopup()">
+              Report
             </button>
           </div>
         </div>
@@ -76,80 +73,90 @@
   </div>
 
   <div class="container">
-    
+
 
     <!-- Posts Section -->
     <div class="posts-section">
       <h2 class="section-title">All Posts by {{ user.username }}</h2>
-      
+
       <!-- Posts Grid -->
       <div class="blog-grid" *ngIf="userPosts.length > 0">
-        <div 
-          class="blog-card" 
-          *ngFor="let post of userPosts"
-          (click)="onCardClick(post.id)">
-          
+        <div class="blog-card" *ngFor="let post of userPosts" (click)="onCardClick(post.id)">
+
           <div *ngIf="user.isOwnProfile" class="post-actions-overlay">
-            <button (click)="startEditingPost(post); $event.stopPropagation()" class="action-btn edit-btn" title="Edit Post">
+            <button (click)="startEditingPost(post); $event.stopPropagation()" class="action-btn edit-btn"
+              title="Edit Post">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
-            <button (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn" title="Delete Post">
+            <button (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn"
+              title="Delete Post">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
               </svg>
             </button>
           </div>
-          
+
           <!-- Post Actions (only for own profile) -->
           <div *ngIf="user.isOwnProfile" class="post-actions-overlay">
             <button (click)="startEditingPost(post); $event.stopPropagation()" class="action-btn edit-btn" title="Edit">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12.854 1.146a.5.5 0 0 0-.708 0L10.5 2.793 13.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-2-2zM13.207 6.207L10.5 3.5l-8 8V14h2.5l8-8z" fill="currentColor"/>
+                <path
+                  d="M12.854 1.146a.5.5 0 0 0-.708 0L10.5 2.793 13.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-2-2zM13.207 6.207L10.5 3.5l-8 8V14h2.5l8-8z"
+                  fill="currentColor" />
               </svg>
             </button>
-            <button (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn" title="Delete">
+            <button (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn"
+              title="Delete">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" fill="currentColor"/>
-                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" fill="currentColor"/>
+                <path
+                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                  fill="currentColor" />
+                <path fill-rule="evenodd"
+                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                  fill="currentColor" />
               </svg>
             </button>
           </div>
-          
+
           <div class="card-image">
             <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
               <!-- Image -->
               <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
-                   [src]="post.medias[post.selectedMediaIndex].url"
-                   [alt]="post.title"
-                   loading="lazy"
-                   (error)="onImageError($event)" />
+                [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title" loading="lazy"
+                (error)="onImageError($event)" />
 
               <!-- Video -->
               <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
-                     [src]="post.medias[post.selectedMediaIndex].url"></video>
+                [src]="post.medias[post.selectedMediaIndex].url"></video>
 
               <!-- Media navigation -->
-              <button *ngIf="post.medias && post.medias.length > 1" 
-                      class="media-btn prev" 
-                      (click)="prevMedia(post, $event)">&#10094;</button>
-              <button *ngIf="post.medias && post.medias.length > 1" 
-                      class="media-btn next" 
-                      (click)="nextMedia(post, $event)">&#10095;</button>
+              <button *ngIf="post.medias && post.medias.length > 1" class="media-btn prev"
+                (click)="prevMedia(post, $event)">&#10094;</button>
+              <button *ngIf="post.medias && post.medias.length > 1" class="media-btn next"
+                (click)="nextMedia(post, $event)">&#10095;</button>
             </div>
-            
+
             <!-- Video overlay -->
-            <div class="video-overlay" *ngIf="post.medias && post.medias.length > 0 && post.medias[post.selectedMediaIndex].type === 'VIDEO'">▶</div>
-            
+            <div class="video-overlay"
+              *ngIf="post.medias && post.medias.length > 0 && post.medias[post.selectedMediaIndex].type === 'VIDEO'">▶
+            </div>
+
             <!-- Subject tag -->
             <div class="subject-tag" *ngIf="post.subject">{{ post.subject }}</div>
           </div>
-          
+
           <div class="card-content">
             <!-- Edit mode -->
             <!-- <div *ngIf="editingPost && editingPost.id === post.id" class="edit-mode">
@@ -161,37 +168,36 @@
                 </div>
               </div>
             </div> -->
-            
+
             <!-- Normal view -->
             <div *ngIf="!editingPost || editingPost.id !== post.id">
               <h3 class="card-title">{{ post.title }}</h3>
               <p class="card-description">{{ post.description }}</p>
-              
+
               <div class="card-meta">
                 <div class="author-info">
                   <div class="author-avatar">
-                    <img 
-                      [src]="user.profileImage" 
-                      [alt]="user.username"
-                      (error)="onImageError($event)">
+                    <img [src]="user.profileImage" [alt]="user.username" (error)="onImageError($event)">
                   </div>
                   <span class="author-name">{{ user.username }}</span>
                 </div>
                 <span class="publish-date">{{ post.publishDate | date:'d MMM, yyyy' }}</span>
               </div>
-              
-              
+
+
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- No posts message -->
       <div class="no-posts-message" *ngIf="userPosts.length === 0">
         <div class="no-posts-content">
           <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-            <path d="M32 8C18.7 8 8 18.7 8 32S18.7 56 32 56S56 45.3 56 32S45.3 8 32 8ZM32 48C23.2 48 16 40.8 16 32S23.2 16 32 16S48 23.2 48 32S40.8 48 32 48Z" fill="currentColor" opacity="0.3"/>
-            <path d="M28 28H36V36H28V28Z" fill="currentColor" opacity="0.5"/>
+            <path
+              d="M32 8C18.7 8 8 18.7 8 32S18.7 56 32 56S56 45.3 56 32S45.3 8 32 8ZM32 48C23.2 48 16 40.8 16 32S23.2 16 32 16S48 23.2 48 32S40.8 48 32 48Z"
+              fill="currentColor" opacity="0.3" />
+            <path d="M28 28H36V36H28V28Z" fill="currentColor" opacity="0.5" />
           </svg>
           <h3>No posts yet</h3>
           <p>{{ user.isOwnProfile ? 'Start sharing your thoughts!' : 'This user hasn\'t posted anything yet.' }}</p>
@@ -205,8 +211,8 @@
 <div class="error-container" *ngIf="!isLoading && !user">
   <div class="error-content">
     <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-      <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+      <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
     <h2>Profile not found</h2>
     <p>The profile you're looking for doesn't exist or has been removed.</p>

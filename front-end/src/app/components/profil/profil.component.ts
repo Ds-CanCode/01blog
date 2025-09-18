@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../services/profil.service';
 import { FollowService } from '../../services/follow.service';
+import { PopupService } from '../../services/popup.service';
 
 // Interfaces basées exactement sur votre backend
 export interface UserProfile {
@@ -62,6 +63,7 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private profileService: ProfileService,
     private followService: FollowService,
+    private popupService: PopupService
   ) { }
 
   ngOnInit(): void {
@@ -215,6 +217,9 @@ export class ProfileComponent implements OnInit {
   }
 
 
+  openReportPopup() {
+    this.popupService.openReport();
+  }
 
   // Utilitaires
   getJoinDate(): string {

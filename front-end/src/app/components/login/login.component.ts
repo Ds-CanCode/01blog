@@ -54,7 +54,7 @@ export class LoginComponent {
 
     });
   }
-  signInWithGoogle() { }
+
   closePopup() {
     if (this.dialogRef) {
       this.isOverlayVisible = false;
