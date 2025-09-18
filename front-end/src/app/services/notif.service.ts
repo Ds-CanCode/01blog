@@ -16,7 +16,7 @@ export class NotifService {
 
     constructor(private http: HttpClient) { }
 
-    
+
     getNotif(): Observable<Notif[]> {
         const token = localStorage.getItem('jwt');
         const headers = new HttpHeaders({
@@ -24,5 +24,13 @@ export class NotifService {
         });
 
         return this.http.get<Notif[]>(`${this.apiUrl}`, { headers });
+    }
+
+    markAsRead(postId: number): Observable<any> {
+        const token = localStorage.getItem('jwt');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        return this.http.post(`${this.apiUrl}/read/${postId}`, {}, { headers });
     }
 }

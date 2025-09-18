@@ -54,4 +54,18 @@ public class NotificationService {
                 n.getPost() != null ? n.getPost().getId() : null
         )).toList();
     }
+
+    @Transactional
+    public void readNotification(Long userId, Long postId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Notification notif = notificationRepository.findByRecipientAndPostId(user, postId)
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
+
+        if (!notif.getRead()) {
+            notif.setRead(true);
+            notificationRepository.save(notif);
+        }
+    }
 }

@@ -50,16 +50,26 @@ export class NotificationComponent implements OnInit {
 
 
 
-  
+
 
   markAsRead(notificationId: number): void {
     const notification = this.notif.find(n => n.id === notificationId);
     if (notification && !notification.read) {
       notification.read = true;
-      // Call API to mark as read
-      // this.notifService.markAsRead(notificationId).subscribe();
+      if (notification.postId) {
+        this.notifService.markAsRead(notification.postId).subscribe({
+          next: () => {
+            console.log(`Notification ${notificationId} marquée comme lue`);
+          },
+          error: (err) => {
+            console.error('Erreur lecture notif:', err);
+            notification.read = false; // rollback si erreur
+          }
+        });
+      }
     }
   }
+
 
   markAllAsRead(): void {
     this.notif.forEach(n => n.read = true);
@@ -69,7 +79,7 @@ export class NotificationComponent implements OnInit {
 
   onNotificationClick(notification: Notif): void {
     this.markAsRead(notification.id);
-    
+
     if (notification.postId) {
       this.popupService.closeAllPopups();
       this.router.navigate(['/article', notification.postId]);
@@ -82,7 +92,7 @@ export class NotificationComponent implements OnInit {
     const now = new Date();
     const date = new Date(dateString);
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
+
     if (diffInSeconds < 60) return 'À l\'instant';
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}min`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;
@@ -94,11 +104,4 @@ export class NotificationComponent implements OnInit {
     return this.notif.filter(n => !n.read).length;
   }
 
-  clearAllNotifications(): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer toutes les notifications ?')) {
-      this.notif = [];
-      // Call API to clear all notifications
-      // this.notifService.clearAll().subscribe();
-    }
-  }
 }
