@@ -68,4 +68,16 @@ public class NotificationService {
             notificationRepository.save(notif);
         }
     }
+
+     @Transactional
+    public void readAllNotification(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        List<Notification> notifications = notificationRepository.findByRecipientAndReadFalse(user);
+        for (Notification notif : notifications) {
+            notif.setRead(true);
+        }
+        notificationRepository.saveAll(notifications);
+    }
 }

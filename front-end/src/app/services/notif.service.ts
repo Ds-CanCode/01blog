@@ -33,4 +33,13 @@ export class NotifService {
         });
         return this.http.post(`${this.apiUrl}/read/${postId}`, {}, { headers });
     }
+
+    markAllAsRead(): Observable<void> {
+        const token = localStorage.getItem('jwt');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        return this.http.post<void>(`${this.apiUrl}/readall`, null, { headers });
+    }
+
 }

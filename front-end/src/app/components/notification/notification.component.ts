@@ -73,8 +73,10 @@ export class NotificationComponent implements OnInit {
 
   markAllAsRead(): void {
     this.notif.forEach(n => n.read = true);
-    // Call API to mark all as read
-    // this.notifService.markAllAsRead().subscribe();
+    this.notifService.markAllAsRead().subscribe({
+      next: () => console.log('Toutes les notifications sont lues'),
+      error: (err) => console.error('Erreur read all:', err)
+    });
   }
 
   onNotificationClick(notification: Notif): void {

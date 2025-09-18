@@ -54,4 +54,18 @@ public class NotificationController {
         notificationService.readNotification(userId, postId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/readall")
+    public ResponseEntity<?> readAllNotif(
+        @RequestHeader("Authorization") String authHeader
+    ){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String token = authHeader.substring(7);
+        Long userId = jwtService.extractId(token);
+        notificationService.readAllNotification(userId);
+        return ResponseEntity.ok().build();
+    }
 }
