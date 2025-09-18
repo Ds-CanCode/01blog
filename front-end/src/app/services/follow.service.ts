@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Following } from '../components/users/users.component';
 
 
 @Injectable({
@@ -33,4 +34,13 @@ export class FollowService {
 
         return this.http.get(`${this.apiUrl}/check/${userId}`, { headers });
     }
+
+    getAllFollowing(): Observable<Following[]> {
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Following[]>(`${this.apiUrl}/allfollowing`, { headers });
+  }
 }

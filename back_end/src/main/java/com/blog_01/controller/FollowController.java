@@ -1,5 +1,6 @@
 package com.blog_01.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog_01.dto.FollowingDTO;
 import com.blog_01.service.FollowService;
 import com.blog_01.service.JwtService;
 
@@ -64,5 +66,20 @@ public class FollowController {
         return ResponseEntity.ok(Map.of(
                 "isFollowed", isFollowed
         ));
+    }
+
+    @GetMapping("/allfollowing")
+    public ResponseEntity<List<FollowingDTO>> allFollowing(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(null);
+        }
+        String token = authHeader.substring(7);
+        Long myId = jwtService.extractId(token);
+     
+        List<FollowingDTO> following = followService.getAllFollowing(myId);
+
+        return ResponseEntity.ok(following);
     }
 }

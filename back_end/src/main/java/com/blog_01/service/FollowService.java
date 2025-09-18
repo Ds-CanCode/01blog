@@ -1,8 +1,12 @@
 package com.blog_01.service;
 
+import java.util.Base64;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blog_01.dto.FollowingDTO;
 import com.blog_01.model.User;
 import com.blog_01.repository.UserRepository;
 
@@ -49,5 +53,26 @@ public class FollowService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur cible introuvable"));
 
         return me.getFollowing().contains(target);
+    }
+
+    @Transactional
+    public List<FollowingDTO> getAllFollowing(Long myId) {
+        User me = userRepository.findById(myId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
+        List<FollowingDTO> followingList = me.getFollowing().stream().map(u -> {
+            FollowingDTO dto = new FollowingDTO();
+            dto.setId(u.getId());
+            dto.setUsername(u.getUsername());
+            if (u.getProfileImage() != null) {
+                String base64Avatar = Base64.getEncoder().encodeToString(u.getProfileImage());
+                dto.setProfileImage("data:image/png;base64," + base64Avatar);
+            } else {
+                dto.setProfileImage(null);
+            }
+            return dto;
+        }).toList();
+
+        return followingList;
     }
 }

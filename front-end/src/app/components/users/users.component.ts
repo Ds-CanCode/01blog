@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FollowService } from '../../services/follow.service';
+import { Router } from '@angular/router';
 
-interface User {
-  name: string;
-  avatar: string;
-  online: boolean;
+export interface Following {
+  id: number;
+  username: string;
+  profileImage?: string; 
 }
 
 
@@ -15,107 +17,31 @@ interface User {
   styleUrl: './users.component.css'
 })
 
-export class UsersComponent {
-  users: User[] = [
-    {
-      name: 'Radouane',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: false
-    },
-    {
-      name: 'Amine',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: true
-    },
-    {
-      name: 'Sofia',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-      online: false
-    },
-    {
-      name: 'Rachid',
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
-      online: true
-    },
-    {
-      name: 'Lina',
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-      online: true
-    },
-    {
-      name: 'Radouane',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: false
-    },
-    {
-      name: 'Amine',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: true
-    },
-    {
-      name: 'Sofia',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-      online: false
-    },
-    {
-      name: 'Rachid',
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
-      online: true
-    },
-    {
-      name: 'Lina',
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-      online: true
-    },
-    {
-      name: 'Radouane',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: false
-    },
-    {
-      name: 'Amine',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: true
-    },
-    {
-      name: 'Sofia',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-      online: false
-    },
-    {
-      name: 'Rachid',
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
-      online: true
-    },
-    {
-      name: 'Lina',
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-      online: true
-    },
-    {
-      name: 'Radouane',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: false
-    },
-    {
-      name: 'Amine',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      online: true
-    },
-    {
-      name: 'Sofia',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-      online: false
-    },
-    {
-      name: 'Rachid',
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
-      online: true
-    },
-    {
-      name: 'Lina',
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-      online: true
-    }
-  ];
+export class UsersComponent implements OnInit {
+  following: Following[] = [];
+  isLoading = false;
+
+  constructor(private followService: FollowService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadFollowing();
+  }
+
+  loadFollowing(): void {
+    this.isLoading = true;
+    this.followService.getAllFollowing().subscribe({
+      next: (res) => {
+        this.following = res;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erreur chargement following:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+   onUserClick(userId: number) {
+    this.router.navigate(['/profil', userId]);
+  }
 }
