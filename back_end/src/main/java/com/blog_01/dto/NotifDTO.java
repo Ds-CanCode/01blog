@@ -3,7 +3,7 @@ package com.blog_01.dto;
 import java.time.LocalDateTime;
 
 public class NotifDTO {
-     private Long id;
+    private Long id;
     private String message;
     private LocalDateTime createdAt;
     private Boolean read;

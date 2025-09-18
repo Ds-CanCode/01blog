@@ -18,7 +18,7 @@ export class PopupService {
     private dialog: MatDialog
   ) {}
 
-  private closeAllPopups() {
+  closeAllPopups() {
     if (this.loginDialogRef) {
       this.loginDialogRef.close();
       this.loginDialogRef = null;
@@ -30,6 +30,10 @@ export class PopupService {
     if (this.papierDialogRef) {
       this.papierDialogRef.close();
       this.papierDialogRef = null;
+    }
+    if (this.notifDialogRef) {
+      this.notifDialogRef.close();
+      this.notifDialogRef = null;
     }
   }
 

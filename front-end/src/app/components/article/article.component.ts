@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LikeService } from '../../services/like.service';
 import { CommentDTO, CommentService } from '../../services/comment.service';
+import { PopupService } from '../../services/popup.service';
 // import { CommonModule } from '@angular/common';
 
 
@@ -38,10 +39,15 @@ export class ArticleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.postId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadArticle();
-    this.loadLikeInfo(this.postId);
-    this.loadComments(this.postId);
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      if (!isNaN(id)) {
+        this.postId = id;
+        this.loadArticle();
+        this.loadLikeInfo(this.postId);
+        this.loadComments(this.postId);
+      }
+    });
   }
 
   loadArticle(): void {
