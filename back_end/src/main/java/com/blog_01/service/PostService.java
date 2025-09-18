@@ -2,9 +2,9 @@ package com.blog_01.service;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,16 +27,18 @@ import jakarta.transaction.Transactional;
 @Service
 public class PostService {
 
-     private final PostRepository postRepository;
+    private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CloudinaryService cloudinaryService;
     private final MediaRepository mediaRepository;
+    private final NotificationService notificationService;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, CloudinaryService cloudinaryService, MediaRepository mediaRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CloudinaryService cloudinaryService, MediaRepository mediaRepository, NotificationService notificationService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.cloudinaryService = cloudinaryService;
         this.mediaRepository = mediaRepository;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -71,7 +73,14 @@ public class PostService {
             }
         }
 
-        return postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+
+        String message = user.getUsername() + " a publié : " + savedPost.getTitle();
+        for (User follower : user.getFollowers()) {
+            notificationService.createNotification(follower, message, savedPost);
+        }
+
+        return savedPost;
     }
 
     public ResponseEntity<List<BlogPostDTO>> getAllPosts() {
@@ -159,12 +168,11 @@ public class PostService {
         if (!post.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("Permistion");
         }
-        
+
         post.setTitle(title);
         post.setContent(content);
         post.setUser(user);
         post.setEditedAt(LocalDateTime.now());
-
 
         if (mediasToRemoveJson != null && !mediasToRemoveJson.isEmpty()) {
             ObjectMapper mapper = new ObjectMapper();
@@ -178,7 +186,7 @@ public class PostService {
                         try {
                             cloudinaryService.delete(media.getPublicId());
                         } catch (IOException e) {
-                            e.printStackTrace(); 
+                            e.printStackTrace();
                         }
                     }
                     mediaRepository.delete(media);
@@ -208,5 +216,5 @@ public class PostService {
 
         return postRepository.save(post);
     }
-    
+
 }
