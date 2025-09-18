@@ -41,6 +41,7 @@ public class FollowService {
         return isNowFollowed;
     }
 
+    @Transactional
     public boolean isFollow(Long myId, Long userId) {
         User me = userRepository.findById(myId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
