@@ -51,8 +51,6 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Report> reports = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
@@ -134,13 +132,7 @@ public class Post {
         this.likes = likes;
     }
 
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
-    }
+    
 
     public List<Notification> getNotifications() {
         return notifications;

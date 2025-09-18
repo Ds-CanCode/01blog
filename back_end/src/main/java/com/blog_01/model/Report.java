@@ -30,8 +30,8 @@ public class Report {
     private User reporter;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 
     public Long getId() {
@@ -66,11 +66,11 @@ public class Report {
         this.reporter = reporter;
     }
 
-    public Post getPost() {
-        return post;
+    public User getUser() {
+        return user;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

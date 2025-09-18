@@ -98,6 +98,9 @@ public class User {
     @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> reports = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Report> receivedReports = new ArrayList<>();
+
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
 
@@ -219,6 +222,15 @@ public class User {
 
     public void setReports(List<Report> reports) {
         this.reports = reports;
+    }
+
+
+    public List<Report> getReceivedReports() {
+        return receivedReports;
+    }
+
+    public void setReceivedReports(List<Report> receivedReports) {
+        this.receivedReports = receivedReports;
     }
 
     public List<Notification> getNotifications() {
