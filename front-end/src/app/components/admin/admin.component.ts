@@ -120,11 +120,21 @@ export class AdminComponent implements OnInit {
   }
 
 
-  deleteUser(userId: number): void {
-    if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-      this.users = this.users.filter(u => u.id !== userId);
-      console.log(`User ${userId} deleted`);
-    }
+  banUser(userId: number): void {
+    this.adminService.banUser(userId).subscribe({
+      next: () => {
+        this.users = this.users.map(u => {
+          if (u.id === userId) {
+            return { ...u, isBanned: !u.isBanned };
+          }
+          return u;
+        });
+        console.log('User Ban Or UnBan:', userId);
+      },
+      error: (err) => {
+        console.error('Error Ban User:', err);
+      }
+    })
   }
 
   // Post management
@@ -140,12 +150,12 @@ export class AdminComponent implements OnInit {
     if (confirm('Are you sure you want to delete this post?')) {
       this.adminService.deletePost(postId).subscribe({
         next: () => {
-        this.posts = this.posts.filter(p => p.id !== postId);
-        console.log('Post deleted:', postId);
-      },
-      error: (err) => {
-        console.error('Error deleting post:', err);
-      }
+          this.posts = this.posts.filter(p => p.id !== postId);
+          console.log('Post deleted:', postId);
+        },
+        error: (err) => {
+          console.error('Error deleting post:', err);
+        }
       })
     }
   }

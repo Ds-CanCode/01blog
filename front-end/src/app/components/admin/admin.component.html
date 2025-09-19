@@ -158,7 +158,7 @@
             </div>
             <div class="cell actions-cell">
               <div class="action-buttons">
-                <button class="ban-btn"  (click)="toggleBan(user)"
+                <button class="ban-btn"  (click)="banUser(user.id)"
                   title="{{ user.isBanned ? 'Débannir' : 'Bannir' }}">
                   {{ user.isBanned ? 'Unban' : 'Ban' }}
                 </button>
