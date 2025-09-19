@@ -5,7 +5,8 @@
       <div class="header-left">
         <button class="back-btn" (click)="goBack()">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
           <span>Back to Blog</span>
         </button>
@@ -16,47 +17,36 @@
   <!-- Navigation Tabs -->
   <nav class="admin-nav">
     <div class="nav-content">
-      <button 
-        class="nav-tab"
-        [class.active]="activeTab === 'dashboard'"
-        (click)="switchTab('dashboard')"
-      >
+      <button class="nav-tab" [class.active]="activeTab === 'dashboard'" (click)="switchTab('dashboard')">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M3 3H8V8H3V3ZM12 3H17V8H12V3ZM12 12H17V17H12V12ZM3 12H8V17H3V12Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M3 3H8V8H3V3ZM12 3H17V8H12V3ZM12 12H17V17H12V12ZM3 12H8V17H3V12Z" stroke="currentColor"
+            stroke-width="1.5" fill="none" />
         </svg>
         Dashboard
       </button>
-      
-      <button 
-        class="nav-tab"
-        [class.active]="activeTab === 'users'"
-        (click)="switchTab('users')"
-      >
+
+      <button class="nav-tab" [class.active]="activeTab === 'users'" (click)="switchTab('users')">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M13 7C13 8.65685 11.6569 10 10 10C8.34315 10 7 8.65685 7 7C7 5.34315 8.34315 4 10 4C11.6569 4 13 5.34315 13 7Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M4.5 16C4.5 13.5147 6.51472 11.5 9 11.5H11C13.4853 11.5 15.5 13.5147 15.5 16" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path
+            d="M13 7C13 8.65685 11.6569 10 10 10C8.34315 10 7 8.65685 7 7C7 5.34315 8.34315 4 10 4C11.6569 4 13 5.34315 13 7Z"
+            stroke="currentColor" stroke-width="1.5" fill="none" />
+          <path d="M4.5 16C4.5 13.5147 6.51472 11.5 9 11.5H11C13.4853 11.5 15.5 13.5147 15.5 16" stroke="currentColor"
+            stroke-width="1.5" fill="none" />
         </svg>
         Users ({{ users.length || 0 }})
       </button>
-      
-      <button 
-        class="nav-tab"
-        [class.active]="activeTab === 'posts'"
-        (click)="switchTab('posts')"
-      >
+
+      <button class="nav-tab" [class.active]="activeTab === 'posts'" (click)="switchTab('posts')">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M4 5H16M4 9H16M4 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M4 5H16M4 9H16M4 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
         </svg>
         Posts ({{ posts.length || 0 }})
       </button>
-      
-      <button 
-        class="nav-tab"
-        [class.active]="activeTab === 'reports'"
-        (click)="switchTab('reports')"
-      >
+
+      <button class="nav-tab" [class.active]="activeTab === 'reports'" (click)="switchTab('reports')">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M10 2L12.09 6.26L17 7L13 10.74L14.18 16.5L10 14.27L5.82 16.5L7 10.74L3 7L7.91 6.26L10 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M10 2L12.09 6.26L17 7L13 10.74L14.18 16.5L10 14.27L5.82 16.5L7 10.74L3 7L7.91 6.26L10 2Z"
+            stroke="currentColor" stroke-width="1.5" fill="none" />
         </svg>
         Reports ({{ reports.length || 0 }})
       </button>
@@ -71,16 +61,22 @@
         <h2>Dashboard Overview</h2>
         <p>Welcome to the admin panel. Here's an overview of your platform.</p>
       </div>
-      
+
       <!-- Stats Cards -->
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon users">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" fill="none"/>
-              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
-              <path d="M23 21V19C23 18.1645 22.7155 17.3541 22.2094 16.7048C21.7033 16.0555 20.9980 15.6072 20.2 15.4373" stroke="currentColor" stroke-width="2"/>
-              <path d="M16 3.1370C16.7986 3.30658 17.5049 3.75452 18.0118 4.40383C18.5187 5.05313 18.8036 5.86353 18.8036 6.69996C18.8036 7.5364 18.5187 8.3468 18.0118 8.99611C17.5049 9.64541 16.7986 10.0934 16 10.2629" stroke="currentColor" stroke-width="2"/>
+              <path
+                d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                stroke="currentColor" stroke-width="2" fill="none" />
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none" />
+              <path
+                d="M23 21V19C23 18.1645 22.7155 17.3541 22.2094 16.7048C21.7033 16.0555 20.9980 15.6072 20.2 15.4373"
+                stroke="currentColor" stroke-width="2" />
+              <path
+                d="M16 3.1370C16.7986 3.30658 17.5049 3.75452 18.0118 4.40383C18.5187 5.05313 18.8036 5.86353 18.8036 6.69996C18.8036 7.5364 18.5187 8.3468 18.0118 8.99611C17.5049 9.64541 16.7986 10.0934 16 10.2629"
+                stroke="currentColor" stroke-width="2" />
             </svg>
           </div>
           <div class="stat-info">
@@ -92,8 +88,10 @@
         <div class="stat-card">
           <div class="stat-icon posts">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
-              <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
+              <path
+                d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+                stroke="currentColor" stroke-width="2" fill="none" />
+              <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" />
             </svg>
           </div>
           <div class="stat-info">
@@ -105,9 +103,11 @@
         <div class="stat-card">
           <div class="stat-icon reports">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M10.29 3.86001L1.82001 18C1.64537 18.3024 1.55299 18.6453 1.55201 18.9945C1.55103 19.3437 1.64149 19.6871 1.81441 19.9905C1.98733 20.2939 2.23673 20.5468 2.53771 20.7238C2.83868 20.9007 3.18082 20.9962 3.53001 21H20.47C20.8192 20.9962 21.1613 20.9007 21.4623 20.7238C21.7633 20.5468 22.0127 20.2939 22.1856 19.9905C22.3585 19.6871 22.449 19.3437 22.448 18.9945C22.447 18.6453 22.3546 18.3024 22.18 18L13.71 3.86001C13.5318 3.56611 13.2807 3.32313 12.9812 3.15449C12.6817 2.98585 12.3438 2.89725 12 2.89725C11.6562 2.89725 11.3183 2.98585 11.0188 3.15449C10.7193 3.32313 10.4682 3.56611 10.29 3.86001V3.86001Z" stroke="currentColor" stroke-width="2" fill="none"/>
-              <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2"/>
-              <circle cx="12" cy="17.02" r="0.5" fill="currentColor"/>
+              <path
+                d="M10.29 3.86001L1.82001 18C1.64537 18.3024 1.55299 18.6453 1.55201 18.9945C1.55103 19.3437 1.64149 19.6871 1.81441 19.9905C1.98733 20.2939 2.23673 20.5468 2.53771 20.7238C2.83868 20.9007 3.18082 20.9962 3.53001 21H20.47C20.8192 20.9962 21.1613 20.9007 21.4623 20.7238C21.7633 20.5468 22.0127 20.2939 22.1856 19.9905C22.3585 19.6871 22.449 19.3437 22.448 18.9945C22.447 18.6453 22.3546 18.3024 22.18 18L13.71 3.86001C13.5318 3.56611 13.2807 3.32313 12.9812 3.15449C12.6817 2.98585 12.3438 2.89725 12 2.89725C11.6562 2.89725 11.3183 2.98585 11.0188 3.15449C10.7193 3.32313 10.4682 3.56611 10.29 3.86001V3.86001Z"
+                stroke="currentColor" stroke-width="2" fill="none" />
+              <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" />
+              <circle cx="12" cy="17.02" r="0.5" fill="currentColor" />
             </svg>
           </div>
           <div class="stat-info">
@@ -132,7 +132,6 @@
           <div class="header-cell">User</div>
           <div class="header-cell">Email</div>
           <div class="header-cell">Join Date</div>
-          <div class="header-cell">Posts</div>
           <div class="header-cell">Status</div>
           <div class="header-cell">Actions</div>
         </div>
@@ -142,44 +141,27 @@
             <div class="user-cell">
               <div class="user-info">
                 <div class="user-avatar">
-                  <img [src]="user.avatar" [alt]="user.name" (error)="onImageError($event)">
-                  <span class="role-badge" *ngIf="user.role === 'admin'">A</span>
+                  <img [src]="user.profileImage" [alt]="user.username" (error)="onImageError($event)">
                 </div>
                 <div class="user-details">
-                  <h4>{{ user.name }}</h4>
-                  <span class="user-id">#{{ user.id }}</span>
+                  <h4>{{ user.username }}</h4>
                 </div>
               </div>
             </div>
             <div class="cell">{{ user.email }}</div>
-            <div class="cell">{{ user.joinDate | date:'MMM d, yyyy' }}</div>
+            <div class="cell">{{ user.createdAt | date:'MMM d, yyyy' }}</div>
+
             <div class="cell">
-              <span class="posts-count">{{ user.postsCount }}</span>
-            </div>
-            <div class="cell">
-              <span class="status-badge" [class]="user.status">{{ user.status | titlecase }}</span>
+              <span class="status-badge"
+                [ngClass]="{'active': user.isBanned === false, 'banned': user.isBanned === true}">
+                {{ user.isBanned ? 'Banned' : 'Active' }}
+              </span>
             </div>
             <div class="cell actions-cell">
               <div class="action-buttons">
-                <select 
-                  [value]="user.status"
-                  (change)="updateUserStatus(user.id, $any($event.target).value)"
-                  class="status-select"
-                  [disabled]="user.role === 'admin'"
-                >
-                  <option value="active">Active</option>
-                  <option value="suspended">Suspended</option>
-                  <option value="banned">Banned</option>
-                </select>
-                <button 
-                  class="delete-btn"
-                  (click)="deleteUser(user.id)"
-                  [disabled]="user.role === 'admin'"
-                  title="Delete User"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M2 4H14M12.667 4V13.333C12.667 14 12 14.667 11.333 14.667H4.667C4 14.667 3.333 14 3.333 13.333V4M5.333 4V2.667C5.333 2 6 1.333 6.667 1.333H9.333C10 1.333 10.667 2 10.667 2.667V4" stroke="currentColor" stroke-width="1.5"/>
-                  </svg>
+                <button class="ban-btn"  (click)="toggleBan(user)"
+                  title="{{ user.isBanned ? 'Débannir' : 'Bannir' }}">
+                  {{ user.isBanned ? 'Unban' : 'Ban' }}
                 </button>
               </div>
             </div>
@@ -200,31 +182,27 @@
       <div class="posts-grid">
         <div class="post-card" *ngFor="let post of posts">
           <div class="post-image">
-              <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+            <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
               <!-- Image -->
               <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
-                   [src]="post.medias[post.selectedMediaIndex].url"
-                   [alt]="post.title"
-                   loading="lazy"
-                   (error)="onImageError($event)" />
+                [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title" loading="lazy"
+                (error)="onImageError($event)" />
 
               <!-- Video -->
               <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
-                     [src]="post.medias[post.selectedMediaIndex].url" controls></video>
+                [src]="post.medias[post.selectedMediaIndex].url" controls></video>
 
-              <button *ngIf="post.medias && post.medias.length > 1" 
-                      class="media-btn prev" 
-                      (click)="prevMedia(post, $event)">&#10094;</button>
-              <button *ngIf="post.medias && post.medias.length > 1" 
-                      class="media-btn next" 
-                      (click)="nextMedia(post, $event)">&#10095;</button> 
+              <button *ngIf="post.medias && post.medias.length > 1" class="media-btn prev"
+                (click)="prevMedia(post, $event)">&#10094;</button>
+              <button *ngIf="post.medias && post.medias.length > 1" class="media-btn next"
+                (click)="nextMedia(post, $event)">&#10095;</button>
             </div>
           </div>
-          
+
           <div class="post-content">
             <h3 class="post-title">{{ post.title }}</h3>
             <p class="post-description">{{ post.description }}</p>
-            
+
             <div class="post-meta">
               <div class="post-author">
                 <img [src]="post.author.avatar" [alt]="post.author.name" (error)="onImageError($event)">
@@ -232,18 +210,16 @@
               </div>
               <span class="post-date">{{ post.publishDate | date:'MMM d' }}</span>
             </div>
-            
-            
-            
+
+
+
             <div class="post-actions">
 
-              <button 
-                class="delete-btn"
-                (click)="deletePost(post.id)"
-                title="Delete Post"
-              >
+              <button class="delete-btn" (click)="deletePost(post.id)" title="Delete Post">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M2 4H14M12.667 4V13.333C12.667 14 12 14.667 11.333 14.667H4.667C4 14.667 3.333 14 3.333 13.333V4M5.333 4V2.667C5.333 2 6 1.333 6.667 1.333H9.333C10 1.333 10.667 2 10.667 2.667V4" stroke="currentColor" stroke-width="1.5"/>
+                  <path
+                    d="M2 4H14M12.667 4V13.333C12.667 14 12 14.667 11.333 14.667H4.667C4 14.667 3.333 14 3.333 13.333V4M5.333 4V2.667C5.333 2 6 1.333 6.667 1.333H9.333C10 1.333 10.667 2 10.667 2.667V4"
+                    stroke="currentColor" stroke-width="1.5" />
                 </svg>
               </button>
             </div>
@@ -267,18 +243,18 @@
             <div class="report-info">
               <div class="report-type">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M4 5H16M4 9H16M4 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M4 5H16M4 9H16M4 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                 </svg>
-            
+
                 <span class="report-type-text"> Report</span>
               </div>
             </div>
-            
+
             <div class="report-date">
               {{ report.createdAt | date:'MMM d, yyyy' }}
             </div>
           </div>
-          
+
           <div class="report-content">
             <h3 class="report-target">{{ report.reason }}</h3>
             <div class="report-details">
@@ -286,7 +262,7 @@
               <p><strong>Reported :</strong> {{ report.reportedUsername }}</p>
             </div>
           </div>
-<!--           
+          <!--           
           <div class="report-actions" *ngIf="report.status === 'pending'">
             <button 
               class="resolve-btn"
@@ -307,7 +283,7 @@
               Dismiss
             </button>
           </div> -->
-        
+
         </div>
       </div>
     </div>

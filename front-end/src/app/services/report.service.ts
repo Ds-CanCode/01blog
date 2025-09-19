@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AdminDTO } from '../components/admin/admin.component';
 
 
 @Injectable({
@@ -9,6 +10,7 @@ import { Observable } from 'rxjs';
 
 export class ReportService {
     private apiUrl = 'http://localhost:8080/api/reports';
+    private apiUrlUser = 'http://localhost:8080/api/admin';
 
     constructor(private http: HttpClient) { }
 
@@ -26,5 +28,13 @@ export class ReportService {
             'Authorization': `Bearer ${token}`
         });
         return this.http.get(`${this.apiUrl}/all`, { headers });
+    }
+
+    getAllUsers(): Observable<AdminDTO[]> {
+        const token = localStorage.getItem('jwt');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        return this.http.get<AdminDTO[]>(`${this.apiUrlUser}/allusers`, { headers });
     }
 }

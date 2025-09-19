@@ -6,16 +6,15 @@ import { PostService } from '../../services/post.service';
 import { BlogPost } from '../home/home.component';
 import { ReportService } from '../../services/report.service';
 
-export interface User {
+export interface AdminDTO {
   id: number;
-  name: string;
+  username: string;
   email: string;
-  avatar: string;
-  joinDate: string;
-  postsCount: number;
-  status: 'active' | 'suspended' | 'banned';
-  role: 'user' | 'admin';
+  createdAt: string;
+  isBanned: boolean;
+  profileImage?: string;
 }
+
 
 export interface Post {
   id: number;
@@ -48,55 +47,8 @@ export interface Report {
 export class AdminComponent implements OnInit {
   activeTab: 'users' | 'posts' | 'reports' | 'dashboard' = 'dashboard';
   searchTerm = '';
-
-
-
-  // Sample data - in real app, this would come from your service
-  users: User[] = [
-    {
-      id: 1,
-      name: 'Ahmed Benali',
-      email: 'ahmed.benali@email.com',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
-      joinDate: '2024-01-15',
-      postsCount: 15,
-      status: 'active',
-      role: 'user'
-    },
-    {
-      id: 2,
-      name: 'Sara Alami',
-      email: 'sara.alami@email.com',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face',
-      joinDate: '2024-02-20',
-      postsCount: 8,
-      status: 'suspended',
-      role: 'user'
-    },
-    {
-      id: 3,
-      name: 'Omar Tazi',
-      email: 'omar.tazi@email.com',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-      joinDate: '2023-11-10',
-      postsCount: 23,
-      status: 'active',
-      role: 'admin'
-    },
-    {
-      id: 4,
-      name: 'Fatima Zahra',
-      email: 'fatima.zahra@email.com',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
-      joinDate: '2024-03-05',
-      postsCount: 12,
-      status: 'banned',
-      role: 'user'
-    }
-  ];
-
+  users: AdminDTO[] = [];
   posts: BlogPost[] = [];
-
   reports: Report[] = [];
 
 
@@ -105,6 +57,7 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.loadAllPost();
     this.loadAllReport();
+    this.loadAllUsers();
   }
 
   loadAllPost(): void {
@@ -134,19 +87,37 @@ export class AdminComponent implements OnInit {
     })
   }
 
+  loadAllUsers(): void {
+    this.reportService.getAllUsers().subscribe({
+      next: (res) => {
+        this.users = res;
+        console.log(this.users);
+
+      },
+      error: (err) => {
+        console.error('Erreur chargement Users:', err);
+      }
+    })
+  }
+
   switchTab(tab: 'users' | 'posts' | 'reports' | 'dashboard'): void {
     this.activeTab = tab;
     this.searchTerm = '';
   }
 
-  // User management
-  updateUserStatus(userId: number, newStatus: 'active' | 'suspended' | 'banned'): void {
-    const user = this.users.find(u => u.id === userId);
-    if (user) {
-      user.status = newStatus;
-      console.log(`User ${user.name} status updated to ${newStatus}`);
-    }
+  toggleBan(user: AdminDTO) {
+    // const newStatus = !user.isBanned; // true => banned, false => active
+    // this.userService.updateUserStatus(user.id, newStatus).subscribe({
+    //   next: () => {
+    //     user.isBanned = newStatus; // update local state
+    //     console.log(`User ${user.username} is now ${newStatus ? 'banned' : 'active'}`);
+    //   },
+    //   error: (err) => {
+    //     console.error('Erreur mise à jour statut:', err);
+    //   }
+    // });
   }
+
 
   deleteUser(userId: number): void {
     if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {

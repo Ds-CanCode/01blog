@@ -35,7 +35,7 @@ public class AdminService {
             dto.setProfileImage(null);
         }
 
-        return dto; // manquant dans ton code
+        return dto;
     }).collect(Collectors.toList());
     }
 }
