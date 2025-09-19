@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { BlogPost } from '../home/home.component';
+import { ReportService } from '../../services/report.service';
 
 export interface User {
   id: number;
@@ -26,24 +27,16 @@ export interface Post {
     avatar: string;
   };
   publishDate: string;
-  status: 'published' | 'draft' | 'removed';
-  views: number;
-  likes: number;
-  comments: number;
 }
 
 export interface Report {
   id: number;
-  type: 'user' | 'post';
-  targetId: number;
-  targetName: string;
-  reporterName: string;
   reason: string;
-  description: string;
-  date: string;
-  status: 'pending' | 'resolved' | 'dismissed';
-  severity: 'low' | 'medium' | 'high';
+  createdAt: string;
+  reporterUsername: string;
+  reportedUsername: string;
 }
+
 
 @Component({
   selector: 'app-admin',
@@ -104,50 +97,14 @@ export class AdminComponent implements OnInit {
 
   posts: BlogPost[] = [];
 
-  reports: Report[] = [
-    {
-      id: 1,
-      type: 'post',
-      targetId: 2,
-      targetName: 'Understanding Modern Web Development',
-      reporterName: 'Anonymous User',
-      reason: 'Inappropriate Content',
-      description: 'This post contains misleading information about web development.',
-      date: '2025-01-12',
-      status: 'pending',
-      severity: 'medium'
-    },
-    {
-      id: 2,
-      type: 'user',
-      targetId: 4,
-      targetName: 'Fatima Zahra',
-      reporterName: 'Ahmed Benali',
-      reason: 'Spam',
-      description: 'User is posting repetitive promotional content.',
-      date: '2025-01-11',
-      status: 'pending',
-      severity: 'high'
-    },
-    {
-      id: 3,
-      type: 'post',
-      targetId: 1,
-      targetName: 'Top 17 Job Portal Software',
-      reporterName: 'Omar Tazi',
-      reason: 'Copyright Violation',
-      description: 'Post contains copyrighted images without permission.',
-      date: '2025-01-10',
-      status: 'resolved',
-      severity: 'low'
-    }
-  ];
+  reports: Report[] = [];
 
 
-  constructor(private router: Router, private postService: PostService) { }
+  constructor(private router: Router, private postService: PostService, private reportService: ReportService) { }
 
   ngOnInit(): void {
     this.loadAllPost();
+    this.loadAllReport();
   }
 
   loadAllPost(): void {
@@ -161,6 +118,19 @@ export class AdminComponent implements OnInit {
         console.error('Erreur chargement Posts:', err);
       }
 
+    })
+  }
+
+  loadAllReport(): void {
+    this.reportService.getReport().subscribe({
+      next: (res) => {
+        this.reports = res;
+        console.log(this.reports);
+
+      },
+      error: (err) => {
+        console.error('Erreur chargement Report:', err);
+      }
     })
   }
 

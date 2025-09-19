@@ -19,4 +19,12 @@ export class ReportService {
         });
         return this.http.post(`${this.apiUrl}/${userId}`, reason, { headers });
     }
+
+    getReport(): Observable<any> {
+        const token = localStorage.getItem('jwt');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        return this.http.get(`${this.apiUrl}/all`, { headers });
+    }
 }

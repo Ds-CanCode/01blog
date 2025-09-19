@@ -58,7 +58,7 @@
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path d="M10 2L12.09 6.26L17 7L13 10.74L14.18 16.5L10 14.27L5.82 16.5L7 10.74L3 7L7.91 6.26L10 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
         </svg>
-        Reports 
+        Reports ({{ reports.length || 0 }})
       </button>
     </div>
   </nav>
@@ -266,33 +266,24 @@
           <div class="report-header">
             <div class="report-info">
               <div class="report-type">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" *ngIf="report.type === 'post'">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M4 5H16M4 9H16M4 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" *ngIf="report.type === 'user'">
-                  <path d="M13 7C13 8.65685 11.6569 10 10 10C8.34315 10 7 8.65685 7 7C7 5.34315 8.34315 4 10 4C11.6569 4 13 5.34315 13 7Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M4.5 16C4.5 13.5147 6.51472 11.5 9 11.5H11C13.4853 11.5 15.5 13.5147 15.5 16" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
-                <span class="report-type-text">{{ report.type | titlecase }} Report</span>
-              </div>
-              
-              <div class="report-badges">
-                <span class="severity-badge" [class]="report.severity">{{ report.severity | titlecase }}</span>
-                <span class="status-badge" [class]="report.status">{{ report.status | titlecase }}</span>
+            
+                <span class="report-type-text"> Report</span>
               </div>
             </div>
             
             <div class="report-date">
-              {{ report.date | date:'MMM d, yyyy' }}
+              {{ report.createdAt | date:'MMM d, yyyy' }}
             </div>
           </div>
           
           <div class="report-content">
-            <h3 class="report-target">{{ report.targetName }}</h3>
+            <h3 class="report-target">{{ report.reason }}</h3>
             <div class="report-details">
-              <p><strong>Reported by:</strong> {{ report.reporterName }}</p>
-              <p><strong>Reason:</strong> {{ report.reason }}</p>
-              <p><strong>Description:</strong> {{ report.description }}</p>
+              <p><strong>Reporter by:</strong> {{ report.reporterUsername }}</p>
+              <p><strong>Reported :</strong> {{ report.reportedUsername }}</p>
             </div>
           </div>
 <!--           
@@ -316,13 +307,7 @@
               Dismiss
             </button>
           </div> -->
-          
-          <div class="report-resolved" *ngIf="report.status !== 'pending'">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>{{ report.status | titlecase }}</span>
-          </div>
+        
         </div>
       </div>
     </div>
