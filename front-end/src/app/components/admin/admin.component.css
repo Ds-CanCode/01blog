@@ -7,7 +7,7 @@
 
 /* === HEADER === */
 .admin-header {
-  background: var(--color-white);
+  background: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 16px 0;
   position: sticky;
@@ -1048,4 +1048,38 @@
     border: 1px solid #ddd;
     break-inside: avoid;
   }
+}
+
+.media-btn.prev {
+  left: 10px;
+}
+
+.media-btn.next {
+  right: 10px;
+}
+
+.media-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 10;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.media-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%) scale(1.1);
 }

@@ -9,23 +9,6 @@
           </svg>
           <span>Back to Blog</span>
         </button>
-        <h1 class="admin-title">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Admin Panel
-        </h1>
-      </div>
-      
-      <div class="header-actions">
-        <div class="admin-info">
-          <div class="admin-avatar">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="Admin">
-          </div>
-          <span class="admin-name">Admin User</span>
-        </div>
       </div>
     </div>
   </header>
@@ -160,28 +143,6 @@
         <p>Manage all registered users, view their activity, and moderate accounts.</p>
       </div>
 
-      <!-- Filters and Search -->
-      <div class="filters-bar">
-        <div class="search-box">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="m15 15 4 4" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <input 
-            type="text" 
-            placeholder="Search users..."
-            [(ngModel)]="searchTerm"
-          >
-        </div>
-        
-        <select [(ngModel)]="selectedFilter" class="filter-select">
-          <option value="all">All Status</option>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-          <option value="banned">Banned</option>
-        </select>
-      </div>
-
       <!-- Users Table -->
       <div class="table-container">
         <div class="table-header">
@@ -251,34 +212,30 @@
         <p>Review and moderate all posts, manage content quality and remove inappropriate material.</p>
       </div>
 
-      <!-- Filters and Search -->
-      <div class="filters-bar">
-        <div class="search-box">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="m15 15 4 4" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <input 
-            type="text" 
-            placeholder="Search posts..."
-            [(ngModel)]="searchTerm"
-          >
-        </div>
-        
-        <select [(ngModel)]="selectedFilter" class="filter-select">
-          <option value="all">All Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-          <option value="removed">Removed</option>
-        </select>
-      </div>
 
       <!-- Posts Grid -->
       <div class="posts-grid">
-        <div class="post-card" *ngFor="let post of getFilteredPosts()">
+        <div class="post-card" *ngFor="let post of posts">
           <div class="post-image">
-            <img [src]="post.image" [alt]="post.title" (error)="onImageError($event)">
-            <span class="post-status-badge" [class]="post.status">{{ post.status | titlecase }}</span>
+              <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+              <!-- Image -->
+              <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
+                   [src]="post.medias[post.selectedMediaIndex].url"
+                   [alt]="post.title"
+                   loading="lazy"
+                   (error)="onImageError($event)" />
+
+              <!-- Video -->
+              <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
+                     [src]="post.medias[post.selectedMediaIndex].url" controls></video>
+
+              <button *ngIf="post.medias && post.medias.length > 1" 
+                      class="media-btn prev" 
+                      (click)="prevMedia(post, $event)">&#10094;</button>
+              <button *ngIf="post.medias && post.medias.length > 1" 
+                      class="media-btn next" 
+                      (click)="nextMedia(post, $event)">&#10095;</button> 
+            </div>
           </div>
           
           <div class="post-content">
@@ -293,38 +250,10 @@
               <span class="post-date">{{ post.publishDate | date:'MMM d' }}</span>
             </div>
             
-            <div class="post-stats">
-              <div class="stat-item">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
-                <span>{{ post.views }}</span>
-              </div>
-              <div class="stat-item">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M14 5.33333C14 8.66667 8 14 8 14C8 14 2 8.66667 2 5.33333C2 4.27247 2.42143 3.25505 3.17157 2.50491C3.92172 1.75476 4.93913 1.33333 6 1.33333C6.84 1.33333 7.64 1.68 8.25 2.25C8.86 1.68 9.66 1.33333 10.5 1.33333C11.5609 1.33333 12.5783 1.75476 13.3284 2.50491C14.0786 3.25505 14.5 4.27247 14.5 5.33333Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
-                <span>{{ post.likes }}</span>
-              </div>
-              <div class="stat-item">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M14 10.6667C14 11.0203 13.8595 11.3594 13.6095 11.6095C13.3594 11.8595 13.0203 12 12.6667 12H4L1.33334 14.6667V2.66667C1.33334 2.31305 1.47381 1.97391 1.72386 1.72386C1.97391 1.47381 2.31305 1.33333 2.66667 1.33333H12.6667C13.0203 1.33333 13.3594 1.47381 13.6095 1.72386C13.8595 1.97391 14 2.31305 14 2.66667V10.6667Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
-                <span>{{ post.comments }}</span>
-              </div>
-            </div>
+            
             
             <div class="post-actions">
-              <select 
-                [value]="post.status"
-                (change)="updatePostStatus(post.id, $any($event.target).value)"
-                class="status-select"
-              >
-                <option value="published">Published</option>
-                <option value="draft">Draft</option>
-                <option value="removed">Removed</option>
-              </select>
+
               <button 
                 class="delete-btn"
                 (click)="deletePost(post.id)"
@@ -347,27 +276,6 @@
         <p>Review user reports and take appropriate action to maintain community standards.</p>
       </div>
 
-      <!-- Filters and Search -->
-      <div class="filters-bar">
-        <div class="search-box">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="m15 15 4 4" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <input 
-            type="text" 
-            placeholder="Search reports..."
-            [(ngModel)]="searchTerm"
-          >
-        </div>
-        
-        <select [(ngModel)]="selectedFilter" class="filter-select">
-          <option value="all">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="resolved">Resolved</option>
-          <option value="dismissed">Dismissed</option>
-        </select>
-      </div>
 
       <!-- Reports List -->
       <div class="reports-list">
@@ -404,7 +312,7 @@
               <p><strong>Description:</strong> {{ report.description }}</p>
             </div>
           </div>
-          
+<!--           
           <div class="report-actions" *ngIf="report.status === 'pending'">
             <button 
               class="resolve-btn"
@@ -424,7 +332,7 @@
               </svg>
               Dismiss
             </button>
-          </div>
+          </div> -->
           
           <div class="report-resolved" *ngIf="report.status !== 'pending'">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

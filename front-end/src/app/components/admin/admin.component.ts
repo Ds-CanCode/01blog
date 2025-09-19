@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { PostService } from '../../services/post.service';
+import { BlogPost } from '../home/home.component';
 
 export interface User {
   id: number;
@@ -46,7 +48,7 @@ export interface Report {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
@@ -107,38 +109,7 @@ export class AdminComponent implements OnInit {
     }
   ];
 
-  posts: Post[] = [
-    {
-      id: 1,
-      title: 'Top 17 Job Portal, Hiring & Recruitment Software',
-      description: 'Complete guide to the best recruitment platforms and software solutions.',
-      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=300&h=200&fit=crop',
-      author: {
-        name: 'Ahmed Benali',
-        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face'
-      },
-      publishDate: '2025-01-15',
-      status: 'published',
-      views: 1245,
-      likes: 67,
-      comments: 23
-    },
-    {
-      id: 2,
-      title: 'Understanding Modern Web Development',
-      description: 'A comprehensive overview of current web development trends and technologies.',
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=300&h=200&fit=crop',
-      author: {
-        name: 'Sara Alami',
-        avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face'
-      },
-      publishDate: '2025-01-10',
-      status: 'removed',
-      views: 892,
-      likes: 34,
-      comments: 12
-    }
-  ];
+  posts: BlogPost[] = [];
 
   reports: Report[] = [
     {
@@ -179,11 +150,24 @@ export class AdminComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private postService: PostService) {}
 
   ngOnInit(): void {
-    // Check admin permissions here
-    // this.checkAdminAccess();
+    this.loadAllPost();
+  }
+
+  loadAllPost(): void {
+    this.postService.getAllPosts().subscribe({
+       next: (res) => {
+        this.posts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));
+        console.log(this.posts);
+        
+      },
+      error: (err) => {
+        console.error('Erreur chargement Posts:', err);
+      }
+
+    })
   }
 
   switchTab(tab: 'users' | 'posts' | 'reports' | 'dashboard'): void {
@@ -209,13 +193,13 @@ export class AdminComponent implements OnInit {
   }
 
   // Post management
-  updatePostStatus(postId: number, newStatus: 'published' | 'draft' | 'removed'): void {
-    const post = this.posts.find(p => p.id === postId);
-    if (post) {
-      post.status = newStatus;
-      console.log(`Post ${post.title} status updated to ${newStatus}`);
-    }
-  }
+  // updatePostStatus(postId: number, newStatus: 'published' | 'draft' | 'removed'): void {
+  //   const post = this.posts.find(p => p.id === postId);
+  //   if (post) {
+  //     post.status = newStatus;
+  //     console.log(`Post ${post.title} status updated to ${newStatus}`);
+  //   }
+  // }
 
   deletePost(postId: number): void {
     if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
@@ -225,22 +209,22 @@ export class AdminComponent implements OnInit {
   }
 
   // Report management
-  resolveReport(reportId: number, action: 'resolve' | 'dismiss'): void {
-    const report = this.reports.find(r => r.id === reportId);
-    if (report) {
-      report.status = action === 'resolve' ? 'resolved' : 'dismissed';
+  // resolveReport(reportId: number, action: 'resolve' | 'dismiss'): void {
+  //   const report = this.reports.find(r => r.id === reportId);
+  //   if (report) {
+  //     report.status = action === 'resolve' ? 'resolved' : 'dismissed';
       
-      if (action === 'resolve' && report.type === 'post') {
-        // Auto-remove reported post
-        this.updatePostStatus(report.targetId, 'removed');
-      } else if (action === 'resolve' && report.type === 'user') {
-        // Auto-suspend reported user
-        this.updateUserStatus(report.targetId, 'suspended');
-      }
+  //     if (action === 'resolve' && report.type === 'post') {
+  //       // Auto-remove reported post
+  //       this.updatePostStatus(report.targetId, 'removed');
+  //     } else if (action === 'resolve' && report.type === 'user') {
+  //       // Auto-suspend reported user
+  //       this.updateUserStatus(report.targetId, 'suspended');
+  //     }
       
-      console.log(`Report ${reportId} ${action}d`);
-    }
-  }
+  //     console.log(`Report ${reportId} ${action}d`);
+  //   }
+  // }
 
   // Filtering methods
   getFilteredUsers(): User[] {
@@ -260,22 +244,22 @@ export class AdminComponent implements OnInit {
     return filtered;
   }
 
-  getFilteredPosts(): Post[] {
-    let filtered = this.posts;
+  // getFilteredPosts(): Post[] {
+  //   let filtered = this.posts;
     
-    if (this.searchTerm) {
-      filtered = filtered.filter(post => 
-        post.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        post.author.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
+  //   if (this.searchTerm) {
+  //     filtered = filtered.filter(post => 
+  //       post.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+  //       post.author.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+  //     );
+  //   }
     
-    if (this.selectedFilter !== 'all') {
-      filtered = filtered.filter(post => post.status === this.selectedFilter);
-    }
+  //   if (this.selectedFilter !== 'all') {
+  //     filtered = filtered.filter(post => post.status === this.selectedFilter);
+  //   }
     
-    return filtered;
-  }
+  //   return filtered;
+  // }
 
   getFilteredReports(): Report[] {
     let filtered = this.reports;
@@ -297,6 +281,25 @@ export class AdminComponent implements OnInit {
 
   onImageError(event: any): void {
     event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgyNVYyNUgxNVYxNVoiIGZpbGw9IiNEREREREQiLz4KPC9zdmc+Cg==';
+  }
+
+
+  prevMedia(post: any, event: Event) {
+    event.stopPropagation();
+    if (post.selectedMediaIndex > 0) {
+      post.selectedMediaIndex--;
+    } else {
+      post.selectedMediaIndex = post.medias.length - 1;
+    }
+  }
+
+  nextMedia(post: any, event: Event) {
+    event.stopPropagation();
+    if (post.selectedMediaIndex < post.medias.length - 1) {
+      post.selectedMediaIndex++;
+    } else {
+      post.selectedMediaIndex = 0;
+    }
   }
 
   goBack(): void {
