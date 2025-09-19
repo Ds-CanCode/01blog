@@ -95,7 +95,8 @@ public class ProfilController {
         }
         String token = authHeader.substring(7);
         Long userId = jwtService.extractId(token);
-        boolean isDeleted = profilservice.deletePost(id, userId);
+        String role = jwtService.extractRole(token);
+        boolean isDeleted = profilservice.deletePost(id, userId, role);
         if (isDeleted) {
             return ResponseEntity.ok().build();
         } 

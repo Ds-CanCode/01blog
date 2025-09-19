@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../services/profil.service';
 import { FollowService } from '../../services/follow.service';
 import { PopupService } from '../../services/popup.service';
+import { AuthService } from '../../services/auth.service';
 
 // Interfaces basées exactement sur votre backend
 export interface UserProfile {
@@ -63,7 +64,8 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private profileService: ProfileService,
     private followService: FollowService,
-    private popupService: PopupService
+    private popupService: PopupService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
