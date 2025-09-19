@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.blog_01.dto.LoginDTO;
 import com.blog_01.model.User;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.UserService;
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO request) {
         try {
             String token = userService.loginAndGenerateToken(request.getUsernameOrEmail(), request.getPassword());
             Long userId = jwtService.extractId(token);
@@ -76,24 +77,4 @@ public class UserController {
     
 }
 
-class LoginRequest {
 
-    private String usernameOrEmail;
-    private String password;
-
-    public String getUsernameOrEmail() {
-        return usernameOrEmail;
-    }
-
-    public void setUsernameOrEmail(String usernameOrEmail) {
-        this.usernameOrEmail = usernameOrEmail;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-}
