@@ -1,8 +1,12 @@
 package com.blog_01.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blog_01.dto.ReportDTO;
 import com.blog_01.model.Report;
 import com.blog_01.model.User;
 import com.blog_01.repository.ReportRepository;
@@ -19,6 +23,7 @@ public class ReportService {
     @Autowired
     private ReportRepository reportRepository;
 
+
     @Transactional
     public void addReport(Long reporterId, Long reportedUserId, String reason) {
         User reporter = userRepository.findById(reporterId)
@@ -32,5 +37,18 @@ public class ReportService {
         report.setReason(reason);
 
         reportRepository.save(report);
+    }
+
+    @Transactional
+    public List<ReportDTO> getAllReport() {
+        return reportRepository.findAll().stream()
+            .map(report -> new ReportDTO(
+                    report.getId(),
+                    report.getReason(),
+                    report.getCreatedAt(),
+                    report.getReporter().getUsername(),   
+                    report.getUser().getUsername()      
+            ))
+            .collect(Collectors.toList());
     }
 }
