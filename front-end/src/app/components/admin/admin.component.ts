@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { BlogPost } from '../home/home.component';
 import { ReportService } from '../../services/report.service';
+import { AdminService } from '../../services/admin..service';
 
 export interface AdminDTO {
   id: number;
@@ -52,7 +53,7 @@ export class AdminComponent implements OnInit {
   reports: Report[] = [];
 
 
-  constructor(private router: Router, private postService: PostService, private reportService: ReportService) { }
+  constructor(private router: Router, private postService: PostService, private reportService: ReportService, private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.loadAllPost();
@@ -88,7 +89,7 @@ export class AdminComponent implements OnInit {
   }
 
   loadAllUsers(): void {
-    this.reportService.getAllUsers().subscribe({
+    this.adminService.getAllUsers().subscribe({
       next: (res) => {
         this.users = res;
         console.log(this.users);
@@ -136,9 +137,16 @@ export class AdminComponent implements OnInit {
   // }
 
   deletePost(postId: number): void {
-    if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-      this.posts = this.posts.filter(p => p.id !== postId);
-      console.log(`Post ${postId} deleted`);
+    if (confirm('Are you sure you want to delete this post?')) {
+      this.adminService.deletePost(postId).subscribe({
+        next: () => {
+        this.posts = this.posts.filter(p => p.id !== postId);
+        console.log('Post deleted:', postId);
+      },
+      error: (err) => {
+        console.error('Error deleting post:', err);
+      }
+      })
     }
   }
 

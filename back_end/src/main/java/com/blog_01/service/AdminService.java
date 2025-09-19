@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog_01.dto.AdminDTO;
+import com.blog_01.model.Post;
 import com.blog_01.model.User;
+import com.blog_01.repository.PostRepository;
 import com.blog_01.repository.UserRepository;
 
 @Service
@@ -16,6 +18,9 @@ public class AdminService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     public List<AdminDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -37,5 +42,13 @@ public class AdminService {
 
         return dto;
     }).collect(Collectors.toList());
+    }
+
+    public boolean deletePost(Long idPost) {
+        Post post = postRepository.findById(idPost)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        postRepository.delete(post);
+        return true;
     }
 }
