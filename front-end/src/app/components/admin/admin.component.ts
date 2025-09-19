@@ -48,22 +48,15 @@ export interface Report {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ],
+  imports: [CommonModule, FormsModule, RouterModule,],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements OnInit {
   activeTab: 'users' | 'posts' | 'reports' | 'dashboard' = 'dashboard';
   searchTerm = '';
-  selectedFilter = 'all';
-  
-  // Dashboard stats
-  stats = {
-    totalUsers: 1247,
-    totalPosts: 856,
-    pendingReports: 12,
-    activeUsers: 892
-  };
+
+
 
   // Sample data - in real app, this would come from your service
   users: User[] = [
@@ -150,7 +143,8 @@ export class AdminComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private postService: PostService) {}
+
+  constructor(private router: Router, private postService: PostService) { }
 
   ngOnInit(): void {
     this.loadAllPost();
@@ -158,10 +152,10 @@ export class AdminComponent implements OnInit {
 
   loadAllPost(): void {
     this.postService.getAllPosts().subscribe({
-       next: (res) => {
+      next: (res) => {
         this.posts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));
         console.log(this.posts);
-        
+
       },
       error: (err) => {
         console.error('Erreur chargement Posts:', err);
@@ -173,7 +167,6 @@ export class AdminComponent implements OnInit {
   switchTab(tab: 'users' | 'posts' | 'reports' | 'dashboard'): void {
     this.activeTab = tab;
     this.searchTerm = '';
-    this.selectedFilter = 'all';
   }
 
   // User management
@@ -213,7 +206,7 @@ export class AdminComponent implements OnInit {
   //   const report = this.reports.find(r => r.id === reportId);
   //   if (report) {
   //     report.status = action === 'resolve' ? 'resolved' : 'dismissed';
-      
+
   //     if (action === 'resolve' && report.type === 'post') {
   //       // Auto-remove reported post
   //       this.updatePostStatus(report.targetId, 'removed');
@@ -221,63 +214,12 @@ export class AdminComponent implements OnInit {
   //       // Auto-suspend reported user
   //       this.updateUserStatus(report.targetId, 'suspended');
   //     }
-      
+
   //     console.log(`Report ${reportId} ${action}d`);
   //   }
   // }
 
-  // Filtering methods
-  getFilteredUsers(): User[] {
-    let filtered = this.users;
-    
-    if (this.searchTerm) {
-      filtered = filtered.filter(user => 
-        user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-    
-    if (this.selectedFilter !== 'all') {
-      filtered = filtered.filter(user => user.status === this.selectedFilter);
-    }
-    
-    return filtered;
-  }
 
-  // getFilteredPosts(): Post[] {
-  //   let filtered = this.posts;
-    
-  //   if (this.searchTerm) {
-  //     filtered = filtered.filter(post => 
-  //       post.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-  //       post.author.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-  //     );
-  //   }
-    
-  //   if (this.selectedFilter !== 'all') {
-  //     filtered = filtered.filter(post => post.status === this.selectedFilter);
-  //   }
-    
-  //   return filtered;
-  // }
-
-  getFilteredReports(): Report[] {
-    let filtered = this.reports;
-    
-    if (this.searchTerm) {
-      filtered = filtered.filter(report => 
-        report.targetName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        report.reporterName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        report.reason.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-    
-    if (this.selectedFilter !== 'all') {
-      filtered = filtered.filter(report => report.status === this.selectedFilter);
-    }
-    
-    return filtered;
-  }
 
   onImageError(event: any): void {
     event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgyNVYyNUgxNVYxNVoiIGZpbGw9IiNEREREREQiLz4KPC9zdmc+Cg==';
