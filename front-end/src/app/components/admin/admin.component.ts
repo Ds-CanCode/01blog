@@ -137,14 +137,6 @@ export class AdminComponent implements OnInit {
     })
   }
 
-  // Post management
-  // updatePostStatus(postId: number, newStatus: 'published' | 'draft' | 'removed'): void {
-  //   const post = this.posts.find(p => p.id === postId);
-  //   if (post) {
-  //     post.status = newStatus;
-  //     console.log(`Post ${post.title} status updated to ${newStatus}`);
-  //   }
-  // }
 
   deletePost(postId: number): void {
     if (confirm('Are you sure you want to delete this post?')) {

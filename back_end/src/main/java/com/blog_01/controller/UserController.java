@@ -70,7 +70,7 @@ public class UserController {
                     "id", userId
             ));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500)
+            return ResponseEntity.status(401)
                     .body(Map.of("message", e.getMessage()));
         }
     }

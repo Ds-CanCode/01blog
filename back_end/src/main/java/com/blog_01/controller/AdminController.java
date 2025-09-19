@@ -35,11 +35,12 @@ public class AdminController {
         }
 
         String token = authHeader.substring(7);
+        Long id = jwtService.extractId(token);
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {
             return ResponseEntity.status(401).build();
         }
-        return ResponseEntity.ok(adminService.getAllUsers());
+        return ResponseEntity.ok(adminService.getAllUsers(id));
     }
 
     @DeleteMapping("/delete/{postId}")

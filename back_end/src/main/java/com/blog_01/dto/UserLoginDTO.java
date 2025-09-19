@@ -8,13 +8,15 @@ public class UserLoginDTO {
     private String email;
     private String password;
     private Role role;
+    private Boolean isBanned;
 
-    public UserLoginDTO(Long id, String username, String email, String password, Role role) {
+    public UserLoginDTO(Long id, String username, String email, String password, Role role, Boolean isBanned) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.isBanned = isBanned;
     }
 
     public Long getId() { return id; }
@@ -27,4 +29,6 @@ public class UserLoginDTO {
     public void setPassword(String password) { this.password = password; }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+    public Boolean getIsBanned() {return isBanned;}
+    public void setIsBanned(Boolean isBanned) {this.isBanned = isBanned;}
 }

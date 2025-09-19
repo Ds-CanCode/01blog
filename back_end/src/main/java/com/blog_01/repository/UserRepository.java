@@ -13,7 +13,7 @@ import com.blog_01.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT new com.blog_01.dto.UserLoginDTO(u.id, u.username, u.email, u.password, u.role) "
+    @Query("SELECT new com.blog_01.dto.UserLoginDTO(u.id, u.username, u.email, u.password, u.role, u.isBanned) "
             + "FROM User u WHERE u.username = :usernameOrEmail OR u.email = :usernameOrEmail")
     UserLoginDTO findLoginUser(@Param("usernameOrEmail") String usernameOrEmail);
 

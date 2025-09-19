@@ -38,6 +38,9 @@ public class UserService {
         if (user == null) {
             throw new RuntimeException("Utilisateur introuvable");
         }
+        if (user.getIsBanned()) {
+            throw new RuntimeException("Cet utilisateur est banni");
+        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
