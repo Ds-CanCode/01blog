@@ -152,24 +152,6 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  // Report management
-  // resolveReport(reportId: number, action: 'resolve' | 'dismiss'): void {
-  //   const report = this.reports.find(r => r.id === reportId);
-  //   if (report) {
-  //     report.status = action === 'resolve' ? 'resolved' : 'dismissed';
-
-  //     if (action === 'resolve' && report.type === 'post') {
-  //       // Auto-remove reported post
-  //       this.updatePostStatus(report.targetId, 'removed');
-  //     } else if (action === 'resolve' && report.type === 'user') {
-  //       // Auto-suspend reported user
-  //       this.updateUserStatus(report.targetId, 'suspended');
-  //     }
-
-  //     console.log(`Report ${reportId} ${action}d`);
-  //   }
-  // }
-
 
 
   onImageError(event: any): void {
@@ -193,6 +175,15 @@ export class AdminComponent implements OnInit {
     } else {
       post.selectedMediaIndex = 0;
     }
+  }
+
+   onCardClick(id: number) {
+    this.router.navigate(['/article', id]);
+  }
+
+  onUserClick(userId: number, event: Event) {
+    event.stopPropagation(); 
+    this.router.navigate(['/profil', userId]);
   }
 
   goBack(): void {
