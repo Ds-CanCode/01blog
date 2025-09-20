@@ -32,10 +32,10 @@ public class FollowController {
             @PathVariable Long userId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        
         Long myId = jwtService.extractId(token);
         if (Objects.equals(myId, userId)) {
             return ResponseEntity.status(403).body(Map.of("error", "Vous ne pouvez pas vous suivre vous-même"));
@@ -53,10 +53,10 @@ public class FollowController {
             @PathVariable Long userId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         Long myId = jwtService.extractId(token);
         if (Objects.equals(myId, userId)) {
             return ResponseEntity.status(403).body(Map.of("error", "Vous ne pouvez pas vous suivre vous-même"));
@@ -69,13 +69,13 @@ public class FollowController {
     }
 
     @GetMapping("/allfollowing")
-    public ResponseEntity<List<FollowingDTO>> allFollowing(
+    public ResponseEntity<?> allFollowing(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body(null);
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         Long myId = jwtService.extractId(token);
      
         List<FollowingDTO> following = followService.getAllFollowing(myId);

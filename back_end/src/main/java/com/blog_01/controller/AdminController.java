@@ -30,11 +30,10 @@ public class AdminController {
     public ResponseEntity<?> getAllUsers(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        
         Long id = jwtService.extractId(token);
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {
@@ -48,10 +47,10 @@ public class AdminController {
             @PathVariable Long postId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {
             return ResponseEntity.status(401).build();
@@ -69,10 +68,10 @@ public class AdminController {
             @PathVariable Long userId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {
             return ResponseEntity.status(401).build();

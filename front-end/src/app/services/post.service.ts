@@ -15,11 +15,17 @@ export class PostService {
 
 
     getAllPosts(): Observable<BlogPost[]> {
-        return this.http.get<BlogPost[]>(`${this.apiUrl}/getAllPosts`);
+        const token = localStorage.getItem('jwt') || '';
+        if (!token) return throwError(() => new Error('No JWT token found'));
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+        return this.http.get<BlogPost[]>(`${this.apiUrl}/getAllPosts`, { headers });
     }
 
     getPost(id: Number): Observable<BlogPost> {
-        return this.http.get<BlogPost>(`${this.apiUrl}/getPost/${id}`);
+        const token = localStorage.getItem('jwt') || '';
+        if (!token) return throwError(() => new Error('No JWT token found'));
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+        return this.http.get<BlogPost>(`${this.apiUrl}/getPost/${id}`, { headers });
     }
 
     addPost(formData: any) {

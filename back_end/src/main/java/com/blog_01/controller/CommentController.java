@@ -29,16 +29,18 @@ public class CommentController {
     }
 
     @PostMapping("/{postId}")
-    public ResponseEntity<CommentDTO> addComment(
+    public ResponseEntity<?> addComment(
             @PathVariable Long postId,
             @RequestHeader("Authorization") String authHeader,
             @RequestBody Map<String, String> request
     ) {
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {
+            return ResponseEntity.status(401).body("Token Expired");
+        } 
         Long userId = jwtService.extractId(token);
         String content = request.get("content");
         CommentDTO comment = commentService.addComment(postId, userId, content);
-        //CommentDTO dto = new CommentDTO(comment);
         return ResponseEntity.ok(comment);
     }
 

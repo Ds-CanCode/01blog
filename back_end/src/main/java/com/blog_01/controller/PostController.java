@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.blog_01.dto.BlogPostDTO;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.PostService;
 
@@ -41,11 +40,11 @@ public class PostController {
             @RequestParam(value = "types", required = false) List<String> types,
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
-
+        
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         String username = jwtService.extractUsername(token);
 
         try {
@@ -60,12 +59,22 @@ public class PostController {
     }
 
     @GetMapping("/getAllPosts")
-    public ResponseEntity<List<BlogPostDTO>> getAllPosts() {
+    public ResponseEntity<?> getAllPosts(@RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         return postService.getAllPosts();
     }
 
     @GetMapping("/getPost/{id}")
-    public ResponseEntity<BlogPostDTO> getPostById(@PathVariable Long id) {
+    public ResponseEntity<?> getPostById(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         return postService.getPost(id);
     }
 
@@ -79,11 +88,11 @@ public class PostController {
             @RequestParam(required = false, name = "mediasToRemove") String mediasToRemoveJson,
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
 
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         String username = jwtService.extractUsername(token);
         Long idUser = jwtService.extractId(token);
         try {

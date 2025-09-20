@@ -34,10 +34,10 @@ public class LikeController {
             @PathVariable Long postId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         Long userId = jwtService.extractId(token);
 
         try {
@@ -51,15 +51,14 @@ public class LikeController {
     }
 
     @GetMapping("/like-info/{postId}")
-    public ResponseEntity<LikeDTO> getLikeInfo(
+    public ResponseEntity<?> getLikeInfo(
             @PathVariable Long postId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        
         Long userId = jwtService.extractId(token);
 
         LikeDTO info = likeService.getLikeInfo(postId, userId);

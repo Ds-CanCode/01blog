@@ -28,56 +28,52 @@ public class ProfilController {
     private JwtService jwtService;
 
     @GetMapping("/{userInfoId}")
-    public ResponseEntity<UserInfoDTO> getUserInfo(
+    public ResponseEntity<?> getUserInfo(
             @PathVariable Long userInfoId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
-        Long userId = jwtService.extractId(token);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         UserInfoDTO userInfo = profilservice.getUserInfo(userInfoId);
         return ResponseEntity.ok(userInfo);
     }
 
     @GetMapping("/post/{userInfoId}")
-    public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfo(
+    public ResponseEntity<?> getUserPostInfo(
             @PathVariable Long userInfoId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
-        Long userId = jwtService.extractId(token);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         List<UserPostInfoDTO> userPostInfo = profilservice.getUserPostInfo(userInfoId);
         return ResponseEntity.ok(userPostInfo);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserInfoDTO> getUserInfoMe(
+    public ResponseEntity<?> getUserInfoMe(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         Long userId = jwtService.extractId(token);
         UserInfoDTO userInfo = profilservice.getUserInfo(userId);
         return ResponseEntity.ok(userInfo);
     }
 
     @GetMapping("/post/me")
-    public ResponseEntity<List<UserPostInfoDTO>> getUserPostInfoMe(
+    public ResponseEntity<?> getUserPostInfoMe(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         Long userId = jwtService.extractId(token);
         List<UserPostInfoDTO> userPostInfo = profilservice.getUserPostInfo(userId);
         return ResponseEntity.ok(userPostInfo);
@@ -90,10 +86,10 @@ public class ProfilController {
             @PathVariable Long id,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        
         Long userId = jwtService.extractId(token);
         String role = jwtService.extractRole(token);
         boolean isDeleted = profilservice.deletePost(id, userId, role);

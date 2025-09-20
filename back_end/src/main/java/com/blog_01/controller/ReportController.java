@@ -31,13 +31,11 @@ public class ReportController {
             @RequestParam("reason") String reason,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
-        Long reporterId = jwtService.extractId(token);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
 
+        Long reporterId = jwtService.extractId(token);
         reportService.addReport(reporterId, reportedUserId, reason);
 
         return ResponseEntity.ok(Map.of("message", "Report ajouté avec succès"));
@@ -48,12 +46,10 @@ public class ReportController {
     public ResponseEntity<?> getReport(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
         String token = authHeader.substring(7);
-        Long id = jwtService.extractId(token);
+        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+
         return ResponseEntity.ok(reportService.getAllReport());
     }
 }
