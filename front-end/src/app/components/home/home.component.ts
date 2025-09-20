@@ -41,7 +41,6 @@ export class HomeComponent implements OnInit  {
   AllPosts: BlogPost[] = [];
   showUserList = false;
 
-
   constructor(private postService: PostService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -69,13 +68,6 @@ export class HomeComponent implements OnInit  {
     event.stopPropagation(); 
     this.router.navigate(['/profil', userId]);
   }
-
-
-
-  onImageError(event: any): void {
-    event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNzUgNzVIMjI1VjEyNUgxNzVWNzVaIiBmaWxsPSIjRERERERkIi8+Cjwvc3ZnPgo=';
-  }
-
 
   prevMedia(post: any, event: Event) {
     event.stopPropagation();

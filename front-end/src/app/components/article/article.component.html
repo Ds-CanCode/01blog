@@ -10,7 +10,8 @@
   <div class="navigation-bar">
     <button class="back-btn" (click)="goBack()">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
       </svg>
       <span>Back to Articles</span>
     </button>
@@ -23,39 +24,38 @@
       <!-- Article Header -->
       <div class="article-header">
         <div class="article-image-container">
-          <div class="post-media" *ngIf="article.medias && article.medias.length > 0">
-            <!-- Image -->
-            <img *ngIf="article.medias[article.selectedMediaIndex || 0].type === 'IMAGE'"
-                 [src]="article.medias[article.selectedMediaIndex || 0].url"
-                 [alt]="article.title"
-                 class="article-image"
-                 (error)="onImageError($event)" />
+          <div class="post-media">
+            <!-- Si il y a au moins un média -->
+            <ng-container *ngIf="article.medias && article.medias.length > 0; else defaultImage">
+              <!-- Image -->
+              <img *ngIf="article.medias[article.selectedMediaIndex || 0].type === 'IMAGE'"
+                [src]="article.medias[article.selectedMediaIndex || 0].url" [alt]="article.title" class="article-image"
+                (error)="article.medias[article.selectedMediaIndex || 0].url = 'profil.jpg'" />
 
-            <!-- Video -->
-            <video *ngIf="article.medias[article.selectedMediaIndex || 0].type === 'VIDEO'"
-                   [src]="article.medias[article.selectedMediaIndex || 0].url"
-                   class="article-image"
-                   controls></video>
+              <!-- Video -->
+              <video *ngIf="article.medias[article.selectedMediaIndex || 0].type === 'VIDEO'"
+                [src]="article.medias[article.selectedMediaIndex || 0].url" class="article-image" controls></video>
 
-            <!-- Media navigation - Only show if multiple media -->
-            <button *ngIf="article.medias && article.medias.length > 1" 
-                    class="media-btn prev" 
-                    (click)="prevMedia(article)">&#10094;</button>
-            <button *ngIf="article.medias && article.medias.length > 1" 
-                    class="media-btn next" 
-                    (click)="nextMedia(article)">&#10095;</button>
+              <!-- Navigation si plusieurs médias -->
+              <button *ngIf="article.medias.length > 1" class="media-btn prev"
+                (click)="prevMedia(article)">&#10094;</button>
+              <button *ngIf="article.medias.length > 1" class="media-btn next"
+                (click)="nextMedia(article)">&#10095;</button>
+            </ng-container>
+
+            <!-- Image par défaut si pas de médias -->
+            <ng-template #defaultImage>
+              <img src="plume.png" alt="Image par défaut" class="article-image" />
+            </ng-template>
           </div>
+
         </div>
-        
+
         <!-- Article Meta Info -->
         <div class="article-meta-info">
           <div class="author-section" (click)="onUserClick(article.author.id)">
             <div class="author-avatar">
-              <img 
-                [src]="article.author.avatar" 
-                [alt]="article.author.name"
-                (error)="onImageError($event)"
-              >
+              <img [src]="article.author.avatar" [alt]="article.author.name" (error)="onImageError($event)">
             </div>
             <div class="author-details">
               <h4 class="author-name">{{ article.author.name }}</h4>
@@ -64,16 +64,14 @@
               </p>
             </div>
           </div>
-          
+
           <!-- Article Actions -->
           <div class="article-actions">
-            <button 
-              class="like-btn"
-              [class.liked]="isLiked"
-              (click)="toggleLike()"
-            >
+            <button class="like-btn" [class.liked]="isLiked" (click)="toggleLike()">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 3C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 3.00063 7.05 3.00063C5.59096 3.00063 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.55063 7.04097 1.55063 8.5C1.55063 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22248 22.45 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.3946C21.7563 5.72709 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path
+                  d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 3C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 3.00063 7.05 3.00063C5.59096 3.00063 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.55063 7.04097 1.55063 8.5C1.55063 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22248 22.45 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.3946C21.7563 5.72709 21.351 5.1208 20.84 4.61V4.61Z"
+                  stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <span>{{ likeCount }}</span>
             </button>
@@ -84,7 +82,7 @@
       <!-- Article Body -->
       <div class="article-body">
         <h1 class="article-title">{{ article.title }}</h1>
-        
+
         <div class="article-content">
           <p class="article-lead">{{ article.description }}</p>
         </div>
@@ -96,7 +94,9 @@
       <div class="comments-header">
         <h3 class="comments-title">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z"
+              stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           Comments ({{ comments.length }})
         </h3>
@@ -110,23 +110,15 @@
           </div>
           <div class="form-content">
             <label for="comment-input">Add a comment</label>
-            <textarea 
-              id="comment-input"
-              [(ngModel)]="newComment" 
-              placeholder="Share your thoughts about this article..."
-              rows="3"
-              class="comment-textarea"
-            ></textarea>
+            <textarea id="comment-input" [(ngModel)]="newComment"
+              placeholder="Share your thoughts about this article..." rows="3" class="comment-textarea"></textarea>
           </div>
         </div>
         <div class="comment-form-actions">
-          <button 
-            class="submit-comment-btn"
-            [disabled]="!newComment.trim()"
-            (click)="addComment()"
-          >
+          <button class="submit-comment-btn" [disabled]="!newComment.trim()" (click)="addComment()">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M18 2L9 11L18 2ZM18 2L12 18L9 11L2 8L18 2Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18 2L9 11L18 2ZM18 2L12 18L9 11L2 8L18 2Z" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             Post Comment
           </button>
@@ -135,24 +127,17 @@
 
       <!-- Comments List -->
       <div class="comments-list">
-        <div 
-          class="comment-item" 
-          *ngFor="let comment of comments; trackBy: trackByCommentId"
-        >
+        <div class="comment-item" *ngFor="let comment of comments; trackBy: trackByCommentId">
           <div class="comment-avatar" (click)="onUserClick(comment.userId)">
-            <img 
-              [src]="comment.avatar" 
-              [alt]="comment.username"
-              (error)="onImageError($event)"
-            >
+            <img [src]="comment.avatar" [alt]="comment.username" (error)="onImageError($event)">
           </div>
-          
+
           <div class="comment-content">
             <div class="comment-header">
               <h4 class="comment-author">{{ comment.username }}</h4>
               <span class="comment-date">{{ comment.createDate | date:'MMM d, yyyy' }}</span>
             </div>
-            
+
             <p class="comment-text">{{ comment.content }}</p>
           </div>
         </div>
@@ -165,8 +150,8 @@
 <div class="error-container" *ngIf="!isLoading && !article">
   <div class="error-content">
     <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-      <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+      <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
     <h2>Article not found</h2>
     <p>The article you're looking for doesn't exist or has been removed.</p>

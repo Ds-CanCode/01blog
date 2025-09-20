@@ -36,7 +36,6 @@ export interface UserPost {
   };
   publishDate: string;
   selectedMediaIndex: number;
-  subject?: string;
   likes?: number;
   comments?: number;
   isLiked?: boolean;

@@ -11,7 +11,7 @@
     <div class="hero-content">
       <!-- Cover Image -->
       <div class="cover-container">
-        <img [src]="user.coverImage" alt="Cover" class="cover-image" (error)="onImageError($event)">
+        <img [src]="user.coverImage" alt="Cover" class="cover-image" onerror="this.src='wave.png'">
         <div class="cover-overlay"></div>
       </div>
 
@@ -83,41 +83,19 @@
       <div class="blog-grid" *ngIf="userPosts.length > 0">
         <div class="blog-card" *ngFor="let post of userPosts" (click)="onCardClick(post.id)">
 
-          <div *ngIf="user.isOwnProfile" class="post-actions-overlay">
-            <button (click)="startEditingPost(post); $event.stopPropagation()" class="action-btn edit-btn"
-              title="Edit Post">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-            <button (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn"
-              title="Delete Post">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-                <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-            </button>
-          </div>
 
           <!-- Post Actions (only for own profile) -->
           <div class="post-actions-overlay">
-            <button *ngIf="user.isOwnProfile" (click)="startEditingPost(post); $event.stopPropagation()" class="action-btn edit-btn" title="Edit">
+            <button *ngIf="user.isOwnProfile" (click)="startEditingPost(post); $event.stopPropagation()"
+              class="action-btn edit-btn" title="Edit">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M12.854 1.146a.5.5 0 0 0-.708 0L10.5 2.793 13.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-2-2zM13.207 6.207L10.5 3.5l-8 8V14h2.5l8-8z"
                   fill="currentColor" />
               </svg>
             </button>
-            <button *ngIf="user.isOwnProfile || authService.isAdmin()" (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn"
+            <button *ngIf="user.isOwnProfile || authService.isAdmin()"
+              (click)="confirmDeletePost(post.id); $event.stopPropagation()" class="action-btn delete-btn"
               title="Delete">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
@@ -131,7 +109,7 @@
           </div>
 
           <div class="card-image">
-            <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+            <div class="post-media" *ngIf="post.medias && post.medias.length > 0; else defaultMedia">
               <!-- Image -->
               <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
                 [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title" loading="lazy"
@@ -152,23 +130,11 @@
             <div class="video-overlay"
               *ngIf="post.medias && post.medias.length > 0 && post.medias[post.selectedMediaIndex].type === 'VIDEO'">▶
             </div>
-
-            <!-- Subject tag -->
-            <div class="subject-tag" *ngIf="post.subject">{{ post.subject }}</div>
           </div>
-
+          <ng-template #defaultMedia>
+            <img src="plume.png" alt="Image par défaut" class="post-image" />
+          </ng-template>
           <div class="card-content">
-            <!-- Edit mode -->
-            <!-- <div *ngIf="editingPost && editingPost.id === post.id" class="edit-mode">
-              <div class="edit-form">
-                <input [(ngModel)]="editingPost.title" class="edit-title-input" placeholder="Post title">
-                <textarea [(ngModel)]="editingPost.description" class="edit-description-input" rows="3" placeholder="Post description"></textarea>
-                <div class="edit-actions">
-                  <button (click)="cancelEditPost()" class="btn-cancel">Cancel</button>
-                </div>
-              </div>
-            </div> -->
-
             <!-- Normal view -->
             <div *ngIf="!editingPost || editingPost.id !== post.id">
               <h3 class="card-title">{{ post.title }}</h3>
@@ -183,8 +149,6 @@
                 </div>
                 <span class="publish-date">{{ post.publishDate | date:'d MMM, yyyy' }}</span>
               </div>
-
-
             </div>
           </div>
         </div>

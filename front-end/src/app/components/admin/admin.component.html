@@ -140,7 +140,7 @@
             <div class="user-cell">
               <div class="user-info" (click)="onUserClick(user.id, $event)">
                 <div class="user-avatar">
-                  <img [src]="user.profileImage" [alt]="user.username" (error)="onImageError($event)">
+                  <img [src]="user.profileImage" [alt]="user.username" onerror="this.src='profil.jpg'">
                 </div>
                 <div class="user-details">
                   <h4>{{ user.username }}</h4>
@@ -158,8 +158,7 @@
             </div>
             <div class="cell actions-cell">
               <div class="action-buttons">
-                <button class="ban-btn"  (click)="banUser(user.id)"
-                  title="{{ user.isBanned ? 'Débannir' : 'Bannir' }}">
+                <button class="ban-btn" (click)="banUser(user.id)" title="{{ user.isBanned ? 'Débannir' : 'Bannir' }}">
                   {{ user.isBanned ? 'Unban' : 'Ban' }}
                 </button>
               </div>
@@ -181,7 +180,7 @@
       <div class="posts-grid">
         <div class="post-card" *ngFor="let post of posts">
           <div class="post-image" (click)="onCardClick(post.id)">
-            <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
+            <div class="post-media" *ngIf="post.medias && post.medias.length > 0 ; else noMedia">
               <!-- Image -->
               <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
                 [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title" loading="lazy"
@@ -196,15 +195,19 @@
               <button *ngIf="post.medias && post.medias.length > 1" class="media-btn next"
                 (click)="nextMedia(post, $event)">&#10095;</button>
             </div>
+
+            <ng-template #noMedia>
+              <img src="plume.png" alt="Image par défaut" class="featured-image" />
+            </ng-template>
           </div>
 
-          <div class="post-content" >
+          <div class="post-content">
             <h3 class="post-title">{{ post.title }}</h3>
             <p class="post-description">{{ post.description }}</p>
 
             <div class="post-meta">
               <div class="post-author" (click)="onUserClick(post.author.id, $event)">
-                <img [src]="post.author.avatar" [alt]="post.author.name" (error)="onImageError($event)">
+                <img [src]="post.author.avatar" [alt]="post.author.name" onerror="this.src='profil.jpg'">
                 <span>{{ post.author.name }}</span>
               </div>
               <span class="post-date">{{ post.publishDate | date:'MMM d' }}</span>

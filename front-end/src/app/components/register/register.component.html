@@ -12,7 +12,7 @@
       </div>
       <div class="profile-photo-upload">
         <div class="profile-photo-icon">
-          <img *ngIf="!profileImageFile" src="avatar.jpeg" alt="Profil Photo">
+          <img *ngIf="!profileImageFile" src="profil.jpg" alt="Profil Photo">
           <img *ngIf="profileImageFile" [src]="profileImageFile" alt="Cover Photo">
         </div>
         <label class="upload-button-profile">
@@ -47,7 +47,6 @@
       </div>
     </div>
 
-    <!-- <button class="register-button" (click)="register()">Register</button> -->
     <button class="register-button" [ngClass]="{'active': isFormValid()}" (click)="register()"
       [disabled]="!isFormValid()">
       Register

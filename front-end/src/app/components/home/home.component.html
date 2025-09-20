@@ -17,19 +17,21 @@
         Uncover fresh perspectives, ideas, and knowledge through the power of blogs.
       </h1>
       <p class="hero-description">
-        Redify is an open platform where readers find dynamic thinking, and where 
+        Redify is an open platform where readers find dynamic thinking, and where
         expert and undiscovered voices can share their writing on any topic.
       </p>
       <button class="start-reading-btn">
         <span>Start Reading</span>
         <svg class="arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2L14 8L8 14M14 8H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 2L14 8L8 14M14 8H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </button>
       <div class="scroll-indicator">
         <span>Scroll down</span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2V14M2 8L8 14L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 2V14M2 8L8 14L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </div>
     </div>
@@ -42,31 +44,35 @@
         <!-- Main Featured Post (Left Side) -->
         <div class="main-featured-post" *ngIf="AllPosts[0]" (click)="onCardClick(AllPosts[0].id)">
           <div class="featured-image-container">
-            <div class="post-media" *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 0">
-              <!-- Image -->
-              <img *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'IMAGE'"
-                   [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url"
-                   [alt]="AllPosts[0].title"
-                   class="featured-image"
-                   (error)="onImageError($event)" />
+            <div class="post-media">
+   
+              <ng-container *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 0; else noMedia">
+   
+                <img *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'IMAGE'"
+                  [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url" [alt]="AllPosts[0].title"
+                  class="featured-image" onerror="this.src='profil.jpg'" />
 
-              <!-- Video -->
-              <video *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'VIDEO'"
-                     [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url"
-                     class="featured-image"></video>
+                <video *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'VIDEO'"
+                  [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url" class="featured-image"
+                  controls></video>
 
-              <!-- Media navigation - Only show if multiple media -->
-              <button *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 1" 
-                      class="media-btn prev" 
-                      (click)="prevMedia(AllPosts[0], $event)">&#10094;</button>
-              <button *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 1" 
-                      class="media-btn next" 
-                      (click)="nextMedia(AllPosts[0], $event)">&#10095;</button>
+
+                <button *ngIf="AllPosts[0].medias.length > 1" class="media-btn prev"
+                  (click)="prevMedia(AllPosts[0], $event)">&#10094;</button>
+                <button *ngIf="AllPosts[0].medias.length > 1" class="media-btn next"
+                  (click)="nextMedia(AllPosts[0], $event)">&#10095;</button>
+              </ng-container>
+
+              <ng-template #noMedia>
+                <img src="plume.png" alt="Image par défaut" class="featured-image" />
+              </ng-template>
             </div>
+
             <div class="featured-overlay"></div>
             <div class="featured-content">
               <div class="featured-meta">
-                <span class="featured-author" (click)="onUserClick(AllPosts[0].author.id, $event)">{{ AllPosts[0].author.name }}</span>
+                <span class="featured-author" (click)="onUserClick(AllPosts[0].author.id, $event)">{{
+                  AllPosts[0].author.name }}</span>
                 <span class="featured-date">{{ AllPosts[0].publishDate | date:'d MMM, yyyy' }}</span>
               </div>
               <h2 class="featured-title">{{ AllPosts[0].title }}</h2>
@@ -81,32 +87,29 @@
 
         <!-- Side Articles (Right Side) -->
         <div class="side-articles">
-          <div 
-            class="side-article" 
-            *ngFor="let post of AllPosts.slice(1, 4)"
-            (click)="onCardClick(post.id)"
-          >
+          <div class="side-article" *ngFor="let post of AllPosts.slice(1, 4)" (click)="onCardClick(post.id)">
             <div class="side-article-image">
-              <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
-                <!-- Image -->
-                <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
-                     [src]="post.medias[post.selectedMediaIndex].url"
-                     [alt]="post.title"
-                     (error)="onImageError($event)" />
+              <div class="post-media">
+                <ng-container *ngIf="post.medias && post.medias.length > 0; else noMedia">
+                  <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
+                    [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title"
+                    onerror="this.src='plume.png'" />
 
-                <!-- Video -->
-                <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
-                       [src]="post.medias[post.selectedMediaIndex].url"></video>
+                  <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
+                    [src]="post.medias[post.selectedMediaIndex].url" controls></video>
 
-                <!-- Media navigation - Only show if multiple media -->
-                <button *ngIf="post.medias && post.medias.length > 1" 
-                        class="media-btn prev" 
-                        (click)="prevMedia(post, $event)">&#10094;</button>
-                <button *ngIf="post.medias && post.medias.length > 1" 
-                        class="media-btn next" 
-                        (click)="nextMedia(post, $event)">&#10095;</button>
+                  <button *ngIf="post.medias.length > 1" class="media-btn prev"
+                    (click)="prevMedia(post, $event)">&#10094;</button>
+                  <button *ngIf="post.medias.length > 1" class="media-btn next"
+                    (click)="nextMedia(post, $event)">&#10095;</button>
+                </ng-container>
+
+                <ng-template #noMedia>
+                  <img src="plume.png" alt="Image par défaut" />
+                </ng-template>
               </div>
             </div>
+
             <div class="side-article-content">
               <div class="side-article-meta">
                 <span class="side-author" (click)="onUserClick(post.author.id, $event)">{{ post.author.name }} </span>
@@ -123,48 +126,43 @@
       </div>
     </div>
 
-    <!-- SECTION 2: All Articles -->
+
     <div class="all-articles-section">
       <div class="blog-grid">
-        <div 
-          class="blog-card" 
-          *ngFor="let post of AllPosts.slice(4)"
-          (click)="onCardClick(post.id)">
-          
+        <div class="blog-card" *ngFor="let post of AllPosts.slice(4)" (click)="onCardClick(post.id)">
+
           <div class="card-image">
-            <div class="post-media" *ngIf="post.medias && post.medias.length > 0">
-              <!-- Image -->
-              <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
-                   [src]="post.medias[post.selectedMediaIndex].url"
-                   [alt]="post.title"
-                   loading="lazy"
-                   (error)="onImageError($event)" />
+            <div class="post-media">
+              <ng-container *ngIf="post.medias && post.medias.length > 0; else noMedia">
+                <img *ngIf="post.medias[post.selectedMediaIndex].type === 'IMAGE'"
+                  [src]="post.medias[post.selectedMediaIndex].url" [alt]="post.title" loading="lazy"
+                  onerror="this.src='plume.png'" />
 
-              <!-- Video -->
-              <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
-                     [src]="post.medias[post.selectedMediaIndex].url" controls></video>
 
-              <!-- Media navigation - Only show if multiple media -->
-              <button *ngIf="post.medias && post.medias.length > 1" 
-                      class="media-btn prev" 
-                      (click)="prevMedia(post, $event)">&#10094;</button>
-              <button *ngIf="post.medias && post.medias.length > 1" 
-                      class="media-btn next" 
-                      (click)="nextMedia(post, $event)">&#10095;</button>
+                <video *ngIf="post.medias[post.selectedMediaIndex].type === 'VIDEO'"
+                  [src]="post.medias[post.selectedMediaIndex].url" controls></video>
+
+
+                <button *ngIf="post.medias.length > 1" class="media-btn prev"
+                  (click)="prevMedia(post, $event)">&#10094;</button>
+                <button *ngIf="post.medias.length > 1" class="media-btn next"
+                  (click)="nextMedia(post, $event)">&#10095;</button>
+              </ng-container>
+
+              <ng-template #noMedia>
+                <img src="plume.png" alt="Image par défaut" />
+              </ng-template>
             </div>
           </div>
-          
+
           <div class="card-content">
             <h3 class="card-title">{{ post.title }}</h3>
             <p class="card-description">{{ post.description }}</p>
-            
+
             <div class="card-meta">
               <div class="author-info" (click)="onUserClick(post.author.id, $event)">
                 <div class="author-avatar">
-                  <img 
-                    [src]="post.author.avatar" 
-                    [alt]="post.author.name"
-                    (error)="onImageError($event)">
+                  <img [src]="post.author.avatar" [alt]="post.author.name" onerror="this.src='profil.jpg'">
                 </div>
                 <span class="author-name">{{ post.author.name }}</span>
               </div>
@@ -175,7 +173,7 @@
       </div>
     </div>
 
-    <!-- Loading State -->
+
     <div class="loading-state" *ngIf="AllPosts.length === 0">
       <div class="loading-spinner"></div>
       <p>Loading articles...</p>
