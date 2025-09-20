@@ -57,26 +57,26 @@ export class AdminComponent implements OnInit {
   constructor(private router: Router, private postService: PostService, private reportService: ReportService, private adminService: AdminService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.loadAllPost();
+    // this.loadAllPost();
     this.loadAllReport();
     this.loadAllUsers();
   }
 
-  loadAllPost(): void {
-    this.postService.getAllPosts().subscribe({
-      next: (res) => {
-        this.posts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));
-        console.log(this.posts);
+  // loadAllPost(): void {
+  //   this.postService.getAllPosts().subscribe({
+  //     next: (res) => {
+  //       this.posts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));
+  //       console.log(this.posts);
 
-      },
-      error: (err) => {
-        console.error('Erreur ', err)
-        if (err.status === 401 ) {
-          this.authService.logout()
-        }
-      }
-    })
-  }
+  //     },
+  //     error: (err) => {
+  //       console.error('Erreur ', err)
+  //       if (err.status === 401 ) {
+  //         this.authService.logout()
+  //       }
+  //     }
+  //   })
+  // }
 
   loadAllReport(): void {
     this.reportService.getReport().subscribe({

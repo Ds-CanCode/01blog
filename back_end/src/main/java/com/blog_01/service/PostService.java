@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +42,6 @@ public class PostService {
     private MediaRepository mediaRepository;
     @Autowired
     private NotificationService notificationService;
-
 
     @Transactional
     public Post create(String title, String content, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
@@ -83,10 +86,11 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<List<BlogPostDTO>> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
+    public List<BlogPostDTO> getAllPostsPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Post> postsPage = postRepository.findAll(pageable);
 
-        List<BlogPostDTO> dtos = posts.stream().map(post -> {
+        List<BlogPostDTO> dtos = postsPage.stream().map(post -> {
             BlogPostDTO dto = new BlogPostDTO();
             dto.setId(post.getId());
             dto.setTitle(post.getTitle());
@@ -99,9 +103,9 @@ public class PostService {
                     mediaDTO.setType(media.getType());
                     return mediaDTO;
                 }).toList();
-
                 dto.setMedias(mediaDTOs);
             }
+
             AuthorDTO author = new AuthorDTO();
             User user = post.getUser();
             author.setId(user.getId());
@@ -114,10 +118,11 @@ public class PostService {
             }
             dto.setAuthor(author);
             dto.setPublishDate(post.getCreatedAt().toString());
+
             return dto;
         }).toList();
 
-        return ResponseEntity.ok(dtos);
+        return dtos;
     }
 
     @Transactional

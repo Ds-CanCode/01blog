@@ -14,11 +14,11 @@ export class PostService {
 
 
 
-    getAllPosts(): Observable<BlogPost[]> {
+    getAllPosts(page: number, size: number = 10): Observable<BlogPost[]> {
         const token = localStorage.getItem('jwt') || '';
         if (!token) return throwError(() => new Error('No JWT token found'));
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-        return this.http.get<BlogPost[]>(`${this.apiUrl}/getAllPosts`, { headers });
+        return this.http.get<BlogPost[]>(`${this.apiUrl}/getAllPosts?page=${page}&size=${size}`, { headers });
     }
 
     getPost(id: Number): Observable<BlogPost> {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.blog_01.dto.BlogPostDTO;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.PostService;
 
@@ -63,17 +65,21 @@ public class PostController {
     }
 
     @GetMapping("/getAllPosts")
-    public ResponseEntity<?> getAllPosts(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> getAllPosts(@RequestHeader("Authorization") String authHeader,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(401).body("Token manquant");
         }
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token) ) {
+        if (!jwtService.isTokenValid(token)) {
             return ResponseEntity.status(401).body("Token Expired");
         }
 
-        return postService.getAllPosts();
+        List<BlogPostDTO> posts = postService.getAllPostsPage(page, size);
+        return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/getPost/{id}")

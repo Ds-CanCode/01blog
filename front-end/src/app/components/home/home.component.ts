@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from '../users/users.component';
 import { Router, RouterModule } from '@angular/router';
@@ -37,35 +37,61 @@ export interface BlogPost {
 })
 
 
-export class HomeComponent implements OnInit  {
+export class HomeComponent implements OnInit {
   AllPosts: BlogPost[] = [];
   showUserList = false;
+  page: number = 0;
+  loading: boolean = false;
+  noMorePosts: boolean = false;
 
   constructor(private postService: PostService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.postService.getAllPosts()
-      .subscribe({
-        next: (res) => {
-          this.AllPosts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));;
-          console.log(this.AllPosts);
-        },
-        error: (err) => {
-          console.error('Erreur ', err)
-          if (err.status === 401) {
-            this.authService.logout()
-          }
-        }
-      });
-
+    this.loadPosts();
   }
+
+  loadPosts(): void {
+    if (this.loading || this.noMorePosts) return;
+    this.loading = true;
+
+    this.postService.getAllPosts(this.page).subscribe({
+      next: (res) => {
+        console.log(res.length);
+
+        if (res.length === 0) {
+          this.noMorePosts = true;
+        } else {
+          this.AllPosts.push(...res.map(post => ({ ...post, selectedMediaIndex: 0 })));
+          this.page++;
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur ', err);
+        this.loading = false;
+        if (err.status === 401) this.authService.logout();
+      }
+    });
+  }
+
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight - 100) { // 100px avant le bas
+      this.loadPosts();
+    }
+  }
+
 
   onCardClick(id: number) {
     this.router.navigate(['/article', id]);
   }
 
   onUserClick(userId: number, event: Event) {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.router.navigate(['/profil', userId]);
   }
 
