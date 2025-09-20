@@ -18,15 +18,12 @@ import jakarta.transaction.Transactional;
 @Service
 public class NotificationService {
 
-    private final NotificationRepository notificationRepository;
-    private final UserRepository userRepository;
-
     @Autowired
-    public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository) {
-        this.notificationRepository = notificationRepository;
-        this.userRepository = userRepository;
-    }
-
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Transactional
     public Notification createNotification(User recipient, String message, Post post) {
         Notification notif = new Notification();
         notif.setRecipient(recipient);

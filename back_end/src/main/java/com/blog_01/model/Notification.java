@@ -37,53 +37,16 @@ public class Notification {
     @JoinColumn(name = "post_id")
     private Post post;
 
- 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Boolean getRead() {
-        return read;
-    }
-
-    public void setRead(Boolean read) {
-        this.read = read;
-    }
-
-    public User getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+    public String getMessage() {return message;}
+    public void setMessage(String message) {this.message = message;}
+    public LocalDateTime getCreatedAt() {return createdAt;}
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
+    public Boolean getRead() {return read;}
+    public void setRead(Boolean read) {this.read = read;}
+    public User getRecipient() {return recipient;}
+    public void setRecipient(User recipient) {this.recipient = recipient;}
+    public Post getPost() {return post;}
+    public void setPost(Post post) {this.post = post;}
 }

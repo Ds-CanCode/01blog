@@ -2,27 +2,27 @@ package com.blog_01.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.blog_01.dto.UserLoginDTO;
 import com.blog_01.model.User;
 import com.blog_01.repository.UserRepository;
 
-import com.blog_01.dto.UserLoginDTO;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
-        this.passwordEncoder = passwordEncoder;
-    }
-
+    @Transactional
     public User register(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
@@ -33,6 +33,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public UserLoginDTO authenticateUser(String usernameOrEmail, String password) {
         UserLoginDTO user = userRepository.findLoginUser(usernameOrEmail);
         if (user == null) {
@@ -47,20 +48,24 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public String loginAndGenerateToken(String usernameOrEmail, String password) {
         UserLoginDTO user = authenticateUser(usernameOrEmail, password);
         return jwtService.generateToken(user.getId(), user.getUsername(), user.getRole().name());
     }
 
+    @Transactional
     public User getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @Transactional
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

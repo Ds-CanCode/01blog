@@ -104,141 +104,39 @@ public class User {
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Boolean getIsBanned() {
-        return isBanned;
-    }
-
-    public void setIsBanned(Boolean isBanned) {
-        this.isBanned = isBanned;
-    }
-
-    public byte[] getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(byte[] profileImage) {
-        this.profileImage = profileImage;
-    }
-
-    public byte[] getCoverImage() {
-        return coverImage;
-    }
-
-    public void setCoverImage(byte[] coverImage) {
-        this.coverImage = coverImage;
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public List<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Like> likes) {
-        this.likes = likes;
-    }
-
-    public Set<User> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(Set<User> followers) {
-        this.followers = followers;
-    }
-
-    public Set<User> getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(Set<User> following) {
-        this.following = following;
-    }
-
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
-    }
-
-
-    public List<Report> getReceivedReports() {
-        return receivedReports;
-    }
-
-    public void setReceivedReports(List<Report> receivedReports) {
-        this.receivedReports = receivedReports;
-    }
-
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
+    public String getPassword() {return password;}
+    public void setPassword(String password) {this.password = password;}
+    public Role getRole() {return role;}
+    public void setRole(Role role) {this.role = role;}
+    public LocalDateTime getCreatedAt() {return createdAt;}
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
+    public Boolean getIsBanned() {return isBanned;}
+    public void setIsBanned(Boolean isBanned) {this.isBanned = isBanned;}
+    public byte[] getProfileImage() {return profileImage;}
+    public void setProfileImage(byte[] profileImage) {this.profileImage = profileImage;}
+    public byte[] getCoverImage() {return coverImage;}
+    public void setCoverImage(byte[] coverImage) {this.coverImage = coverImage;}
+    public List<Post> getPosts() {return posts;}
+    public void setPosts(List<Post> posts) {this.posts = posts;}
+    public List<Comment> getComments() {return comments;}
+    public void setComments(List<Comment> comments) {this.comments = comments;}
+    public List<Like> getLikes() {return likes;}
+    public void setLikes(List<Like> likes) {this.likes = likes;}
+    public Set<User> getFollowers() {return followers;}
+    public void setFollowers(Set<User> followers) {this.followers = followers;}
+    public Set<User> getFollowing() {return following;}
+    public void setFollowing(Set<User> following) {this.following = following;}
+    public List<Report> getReports() {return reports;}
+    public void setReports(List<Report> reports) {this.reports = reports;}
+    public List<Report> getReceivedReports() {return receivedReports;}
+    public void setReceivedReports(List<Report> receivedReports) {this.receivedReports = receivedReports;}
+    public List<Notification> getNotifications() {return notifications;}
+    public void setNotifications(List<Notification> notifications) {this.notifications = notifications;}
 
 }

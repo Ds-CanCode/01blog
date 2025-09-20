@@ -56,89 +56,25 @@ public class Post {
     private List<Notification> notifications = new ArrayList<>();
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getEditedAt() {
-        return editedAt;
-    }
-
-    public void setEditedAt(LocalDateTime editedAt) {
-        this.editedAt = editedAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user2) {
-        this.user = user2;
-    }
-
-    public List<Media> getMedias() {
-        return medias;
-    }
-
-    public void setMedias(List<Media> medias) {
-        this.medias = medias;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public List<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Like> likes) {
-        this.likes = likes;
-    }
-
-    
-
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+    public String getTitle() {return title;}
+    public void setTitle(String title) {this.title = title;}
+    public String getContent() {return content;}
+    public void setContent(String content) {this.content = content;}
+    public String getTags() {return tags;}
+    public void setTags(String tags) {this.tags = tags;}
+    public LocalDateTime getCreatedAt() {return createdAt;}
+    public LocalDateTime getEditedAt() {return editedAt;}
+    public void setEditedAt(LocalDateTime editedAt) {this.editedAt = editedAt;}
+    public User getUser() {return user;}
+    public void setUser(User user2) {this.user = user2;}
+    public List<Media> getMedias() {return medias;}
+    public void setMedias(List<Media> medias) {this.medias = medias;}
+    public List<Comment> getComments() {return comments;}
+    public void setComments(List<Comment> comments) {this.comments = comments;}
+    public List<Like> getLikes() {return likes;}
+    public void setLikes(List<Like> likes) {this.likes = likes;}
+    public List<Notification> getNotifications() {return notifications;}
+    public void setNotifications(List<Notification> notifications) {this.notifications = notifications;}
 }

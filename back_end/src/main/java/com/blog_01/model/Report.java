@@ -32,45 +32,15 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public User getReporter() {
-        return reporter;
-    }
-
-    public void setReporter(User reporter) {
-        this.reporter = reporter;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+    public String getReason() {return reason;}
+    public void setReason(String reason) {this.reason = reason;}
+    public LocalDateTime getCreatedAt() {return createdAt;}
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
+    public User getReporter() {return reporter;}
+    public void setReporter(User reporter) {this.reporter = reporter;}
+    public User getUser() {return user;}
+    public void setUser(User user) {this.user = user;}
 }

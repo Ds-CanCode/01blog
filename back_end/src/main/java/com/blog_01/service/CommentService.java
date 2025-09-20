@@ -3,6 +3,7 @@ package com.blog_01.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +18,12 @@ import com.blog_01.repository.UserRepository;
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
-
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository) {
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public CommentDTO addComment(Long postId, Long userId, String content) {

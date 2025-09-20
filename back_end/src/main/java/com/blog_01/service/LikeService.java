@@ -17,7 +17,6 @@ public class LikeService {
 
     @Autowired
     private LikeRepository likeRepository;
-
     @Autowired
     private PostRepository postRepository;
 
@@ -40,6 +39,7 @@ public class LikeService {
 
     }
 
+    @Transactional
     public LikeDTO getLikeInfo(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));

@@ -62,14 +62,13 @@ public class ProfilService {
             dto.setId(post.getId());
             dto.setTitle(post.getTitle());
             dto.setDescription(post.getContent());
-            dto.setPublishDate(post.getCreatedAt().toString()); // tu peux formatter si besoin
+            dto.setPublishDate(post.getCreatedAt().toString());
 
-            // Mapper les medias correctement
             List<MediaDTO> mediaDTOs = post.getMedias().stream()
                     .map(media -> {
                         MediaDTO m = new MediaDTO();
                         m.setUrl(media.getUrl());
-                        m.setType(media.getType()); // convertir Enum en String
+                        m.setType(media.getType());
                         return m;
                     })
                     .toList();
@@ -82,6 +81,7 @@ public class ProfilService {
         return dtos;
     }
 
+    @Transactional
     public boolean deletePost(Long idPost, Long idUser, String role) {
         Post post = postRepository.findById(idPost)
                 .orElseThrow(() -> new RuntimeException("Post not found"));

@@ -13,6 +13,8 @@ import com.blog_01.model.User;
 import com.blog_01.repository.PostRepository;
 import com.blog_01.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AdminService {
 
@@ -22,6 +24,7 @@ public class AdminService {
     @Autowired
     private PostRepository postRepository;
 
+    @Transactional
     public List<AdminDTO> getAllUsers(Long currentUserId) {
         List<User> users = userRepository.findAll();
 
@@ -43,6 +46,7 @@ public class AdminService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     public boolean deletePost(Long idPost) {
         Post post = postRepository.findById(idPost)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
@@ -51,6 +55,7 @@ public class AdminService {
         return true;
     }
 
+    @Transactional
     public void banUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));

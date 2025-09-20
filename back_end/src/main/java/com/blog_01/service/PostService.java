@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,19 +28,17 @@ import jakarta.transaction.Transactional;
 @Service
 public class PostService {
 
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final CloudinaryService cloudinaryService;
-    private final MediaRepository mediaRepository;
-    private final NotificationService notificationService;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+    @Autowired
+    private MediaRepository mediaRepository;
+    @Autowired
+    private NotificationService notificationService;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, CloudinaryService cloudinaryService, MediaRepository mediaRepository, NotificationService notificationService) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-        this.cloudinaryService = cloudinaryService;
-        this.mediaRepository = mediaRepository;
-        this.notificationService = notificationService;
-    }
 
     @Transactional
     public Post create(String title, String content, String username, List<MultipartFile> files, List<String> types) throws java.io.IOException {
@@ -83,6 +82,7 @@ public class PostService {
         return savedPost;
     }
 
+    @Transactional
     public ResponseEntity<List<BlogPostDTO>> getAllPosts() {
         List<Post> posts = postRepository.findAll();
 
@@ -120,6 +120,7 @@ public class PostService {
         return ResponseEntity.ok(dtos);
     }
 
+    @Transactional
     public ResponseEntity<BlogPostDTO> getPost(Long id) {
         return postRepository.findById(id)
                 .map(post -> {

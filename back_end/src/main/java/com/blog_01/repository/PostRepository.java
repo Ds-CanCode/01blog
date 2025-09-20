@@ -14,5 +14,5 @@ import com.blog_01.model.Post;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
   @Query("SELECT DISTINCT p FROM Post p LEFT JOIN FETCH p.medias WHERE p.user.id = :userId")
-    List<Post> findPostsWithMediaByUserId(@Param("userId") Long userId);
+  List<Post> findPostsWithMediaByUserId(@Param("userId") Long userId);
 }
