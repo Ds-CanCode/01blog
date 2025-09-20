@@ -7,7 +7,6 @@ import { FollowService } from '../../services/follow.service';
 import { PopupService } from '../../services/popup.service';
 import { AuthService } from '../../services/auth.service';
 
-// Interfaces basées exactement sur votre backend
 export interface UserProfile {
   id: number;
   username: string;
@@ -82,8 +81,11 @@ export class ProfileComponent implements OnInit {
         next: (res: any) => {
           this.isFollowed = res.isFollowed;
         },
-        error: (error) => {
-          console.error('Error:', error);
+        error: (err) => {
+          console.error('Erreur ', err)
+          if (err.status === 401) {
+            this.authService.logout()
+          }
         }
       })
     }
@@ -116,6 +118,9 @@ export class ProfileComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading user:', error);
+        if (error.status === 401) {
+          this.authService.logout()
+        }
         this.user = null;
         this.isLoading = false;
       }
@@ -142,6 +147,9 @@ export class ProfileComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading user posts:', error);
+        if (error.status === 401) {
+          this.authService.logout()
+        }
         this.userPosts = [];
       }
     });
@@ -153,20 +161,22 @@ export class ProfileComponent implements OnInit {
       this.followService.follow(this.user.id).subscribe({
         next: () => {
           if (this.isFollowed && this.user) {
-            this.user.followersCount-- ;
-          } else if (!this.isFollowed && this.user){
+            this.user.followersCount--;
+          } else if (!this.isFollowed && this.user) {
             this.user.followersCount++
           }
           this.isFollowed = !this.isFollowed;
         },
         error: (err) => {
           console.error(err);
+          if (err.status === 401) {
+            this.authService.logout()
+          }
         }
       });
     }
   }
 
-  // Navigation médias (même logique que home)
   prevMedia(post: UserPost, event?: Event): void {
     if (event) event.stopPropagation();
 
@@ -210,6 +220,9 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error deleting post:', err);
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     });
   }
@@ -226,7 +239,6 @@ export class ProfileComponent implements OnInit {
     this.popupService.openReport(userId);
   }
 
-  // Utilitaires
   getJoinDate(): string {
     if (this.user?.createdAt) {
       return new Date(this.user.createdAt).toLocaleDateString('en-US', {

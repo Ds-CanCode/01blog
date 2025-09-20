@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NotifService } from '../../services/notif.service';
 import { Router } from '@angular/router';
 import { PopupService } from '../../services/popup.service';
+import { AuthService } from '../../services/auth.service';
 
 
 export interface Notif {
@@ -26,7 +27,7 @@ export class NotificationComponent implements OnInit {
   notif: Notif[] = [];
   isLoading = false;
 
-  constructor(private notifService: NotifService, private router: Router, private popupService: PopupService) { }
+  constructor(private notifService: NotifService, private router: Router, private popupService: PopupService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadNotif();
@@ -40,9 +41,11 @@ export class NotificationComponent implements OnInit {
         this.notif = res.reverse();
         this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error:', error);
-        this.isLoading = false;
+      error: (err) => {
+        console.error('Erreur ', err)
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     });
   }
@@ -62,8 +65,11 @@ export class NotificationComponent implements OnInit {
             console.log(`Notification ${notificationId} marquée comme lue`);
           },
           error: (err) => {
+            notification.read = false;
             console.error('Erreur lecture notif:', err);
-            notification.read = false; // rollback si erreur
+            if (err.status === 401) {
+              this.authService.logout()
+            }
           }
         });
       }
@@ -75,7 +81,12 @@ export class NotificationComponent implements OnInit {
     this.notif.forEach(n => n.read = true);
     this.notifService.markAllAsRead().subscribe({
       next: () => console.log('Toutes les notifications sont lues'),
-      error: (err) => console.error('Erreur read all:', err)
+      error: (err) => {
+        console.error('Erreur read all:', err);
+        if (err.status === 401) {
+          this.authService.logout()
+        }
+      }
     });
   }
 

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FollowService } from '../../services/follow.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 export interface Following {
   id: number;
   username: string;
-  profileImage?: string; 
+  profileImage?: string;
 }
 
 
@@ -21,7 +22,7 @@ export class UsersComponent implements OnInit {
   following: Following[] = [];
   isLoading = false;
 
-  constructor(private followService: FollowService, private router: Router) {}
+  constructor(private followService: FollowService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadFollowing();
@@ -37,11 +38,14 @@ export class UsersComponent implements OnInit {
       error: (err) => {
         console.error('Erreur chargement following:', err);
         this.isLoading = false;
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     });
   }
 
-   onUserClick(userId: number) {
+  onUserClick(userId: number) {
     this.router.navigate(['/profil', userId]);
   }
 }

@@ -40,10 +40,14 @@ public class PostController {
             @RequestParam(value = "types", required = false) List<String> types,
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
-        
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token manquant");
+        }
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {
+            return ResponseEntity.status(401).body("Token Expired");
+        }
 
         String username = jwtService.extractUsername(token);
 
@@ -61,9 +65,13 @@ public class PostController {
     @GetMapping("/getAllPosts")
     public ResponseEntity<?> getAllPosts(@RequestHeader("Authorization") String authHeader) {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token manquant");
+        }
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token) ) {
+            return ResponseEntity.status(401).body("Token Expired");
+        }
 
         return postService.getAllPosts();
     }
@@ -71,9 +79,13 @@ public class PostController {
     @GetMapping("/getPost/{id}")
     public ResponseEntity<?> getPostById(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token manquant");
+        }
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {
+            return ResponseEntity.status(401).body("Token Expired");
+        }
 
         return postService.getPost(id);
     }
@@ -89,9 +101,13 @@ public class PostController {
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token manquant");
+        }
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {
+            return ResponseEntity.status(401).body("Token Expired");
+        }
 
         String username = jwtService.extractUsername(token);
         Long idUser = jwtService.extractId(token);
@@ -101,7 +117,8 @@ public class PostController {
             response.put("message", "Post créé par " + username);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
-            return ResponseEntity.status(500).body("Erreur lors de l'upload des fichiers");
+            return ResponseEntity.status(500)
+                    .body("Erreur lors de l'upload des fichiers");
         }
     }
 }

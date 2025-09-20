@@ -17,8 +17,8 @@ export class LandingComponent {
   menuOpen = false;
   constructor(
     private popupService: PopupService
-    // public authService: AuthService
-  ) { }
+  ) {}
+
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
@@ -26,6 +26,7 @@ export class LandingComponent {
   closeMenu() {
     this.menuOpen = false;
   }
+  
   openLogin() {
     if (this.menuOpen) {
       this.closeMenu();

@@ -7,10 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LikeService } from '../../services/like.service';
 import { CommentDTO, CommentService } from '../../services/comment.service';
-import { PopupService } from '../../services/popup.service';
-// import { CommonModule } from '@angular/common';
-
-
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -35,7 +32,8 @@ export class ArticleComponent implements OnInit {
     private postService: PostService,
     private likeService: LikeService,
     private router: Router,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -59,14 +57,25 @@ export class ArticleComponent implements OnInit {
       error: (err) => {
         console.error('Error loading article:', err);
         this.isLoading = false;
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     });
   }
 
   loadLikeInfo(postId: number) {
-    this.likeService.getLikeInfo(postId).subscribe(info => {
-      this.likeCount = info.likesCount;
-      this.isLiked = info.userLiked;
+    this.likeService.getLikeInfo(postId).subscribe({
+      next: (info) => {
+        this.likeCount = info.likesCount;
+        this.isLiked = info.userLiked;
+      },
+      error: (err) => {
+        console.error('Error loading Likes:', err);
+        if (err.status === 401) {
+          this.authService.logout()
+        }
+      }
     });
   }
 
@@ -78,6 +87,9 @@ export class ArticleComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading comment:', err);
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     })
   }
@@ -95,6 +107,9 @@ export class ArticleComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur like:', err);
+        if (err.status === 401 ) {
+          this.authService.logout()
+        }
       }
     });
 
@@ -110,7 +125,12 @@ export class ArticleComponent implements OnInit {
         console.log("Comment is added", comment);
         this.newComment = '';
       },
-      error: (err) => console.error('Erreur commentaire:', err)
+      error: (err) => {
+        console.error('Erreur commentaire:', err);
+        if (err.status === 401) {
+          this.authService.logout()
+        }
+      }
     });
   }
 

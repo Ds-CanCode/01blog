@@ -55,7 +55,8 @@ public class ProfilService {
 
     @Transactional
     public List<UserPostInfoDTO> getUserPostInfo(Long userInfoId) {
-        List<Post> posts = postRepository.findPostsWithMediaByUserId(userInfoId);
+        List<Post> posts = postRepository.findPostsWithMediaByUserId(userInfoId)
+                            .orElseThrow(() -> new RuntimeException("Post not found"));
 
         List<UserPostInfoDTO> dtos = posts.stream().map(post -> {
             UserPostInfoDTO dto = new UserPostInfoDTO();

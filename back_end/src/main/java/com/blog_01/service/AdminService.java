@@ -59,6 +59,7 @@ public class AdminService {
     public void banUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
+                
         user.setIsBanned(!user.getIsBanned());
         userRepository.save(user);
     }

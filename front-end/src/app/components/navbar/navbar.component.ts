@@ -50,11 +50,6 @@ export class NavbarComponent {
 
   openPapier() {
     this.router.navigate(['/papier']);
-   
-    // if (this.menuOpen) {
-    //   this.closeMenu();
-    // }
-    // this.popupService.openPapierPopup();
   }
 
   openNotification() {

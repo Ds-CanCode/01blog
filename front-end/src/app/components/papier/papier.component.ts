@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { PostService } from '../../services/post.service';
-import { MatDialogModule } from '@angular/material/dialog';
+import { AuthService } from '../../services/auth.service';
 
 
 
@@ -31,7 +30,7 @@ export class PapierComponent {
   postId: number | null = null;
   mediasToRemove: string[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router, private postService: PostService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private postService: PostService, private authService: AuthService) { }
 
 
   ngOnInit() {
@@ -126,7 +125,12 @@ export class PapierComponent {
           this.loading = false;
           this.router.navigate(['/profil'])
         },
-        error: (err) => console.error('Erreur ❌', err)
+        error: (err) => {
+          console.error('Erreur ', err)
+          if (err.status === 401) {
+            this.authService.logout()
+          }
+        }
       })
 
     } else {
@@ -137,9 +141,14 @@ export class PapierComponent {
             this.loading = false;
             this.router.navigate(['/home'])
           },
-          error: (err) => console.error('Erreur ❌', err)
+          error: (err) => {
+            console.error('Erreur ', err)
+            if (err.status === 401) {
+              this.authService.logout()
+            }
+          }
         });
-        
+
     }
   }
 }

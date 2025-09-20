@@ -1,8 +1,7 @@
-import { Component, Optional } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
-// import { RegisterComponent } from '../register/register.component';
 import { PopupService } from '../../services/popup.service';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -43,7 +42,7 @@ export class LoginComponent {
 
     this.authService.loginUser(user).subscribe({
       next: (response) => {
-        console.log('✅ Token reçu :', response.token);
+        console.log('Token reçu :', response.token);
         this.router.navigate(['/home']);
         this.closePopup();
       },

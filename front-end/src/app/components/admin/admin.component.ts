@@ -6,6 +6,7 @@ import { PostService } from '../../services/post.service';
 import { BlogPost } from '../home/home.component';
 import { ReportService } from '../../services/report.service';
 import { AdminService } from '../../services/admin..service';
+import { AuthService } from '../../services/auth.service';
 
 export interface AdminDTO {
   id: number;
@@ -53,7 +54,7 @@ export class AdminComponent implements OnInit {
   reports: Report[] = [];
 
 
-  constructor(private router: Router, private postService: PostService, private reportService: ReportService, private adminService: AdminService) { }
+  constructor(private router: Router, private postService: PostService, private reportService: ReportService, private adminService: AdminService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadAllPost();
@@ -69,9 +70,11 @@ export class AdminComponent implements OnInit {
 
       },
       error: (err) => {
-        console.error('Erreur chargement Posts:', err);
+        console.error('Erreur ', err)
+        if (err.status === 401 ) {
+          this.authService.logout()
+        }
       }
-
     })
   }
 
@@ -83,7 +86,10 @@ export class AdminComponent implements OnInit {
 
       },
       error: (err) => {
-        console.error('Erreur chargement Report:', err);
+        console.error('Erreur ', err)
+        if (err.status === 401 ) {
+          this.authService.logout()
+        }
       }
     })
   }
@@ -96,27 +102,12 @@ export class AdminComponent implements OnInit {
 
       },
       error: (err) => {
-        console.error('Erreur chargement Users:', err);
+        console.error('Erreur ', err)
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     })
-  }
-
-  switchTab(tab: 'users' | 'posts' | 'reports' | 'dashboard'): void {
-    this.activeTab = tab;
-    this.searchTerm = '';
-  }
-
-  toggleBan(user: AdminDTO) {
-    // const newStatus = !user.isBanned; // true => banned, false => active
-    // this.userService.updateUserStatus(user.id, newStatus).subscribe({
-    //   next: () => {
-    //     user.isBanned = newStatus; // update local state
-    //     console.log(`User ${user.username} is now ${newStatus ? 'banned' : 'active'}`);
-    //   },
-    //   error: (err) => {
-    //     console.error('Erreur mise à jour statut:', err);
-    //   }
-    // });
   }
 
 
@@ -132,7 +123,10 @@ export class AdminComponent implements OnInit {
         console.log('User Ban Or UnBan:', userId);
       },
       error: (err) => {
-        console.error('Error Ban User:', err);
+        console.error('Erreur ', err)
+        if (err.status === 401) {
+          this.authService.logout()
+        }
       }
     })
   }
@@ -146,7 +140,10 @@ export class AdminComponent implements OnInit {
           console.log('Post deleted:', postId);
         },
         error: (err) => {
-          console.error('Error deleting post:', err);
+          console.error('Erreur ', err)
+          if (err.status === 401) {
+            this.authService.logout()
+          }
         }
       })
     }
@@ -158,6 +155,10 @@ export class AdminComponent implements OnInit {
     event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgyNVYyNUgxNVYxNVoiIGZpbGw9IiNEREREREQiLz4KPC9zdmc+Cg==';
   }
 
+  switchTab(tab: 'users' | 'posts' | 'reports' | 'dashboard'): void {
+    this.activeTab = tab;
+    this.searchTerm = '';
+  }
 
   prevMedia(post: any, event: Event) {
     event.stopPropagation();
@@ -177,12 +178,12 @@ export class AdminComponent implements OnInit {
     }
   }
 
-   onCardClick(id: number) {
+  onCardClick(id: number) {
     this.router.navigate(['/article', id]);
   }
 
   onUserClick(userId: number, event: Event) {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.router.navigate(['/profil', userId]);
   }
 

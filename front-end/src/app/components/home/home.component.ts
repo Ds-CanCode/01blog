@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { UsersComponent } from '../users/users.component';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-// import { ArticleComponent } from '../article/article.component';
+import { AuthService } from '../../services/auth.service';
 
 
 export interface MediaDTO {
@@ -38,11 +37,12 @@ export interface BlogPost {
 })
 
 
-export class HomeComponent {
+export class HomeComponent implements OnInit  {
   AllPosts: BlogPost[] = [];
+  showUserList = false;
 
 
-  constructor(private postService: PostService, private router: Router) { }
+  constructor(private postService: PostService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.postService.getAllPosts()
@@ -51,7 +51,12 @@ export class HomeComponent {
           this.AllPosts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));;
           console.log(this.AllPosts);
         },
-        error: (err) => console.error('Erreur ❌', err)
+        error: (err) => {
+          console.error('Erreur ', err)
+          if (err.status === 401) {
+            this.authService.logout()
+          }
+        }
       });
 
   }
@@ -89,10 +94,6 @@ export class HomeComponent {
       post.selectedMediaIndex = 0;
     }
   }
-
-
-
-  showUserList = false;
 
   toggleUserList() {
     this.showUserList = !this.showUserList;

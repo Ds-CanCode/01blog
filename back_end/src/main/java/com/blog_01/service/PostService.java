@@ -155,7 +155,7 @@ public class PostService {
                     return ResponseEntity.ok(dto);
                 }
                 )
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new RuntimeException("Post not found"));
     }
 
     @Transactional
