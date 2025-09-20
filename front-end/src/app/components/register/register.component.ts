@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-// import { HttpClientModule } from '@angular/common/http';
 import { PopupService } from '../../services/popup.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from "@angular/material/icon";

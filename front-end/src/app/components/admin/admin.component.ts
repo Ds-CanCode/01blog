@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -52,31 +52,49 @@ export class AdminComponent implements OnInit {
   users: AdminDTO[] = [];
   posts: BlogPost[] = [];
   reports: Report[] = [];
-
+  page: number = 0;
+  loading: boolean = false;
+  noMorePosts: boolean = false;
 
   constructor(private router: Router, private postService: PostService, private reportService: ReportService, private adminService: AdminService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    // this.loadAllPost();
+    this.loadAllPost();
     this.loadAllReport();
     this.loadAllUsers();
   }
 
-  // loadAllPost(): void {
-  //   this.postService.getAllPosts().subscribe({
-  //     next: (res) => {
-  //       this.posts = res.map(post => ({ ...post, selectedMediaIndex: 0 }));
-  //       console.log(this.posts);
+  loadAllPost(): void {
+    if (this.loading || this.noMorePosts) return;
+    this.loading = true;
 
-  //     },
-  //     error: (err) => {
-  //       console.error('Erreur ', err)
-  //       if (err.status === 401 ) {
-  //         this.authService.logout()
-  //       }
-  //     }
-  //   })
-  // }
+    this.postService.getAllPosts(this.page).subscribe({
+      next: (res) => {
+        if (res.length === 0) {
+          this.noMorePosts = true;
+        } else {
+          this.posts.push(...res.map(post => ({ ...post, selectedMediaIndex: 0 })));
+          this.page++;
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur ', err);
+        this.loading = false;
+        if (err.status === 401) this.authService.logout();
+      }
+    });
+  }
+
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      this.loadAllPost();
+    }
+  }
 
   loadAllReport(): void {
     this.reportService.getReport().subscribe({
