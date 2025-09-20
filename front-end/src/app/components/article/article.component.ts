@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { BlogPost } from '../home/home.component';
@@ -26,6 +26,10 @@ export class ArticleComponent implements OnInit {
   likeCount: number = 0;
   isLiked: boolean = false;
   comments: CommentDTO[] = [];
+  loading = false;
+  noMoreComments = false;
+  page = 0;
+  pageSize = 10;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,8 +46,8 @@ export class ArticleComponent implements OnInit {
       if (!isNaN(id)) {
         this.postId = id;
         this.loadArticle();
-        this.loadLikeInfo(this.postId);
-        this.loadComments(this.postId);
+        this.loadLikeInfo();
+        this.loadComments();
       }
     });
   }
@@ -64,8 +68,8 @@ export class ArticleComponent implements OnInit {
     });
   }
 
-  loadLikeInfo(postId: number) {
-    this.likeService.getLikeInfo(postId).subscribe({
+  loadLikeInfo() {
+    this.likeService.getLikeInfo(this.postId).subscribe({
       next: (info) => {
         this.likeCount = info.likesCount;
         this.isLiked = info.userLiked;
@@ -79,20 +83,38 @@ export class ArticleComponent implements OnInit {
     });
   }
 
-  loadComments(postId: number) {
-    this.commentService.getComments(postId).subscribe({
-      next: (comment) => {
-        console.log(comment);
-        this.comments = comment;
+  loadComments(): void {
+    if (this.loading || this.noMoreComments) return;
+    this.loading = true;
+    this.commentService.getComments(this.postId, this.page, this.pageSize).subscribe({
+      next: (res) => {
+        console.log(res.length);
+
+        if (res.length === 0) {
+          this.noMoreComments = true;
+        } else {
+          this.comments.push(...res);
+          this.page++;
+        }
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error loading comment:', err);
-        if (err.status === 401) {
-          this.authService.logout()
-        }
+        this.loading = false;
+        if (err.status === 401) this.authService.logout();
       }
-    })
+    });
   }
+
+
+  onCommentScroll(event: any): void {
+    const target = event.target;
+    const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
+    if (scrollBottom < 20) { 
+      this.loadComments();
+    }
+  }
+
 
   toggleLike(): void {
     this.likeService.addLike(this.postId).subscribe({
@@ -107,7 +129,7 @@ export class ArticleComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur like:', err);
-        if (err.status === 401 ) {
+        if (err.status === 401) {
           this.authService.logout()
         }
       }

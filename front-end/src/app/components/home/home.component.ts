@@ -56,8 +56,6 @@ export class HomeComponent implements OnInit {
 
     this.postService.getAllPosts(this.page).subscribe({
       next: (res) => {
-        console.log(res.length);
-
         if (res.length === 0) {
           this.noMorePosts = true;
         } else {
@@ -79,8 +77,7 @@ export class HomeComponent implements OnInit {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
-
-    if (scrollTop + clientHeight >= scrollHeight - 100) { // 100px avant le bas
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
       this.loadPosts();
     }
   }

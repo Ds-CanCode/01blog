@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,16 +45,16 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentDTO> getCommentsByPost(Long postId) {
+    public List<CommentDTO> getCommentsByPost(Long postId, int page, int size) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-       
-        List<Comment> comments = commentRepository.findByPost(post);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> commentsPage = commentRepository.findByPost(post, pageable);
 
-        return comments.stream()
-                .map(CommentDTO::new)
-                .collect(Collectors.toList());
+        return commentsPage.stream()
+            .map(CommentDTO::new)
+            .collect(Collectors.toList());
     }
 
 }

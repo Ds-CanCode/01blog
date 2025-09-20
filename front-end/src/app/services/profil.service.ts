@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { MediaDTO } from '../components/home/home.component';
 import { UserPost, UserProfile } from '../components/profil/profil.component';
-
-
-
 
 
 @Injectable({

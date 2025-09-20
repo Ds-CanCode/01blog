@@ -261,6 +261,8 @@
   padding: 32px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
+  max-height: 400px;
+  overflow-y: auto; 
 }
 
 .comments-header {

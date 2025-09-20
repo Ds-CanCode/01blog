@@ -10,7 +10,7 @@ export interface CommentDTO {
   userId: number;
   username: string;
   avatar?: string;
-  createDate: string; 
+  createDate: string;
 }
 
 @Injectable({
@@ -32,7 +32,7 @@ export class CommentService {
     return this.http.post<CommentDTO>(`${this.apiUrl}/${postId}`, body, { headers });
   }
 
-  getComments(postId: number): Observable<CommentDTO[]> {
-    return this.http.get<CommentDTO[]>(`${this.apiUrl}/post/${postId}`);
+  getComments(postId: number, page: number, size: number): Observable<CommentDTO[]> {
+    return this.http.get<CommentDTO[]>(`${this.apiUrl}/post/${postId}?page=${page}&size=${size}`);
   }
 }

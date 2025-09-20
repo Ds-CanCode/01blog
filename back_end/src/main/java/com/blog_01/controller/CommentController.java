@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.CommentDTO;
@@ -37,7 +38,7 @@ public class CommentController {
         String token = authHeader.substring(7);
         if (!jwtService.isTokenValid(token)) {
             return ResponseEntity.status(401).body("Token Expired");
-        } 
+        }
         Long userId = jwtService.extractId(token);
         String content = request.get("content");
         CommentDTO comment = commentService.addComment(postId, userId, content);
@@ -45,8 +46,12 @@ public class CommentController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable Long postId) {
-        List<CommentDTO> comments = commentService.getCommentsByPost(postId);
+    public ResponseEntity<List<CommentDTO>> getComments(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<CommentDTO> comments = commentService.getCommentsByPost(postId, page, size);
         return ResponseEntity.ok(comments);
     }
 
