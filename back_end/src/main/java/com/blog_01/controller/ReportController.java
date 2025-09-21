@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog_01.exception.TokenExpiredException;
+import com.blog_01.exception.UnauthorizedException;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.ReportService;
 
@@ -31,9 +33,9 @@ public class ReportController {
             @RequestParam("reason") String reason,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         Long reporterId = jwtService.extractId(token);
         reportService.addReport(reporterId, reportedUserId, reason);
@@ -46,9 +48,9 @@ public class ReportController {
     public ResponseEntity<?> getReport(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         return ResponseEntity.ok(reportService.getAllReport());
     }

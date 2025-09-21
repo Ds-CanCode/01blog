@@ -33,6 +33,12 @@ export class CommentService {
   }
 
   getComments(postId: number, page: number, size: number): Observable<CommentDTO[]> {
-    return this.http.get<CommentDTO[]>(`${this.apiUrl}/post/${postId}?page=${page}&size=${size}`);
+    const token = localStorage.getItem('jwt');
+    console.log(token);
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<CommentDTO[]>(`${this.apiUrl}/post/${postId}?page=${page}&size=${size}`, { headers });
   }
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.FollowingDTO;
+import com.blog_01.exception.TokenExpiredException;
+import com.blog_01.exception.UnauthorizedException;
 import com.blog_01.service.FollowService;
 import com.blog_01.service.JwtService;
 
@@ -32,9 +34,9 @@ public class FollowController {
             @PathVariable Long userId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
         
         Long myId = jwtService.extractId(token);
         if (Objects.equals(myId, userId)) {
@@ -53,9 +55,9 @@ public class FollowController {
             @PathVariable Long userId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         Long myId = jwtService.extractId(token);
         if (Objects.equals(myId, userId)) {

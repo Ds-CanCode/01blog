@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.NotifDTO;
+import com.blog_01.exception.TokenExpiredException;
+import com.blog_01.exception.UnauthorizedException;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.NotificationService;
 
@@ -30,9 +32,9 @@ public class NotificationController {
     public ResponseEntity<?> getNotif(
         @RequestHeader("Authorization") String authHeader
     ){
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
         
         Long userId = jwtService.extractId(token);
         List<NotifDTO> notif = notificationService.getUnreadNotifications(userId);
@@ -44,9 +46,9 @@ public class NotificationController {
         @PathVariable Long postId,
         @RequestHeader("Authorization") String authHeader
     ){
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         Long userId = jwtService.extractId(token);
         notificationService.readNotification(userId, postId);
@@ -57,9 +59,9 @@ public class NotificationController {
     public ResponseEntity<?> readAllNotif(
         @RequestHeader("Authorization") String authHeader
     ){
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         Long userId = jwtService.extractId(token);
         notificationService.readAllNotification(userId);

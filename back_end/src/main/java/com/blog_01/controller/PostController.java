@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.blog_01.dto.BlogPostDTO;
+import com.blog_01.exception.TokenExpiredException;
+import com.blog_01.exception.UnauthorizedException;
 import com.blog_01.service.JwtService;
 import com.blog_01.service.PostService;
 
@@ -42,13 +44,9 @@ public class PostController {
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {
-            return ResponseEntity.status(401).body("Token Expired");
-        }
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         String username = jwtService.extractUsername(token);
 
@@ -69,13 +67,9 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size
     ) {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {
-            return ResponseEntity.status(401).body("Token Expired");
-        }
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         List<BlogPostDTO> posts = postService.getAllPostsPage(page, size);
         return ResponseEntity.ok(posts);
@@ -106,13 +100,9 @@ public class PostController {
             @RequestHeader("Authorization") String authHeader
     ) throws java.io.IOException {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Token manquant");
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {
-            return ResponseEntity.status(401).body("Token Expired");
-        }
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         String username = jwtService.extractUsername(token);
         Long idUser = jwtService.extractId(token);

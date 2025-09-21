@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog_01.exception.TokenExpiredException;
+import com.blog_01.exception.UnauthorizedException;
 import com.blog_01.service.AdminService;
 import com.blog_01.service.JwtService;
 
@@ -30,9 +32,9 @@ public class AdminController {
     public ResponseEntity<?> getAllUsers(
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
         
         Long id = jwtService.extractId(token);
         String role = jwtService.extractRole(token);
@@ -47,9 +49,9 @@ public class AdminController {
             @PathVariable Long postId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
 
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {
@@ -68,9 +70,9 @@ public class AdminController {
             @PathVariable Long userId,
             @RequestHeader("Authorization") String authHeader
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {return ResponseEntity.status(401).body("Token manquant");}
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {return ResponseEntity.status(401).body("Token Expired");}
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
         
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {

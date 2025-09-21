@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog_01.dto.CommentDTO;
+import com.blog_01.exception.TokenExpiredException;
+import com.blog_01.exception.UnauthorizedException;
 import com.blog_01.service.CommentService;
 import com.blog_01.service.JwtService;
 
@@ -35,10 +37,10 @@ public class CommentController {
             @RequestHeader("Authorization") String authHeader,
             @RequestBody Map<String, String> request
     ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
         String token = authHeader.substring(7);
-        if (!jwtService.isTokenValid(token)) {
-            return ResponseEntity.status(401).body("Token Expired");
-        }
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
+
         Long userId = jwtService.extractId(token);
         String content = request.get("content");
         CommentDTO comment = commentService.addComment(postId, userId, content);
@@ -47,10 +49,15 @@ public class CommentController {
 
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<CommentDTO>> getComments(
+            @RequestHeader("Authorization") String authHeader,
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {throw new UnauthorizedException("Token manquant");}
+        String token = authHeader.substring(7);
+        if (!jwtService.isTokenValid(token)) {throw new TokenExpiredException("Token expired");}
+        
         List<CommentDTO> comments = commentService.getCommentsByPost(postId, page, size);
         return ResponseEntity.ok(comments);
     }

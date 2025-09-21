@@ -2,9 +2,11 @@ package com.blog_01.controller;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+    private static final Pattern EMAIL_REGEX
+            = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+
     public UserController(UserService userService, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -40,6 +45,22 @@ public class UserController {
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage
     ) {
         try {
+
+            if (!StringUtils.hasText(username)) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Le nom d'utilisateur est obligatoire."));
+            }
+
+            if (!StringUtils.hasText(email)) {
+                return ResponseEntity.badRequest().body(Map.of("message", "L'email est obligatoire."));
+            }
+
+            if (!EMAIL_REGEX.matcher(email).matches()) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Format d'email invalide."));
+            }
+
+            if (!StringUtils.hasText(password) || password.length() < 6) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Le mot de passe doit contenir au moins 6 caractères."));
+            }
 
             String hashedPassword = passwordEncoder.encode(password);
 
@@ -74,7 +95,5 @@ public class UserController {
                     .body(Map.of("message", e.getMessage()));
         }
     }
-    
+
 }
-
-
