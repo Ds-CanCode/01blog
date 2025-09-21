@@ -2,7 +2,7 @@
 <h4 class="title">Following</h4>
 <ul class="user-list">
     <li *ngFor="let user of following" class="user-item" >
-        <img [src]="user.profileImage" [alt]="user.username" class="avatar" (click)="onUserClick(user.id)"/>
+        <img [src]="user.profileImage" [alt]="user.username" class="avatar" (click)="onUserClick(user.id)" onerror="this.src='profil.jpg'"/>
         <div class="user-info" (click)="onUserClick(user.id)">
             <span class="user-name">{{ user.username }}</span>
         </div>

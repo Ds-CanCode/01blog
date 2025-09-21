@@ -14,19 +14,15 @@
   <div class="hero-section">
     <div class="hero-content">
       <h1 class="hero-title">
-        Uncover fresh perspectives, ideas, and knowledge through the power of blogs.
+        L’empire des plumes et des songes.
       </h1>
       <p class="hero-description">
-        Redify is an open platform where readers find dynamic thinking, and where
-        expert and undiscovered voices can share their writing on any topic.
+        Sous la voûte étoilée s’écrivent les songes,
+        et la plume éclaire plus que mille flambeaux.
+        Celui qui conte partage son âme,
+        et fait naître au lecteur un monde nouveau.
       </p>
-      <button class="start-reading-btn">
-        <span>Start Reading</span>
-        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2L14 8L8 14M14 8H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </button>
+     
       <div class="scroll-indicator">
         <span>Scroll down</span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -45,9 +41,9 @@
         <div class="main-featured-post" *ngIf="AllPosts[0]" (click)="onCardClick(AllPosts[0].id)">
           <div class="featured-image-container">
             <div class="post-media">
-   
+
               <ng-container *ngIf="AllPosts[0].medias && AllPosts[0].medias.length > 0; else noMedia">
-   
+
                 <img *ngIf="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].type === 'IMAGE'"
                   [src]="AllPosts[0].medias[AllPosts[0].selectedMediaIndex].url" [alt]="AllPosts[0].title"
                   class="featured-image" onerror="this.src='profil.jpg'" />

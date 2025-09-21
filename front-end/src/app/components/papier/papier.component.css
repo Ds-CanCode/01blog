@@ -1,10 +1,11 @@
 :host {
     display: block;
     height: auto;
-    background-image: url("../../../../public/bg.png");
+    background-image: url("../../../../public/plume.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    opacity: 1;
 }
 .container {
     max-width: 800px;
