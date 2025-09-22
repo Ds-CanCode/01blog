@@ -117,7 +117,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading user:', error);
-        if (error.status === 401) {
+        if (error.status === 401 ||  error.status === 400) {
           this.authService.logout()
         }
         this.user = null;

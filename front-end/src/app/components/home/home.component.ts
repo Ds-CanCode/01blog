@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
       error: (err) => {
         console.error('Erreur ', err);
         this.loading = false;
-        if (err.status === 401) this.authService.logout();
+        if (err.status === 401 || err.status === 400) this.authService.logout();
       }
     });
   }

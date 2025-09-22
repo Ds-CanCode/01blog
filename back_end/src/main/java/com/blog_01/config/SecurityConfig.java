@@ -20,8 +20,7 @@ public class SecurityConfig {
         System.out.println("🚀 SecurityConfig loaded with CORS enabled");
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {
-                })
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
